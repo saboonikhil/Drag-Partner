@@ -3079,7 +3079,7 @@ public final class R {
     public static final int design_ic_visibility_off=0x7f07005e;
     public static final int design_password_eye=0x7f07005f;
     public static final int design_snackbar_background=0x7f070060;
-    public static final int ic_directions_car=0x7f070061;
+    public static final int logo=0x7f070061;
     public static final int navigation_empty_icon=0x7f070062;
     public static final int notification_action_background=0x7f070063;
     public static final int notification_bg=0x7f070064;

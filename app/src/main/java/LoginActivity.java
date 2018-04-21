@@ -18,15 +18,15 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_ADDCAR = 0;
 
-    @BindView(com.bonvoyage.admin.R.id.input_email) EditText _emailText;
-    @BindView(com.bonvoyage.admin.R.id.input_password) EditText _passwordText;
-    @BindView(com.bonvoyage.admin.R.id.btn_login) Button _loginButton;
-    @BindView(com.bonvoyage.admin.R.id.addcar) Button _addcarLink;
+    @BindView(R.id.input_email) EditText _emailText;
+    @BindView(R.id.input_password) EditText _passwordText;
+    @BindView(R.id.btn_login) Button _loginButton;
+    @BindView(R.id.addcar) Button _addcarLink;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.bonvoyage.admin.R.layout.activity_login);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -41,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), AddcarActivity.class);
+                // Start the Car Registration activity
+                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.AddcarActivity.class);
                 startActivityForResult(intent, REQUEST_ADDCAR);
                 finish();
                 overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);

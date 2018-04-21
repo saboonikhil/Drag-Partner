@@ -17,19 +17,19 @@ import butterknife.ButterKnife;
 public class AddcarActivity extends AppCompatActivity {
     private static final String TAG = "AddcarActivity";
 
-    @BindView(com.bonvoyage.admin.R.id.destination) EditText _destinationText;
-    @BindView(com.bonvoyage.admin.R.id.car_name) EditText _carText;
-    @BindView(com.bonvoyage.admin.R.id.driver_name) EditText _driverText;
-    @BindView(com.bonvoyage.admin.R.id.driver_number) EditText _mobileText;
-    @BindView(com.bonvoyage.admin.R.id.car_number) EditText _numberText;
-    @BindView(com.bonvoyage.admin.R.id.org_name) EditText _orgText;
-    @BindView(com.bonvoyage.admin.R.id.btn_addcar) Button _addcarButton;
-    @BindView(com.bonvoyage.admin.R.id.link_login) TextView _loginLink;
+    @BindView(R.id.destination) EditText _destinationText;
+    @BindView(R.id.car_name) EditText _carText;
+    @BindView(R.id.driver_name) EditText _driverText;
+    @BindView(R.id.driver_number) EditText _mobileText;
+    @BindView(R.id.car_number) EditText _numberText;
+    @BindView(R.id.org_name) EditText _orgText;
+    @BindView(R.id.btn_addcar) Button _addcarButton;
+    @BindView(R.id.link_login) TextView _loginLink;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.bonvoyage.admin.R.layout.activity_addcar);
+        setContentView(R.layout.activity_addcar);
         ButterKnife.bind(this);
 
         _addcarButton.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class AddcarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the car registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.LoginActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
