@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Nik\\Downloads\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v21\\values-v21.xml",
+            "outputFile": "C:\\Users\\Nik\\Documents\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v21\\values-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\19293b6cbbb1ac56ede2a2ee2ef1c3a6\\res\\values-v21\\values-v21.xml",
@@ -20,25 +20,6 @@
                         "endLines": "2,3,4,5,298,299,306,310,316,321",
                         "endColumns": "103,63,66,63,115,125,125,127,12,12",
                         "endOffsets": "154,218,285,349,21451,21577,22034,22330,22669,23007"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Nik\\Downloads\\bonvoyage-admin\\app\\src\\main\\res\\values-v21\\styles.xml",
-                    "from": {
-                        "startLines": "3,11",
-                        "startColumns": "4,4",
-                        "startOffsets": "56,551",
-                        "endLines": "9,34",
-                        "endColumns": "12,12",
-                        "endOffsets": "545,1822"
-                    },
-                    "to": {
-                        "startLines": "6,13",
-                        "startColumns": "4,4",
-                        "startOffsets": "354,848",
-                        "endLines": "12,36",
-                        "endColumns": "12,12",
-                        "endOffsets": "843,2119"
                     }
                 },
                 {
@@ -96,6 +77,25 @@
                         "endLines": "302,305,309,313",
                         "endColumns": "12,12,12,12",
                         "endOffsets": "21745,21908,22202,22497"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Nik\\Documents\\bonvoyage-admin\\app\\src\\main\\res\\values-v21\\styles.xml",
+                    "from": {
+                        "startLines": "3,11",
+                        "startColumns": "4,4",
+                        "startOffsets": "56,551",
+                        "endLines": "9,34",
+                        "endColumns": "12,12",
+                        "endOffsets": "545,1822"
+                    },
+                    "to": {
+                        "startLines": "6,13",
+                        "startColumns": "4,4",
+                        "startOffsets": "354,848",
+                        "endLines": "12,36",
+                        "endColumns": "12,12",
+                        "endOffsets": "843,2119"
                     }
                 }
             ]

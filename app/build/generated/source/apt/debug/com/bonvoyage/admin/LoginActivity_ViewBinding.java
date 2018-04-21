@@ -26,7 +26,6 @@ public class LoginActivity_ViewBinding implements Unbinder {
     target._emailText = Utils.findRequiredViewAsType(source, R.id.input_email, "field '_emailText'", EditText.class);
     target._passwordText = Utils.findRequiredViewAsType(source, R.id.input_password, "field '_passwordText'", EditText.class);
     target._loginButton = Utils.findRequiredViewAsType(source, R.id.btn_login, "field '_loginButton'", Button.class);
-    target._addcarLink = Utils.findRequiredViewAsType(source, R.id.addcar, "field '_addcarLink'", Button.class);
   }
 
   @Override
@@ -39,6 +38,5 @@ public class LoginActivity_ViewBinding implements Unbinder {
     target._emailText = null;
     target._passwordText = null;
     target._loginButton = null;
-    target._addcarLink = null;
   }
 }

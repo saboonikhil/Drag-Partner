@@ -21,7 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.input_email) EditText _emailText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.addcar) Button _addcarLink;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,17 +36,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        _addcarLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Car Registration activity
-                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.AddcarActivity.class);
-                startActivityForResult(intent, REQUEST_ADDCAR);
-                finish();
-                overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
-            }
-        });
     }
 
     public void login() {

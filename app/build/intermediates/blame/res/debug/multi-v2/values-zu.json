@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Nik\\Downloads\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zu\\values-zu.xml",
+            "outputFile": "C:\\Users\\Nik\\Documents\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zu\\values-zu.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\19293b6cbbb1ac56ede2a2ee2ef1c3a6\\res\\values-zu\\values-zu.xml",

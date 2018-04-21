@@ -42,8 +42,8 @@ public class AddcarActivity extends AppCompatActivity {
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the car registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.LoginActivity.class);
+                // Finish the car registration screen and return to the Main activity
+                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.MainActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);

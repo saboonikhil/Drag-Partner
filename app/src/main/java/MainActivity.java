@@ -5,18 +5,44 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.app.ProgressDialog;
+import android.util.Log;
+import android.content.Intent;
+import android.view.View;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+    private static final int REQUEST_ADDCAR = 0;
+
+    @BindView(R.id.addplace) Button _placeButton;
+    @BindView(R.id.addcar) Button _addcarLink;
+    @BindView(R.id.blockuser) Button _blockButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.bonvoyage.admin.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, com.bonvoyage.admin.LoginActivity.class);
         startActivity(intent);
+
+        _addcarLink.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Start the Car Registration activity
+                Intent intent = new Intent(getApplicationContext(), com.bonvoyage.admin.AddcarActivity.class);
+                startActivityForResult(intent, REQUEST_ADDCAR);
+                finish();
+                overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
+            }
+        });
     }
 
     @Override
