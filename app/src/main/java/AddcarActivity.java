@@ -11,35 +11,41 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class AddcarActivity extends AppCompatActivity {
+
+    private EditText destinationText;
+    private EditText carText;
+    private EditText driverText;
+    private EditText mobileText;
+    private EditText numberText;
+    private EditText orgText;
+    private Button addcarButton;
+    private TextView loginLink;
+
     private static final String TAG = "AddcarActivity";
 
-    @BindView(R.id.destination) EditText _destinationText;
-    @BindView(R.id.car_name) EditText _carText;
-    @BindView(R.id.driver_name) EditText _driverText;
-    @BindView(R.id.driver_number) EditText _mobileText;
-    @BindView(R.id.car_number) EditText _numberText;
-    @BindView(R.id.org_name) EditText _orgText;
-    @BindView(R.id.btn_addcar) Button _addcarButton;
-    @BindView(R.id.link_login) TextView _loginLink;
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addcar);
-        ButterKnife.bind(this);
 
-        _addcarButton.setOnClickListener(new View.OnClickListener() {
+        destinationText = (EditText) findViewById(R.id.destination);
+        carText = (EditText) findViewById(R.id.car_name);
+        driverText = (EditText) findViewById(R.id.driver_name);
+        mobileText = (EditText) findViewById(R.id.driver_number);
+        numberText = (EditText) findViewById(R.id.car_number);
+        orgText = (EditText) findViewById(R.id.org_name);
+        addcarButton = (Button) findViewById(R.id.btn_addcar);
+        loginLink = (TextView) findViewById(R.id.link_login);
+
+        addcarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Finish the car registration screen and return to the Main activity
@@ -54,7 +60,7 @@ public class AddcarActivity extends AppCompatActivity {
     public void signup() {
         Log.d(TAG, "Addcar");
 
-        _addcarButton.setEnabled(false);
+        addcarButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(AddcarActivity.this,
                 com.bonvoyage.admin.R.style.AppTheme_Dark_Dialog);
@@ -81,7 +87,7 @@ public class AddcarActivity extends AppCompatActivity {
     }
 
     public void onAddcarSuccess() {
-        _addcarButton.setEnabled(true);
+        addcarButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }

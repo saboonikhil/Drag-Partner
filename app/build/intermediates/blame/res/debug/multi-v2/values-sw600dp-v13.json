@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\Nik\\Documents\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\cce16031417580f0f31f5c8aed6f2dcd\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\5ddb38b77a89fa37f060213cb4876beb\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\703970ce1dcf9dcb1f4706588faf670d\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\faa593abb33a46f4a0987e90ddd81d6c\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

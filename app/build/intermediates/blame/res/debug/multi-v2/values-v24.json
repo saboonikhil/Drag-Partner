@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\Nik\\Documents\\bonvoyage-admin\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\cce16031417580f0f31f5c8aed6f2dcd\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\5ddb38b77a89fa37f060213cb4876beb\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.1.0.aar\\d57f22bec13fe000db883fc1c59cd0ee\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Nik\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.1.0.aar\\5f4590421b10fdcee539dbe3c361b0c5\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
