@@ -6,26 +6,30 @@ import java.io.Serializable;
 
 public class CarDetailsAdmin implements Serializable {
 
-    public String carName;
-    public String dropLocation;
-    public String startDate;
-    public String startTime;
-    public String seatsAvailable;
-    public String driverName;
-    public String driverMobile;
-    public String carNumber;
-    public String orgName;
+    private String carName;
+    private String pickupLocation;
+    private String dropLocation;
+    private String startDate;
+    private String startTime;
+    private String seatsAvailable;
+    private String driverName;
+    private String driverMobile;
+    private String carNumber;
+    private String orgName;
+    private boolean shared;
 
     public CarDetailsAdmin() {
 
     }
 
-    public CarDetailsAdmin(String carName, String dropLocation,
+    public CarDetailsAdmin(String carName,String pickupLocation, String dropLocation,
                            String startDate, String startTime,
                            String seatsAvailable, String driverName,
                            String driverMobile, String carNumber,
-                           String orgName) {
+                           String orgName,boolean shared
+    ) {
         this.carName = carName;
+        this.pickupLocation=pickupLocation;
         this.dropLocation = dropLocation;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -34,6 +38,7 @@ public class CarDetailsAdmin implements Serializable {
         this.driverMobile = driverMobile;
         this.carNumber = carNumber;
         this.orgName = orgName;
+        this.shared=shared;
     }
 
     public String getDriverName() {
@@ -76,6 +81,16 @@ public class CarDetailsAdmin implements Serializable {
         this.carName = carName;
     }
 
+
+    public String getPickupLocation() {
+        return pickupLocation;
+    }
+
+    public void setPickupLocation(String pickupLocation) {
+        this.pickupLocation = pickupLocation;
+    }
+
+
     public String getDropLocation() {
         return dropLocation;
     }
@@ -106,6 +121,14 @@ public class CarDetailsAdmin implements Serializable {
 
     public void setSeatsAvailable(String seatsAvailable) {
         this.seatsAvailable = seatsAvailable;
+    }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean isShared) {
+        shared = isShared;
     }
 
 
