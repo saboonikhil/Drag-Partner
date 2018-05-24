@@ -70,8 +70,8 @@ public class AddcarActivity extends AppCompatActivity {
         carNumber = carNumberText.getText().toString();
         orgName = orgNameText.getText().toString();
 
-        CarDetailsAdmin carDetailsAdmin = new CarDetailsAdmin(carName, "Available to book",
-                "", "", seatsAvailable, driverName, driverMobile, carNumber, orgName);
+        CarDetailsAdmin carDetailsAdmin = new CarDetailsAdmin(carName,"", "Available to book",
+                "", "", seatsAvailable, driverName, driverMobile, carNumber, orgName,false);
 
         FirebaseDatabase database=FirebaseDatabase.getInstance();
         DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
@@ -80,7 +80,4 @@ public class AddcarActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
 
     }
-
-
-
 }
