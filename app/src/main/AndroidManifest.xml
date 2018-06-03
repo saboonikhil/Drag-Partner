@@ -7,17 +7,36 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
-            android:name="com.bonvoyage.admin.MainActivity" android:theme="@style/AppTheme.Dark"
-            android:label="@string/app_name" >
+            android:name="com.bonvoyage.admin.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.bonvoyage.admin.LoginActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name="com.bonvoyage.admin.AddcarActivity" android:theme="@style/AppTheme.Dark" />
+        <activity android:name="com.bonvoyage.admin.LoginActivity"/>
+        <activity android:name="com.bonvoyage.admin.CarAdditionActivity" android:label="Add Car">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bonvoyage.admin.MainActivity" />
+        </activity>
+        <activity android:name="com.bonvoyage.admin.DriverAdditionActivity" android:label="Add Driver">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bonvoyage.admin.MainActivity" />
+        </activity>
+        <activity android:name="com.bonvoyage.admin.DriverAllotmentActivity" android:label="Allot Driver">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bonvoyage.admin.MainActivity" />
+        </activity>
+        <activity android:name="com.bonvoyage.admin.PlaceAdditionActivity" android:label="Add Place">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bonvoyage.admin.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

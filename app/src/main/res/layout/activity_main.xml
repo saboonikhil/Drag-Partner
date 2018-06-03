@@ -8,38 +8,62 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <ImageView android:src="@drawable/logo"
-            android:layout_width="300dp"
-            android:layout_height="120dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:layout_gravity="center_horizontal" />
-
+            android:text="Welcome Boss!"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/addplace"
-            android:layout_width="fill_parent"
+            android:id="@+id/dashboard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="0dp"
+            android:padding="12dp"
+            android:text="Dashboard"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/allot_driver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:padding="12dp"
+            android:text="Allot Driver"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/add_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:padding="12dp"
             android:text="Add Place"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/addcar"
-            android:layout_width="fill_parent"
+            android:id="@+id/add_car"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="0dp"
             android:padding="12dp"
             android:text="Add Car"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/blockuser"
-            android:layout_width="fill_parent"
+            android:id="@+id/add_driver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:padding="12dp"
+            android:text="Add Driver"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/blacklist_user"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="24dp"
@@ -47,4 +71,5 @@
             android:text="Blacklist User"/>
 
     </LinearLayout>
+
 </ScrollView>

@@ -2,6 +2,7 @@ package com.bonvoyage.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddcarActivity extends AppCompatActivity {
+public class CarAdditionActivity extends AppCompatActivity {
 
     private EditText seatsAvailableText;
     private EditText carNameText;
@@ -25,12 +26,13 @@ public class AddcarActivity extends AppCompatActivity {
     private String seatsAvailable, carName, driverName, driverMobile, carNumber, orgName;
 
 
-    private static final String TAG = "AddcarActivity";
+    private static final String TAG = "CarAdditionActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addcar);
+        setContentView(R.layout.activity_add_car);
+        setupActionBar();
 
         seatsAvailableText=(EditText)findViewById(R.id.seats_available);
         carNameText=(EditText)findViewById(R.id.car_name);
@@ -53,12 +55,19 @@ public class AddcarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the car registration screen and return to the Main activity
-                Intent intent = new Intent(AddcarActivity.this,MainActivity.class);
+                Intent intent = new Intent(CarAdditionActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
             }
         });
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void saveCar() {

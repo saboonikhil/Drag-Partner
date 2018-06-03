@@ -24,3 +24,4 @@ dependencies {
     implementation 'com.android.support:design:27.1.0'
     implementation 'com.google.firebase:firebase-database:11.8.0'
 }
+apply plugin: 'com.google.gms.google-services'
