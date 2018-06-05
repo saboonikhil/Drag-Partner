@@ -268,6 +268,11 @@ public class CarAdditionActivity extends AppCompatActivity {
         Toast.makeText(this, "Car added successfully!",
                 Toast.LENGTH_SHORT).show();
 
+        Intent intent = new Intent(CarAdditionActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
+
     }
 
     private void setupDateTimePicker() {
