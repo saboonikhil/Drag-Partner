@@ -245,7 +245,7 @@ public class CarAdditionActivity extends AppCompatActivity {
 
     private void saveCar() {
 
-        String defaultTravelDate = "", defaultTravelTime = "", defaultPickupLocation = "", defaultDropLocation = "";
+        String defaultTravelDate = "", defaultTravelTime = "", defaultPickupLocation = "Available to Book", defaultDropLocation = "Available to Book";
 
         seatsAvailable = seatsAvailableText.getText().toString();
         carName = carNameText.getText().toString();
