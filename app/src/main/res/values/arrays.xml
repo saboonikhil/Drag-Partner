@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="array_VIT_options_A">
+        <item>MHA Block</item>
+        <item>MHB Block</item>
+        <item>MHB Annex Block</item>
+        <item>MHC Block</item>
+        <item>MHD Block</item>
+        <item>MHD Annex Block</item>
+        <item>MHE Block</item>
+        <item>MHF Block</item>
+        <item>MHG Block</item>
+        <item>MHH Block</item>
+        <item>MHJ Block</item>
+        <item>MHK Block</item>
+        <item>MHL Block</item>
+        <item>MHM Block</item>
+        <item>MHN Block</item>
+        <item>MHP Block</item>
+        <item>MHQ Block</item>
+        <item>LHC Block</item>
+        <item>LHF Block</item>
+        <item>Main Gate</item>
+        <item>Gate 2</item>
+        <item>Gate 3</item>
+    </string-array>
+
+    <string-array name="array_VIT_options_B">
+        <item>Chennai International Airport</item>
+        <item>Kempegowda International Airport</item>
+        <item>Sripuram Golden Temple</item>
+        <item>Cup and Saucer Waterfalls</item>
+        <item>Bans Resort</item>
+        <item>Pondicherry</item>
+        <item>Yelagiri Hills</item>
+        <item>Nandi Hills</item>
+        <item>Coorg</item>
+        <item>Horsley Hills</item>
+    </string-array>
+
+
+    <string-array name="array_KGP_options_A">
+        <item>RK Hall</item>
+        <item>RP Hall</item>
+        <item>MS Hall</item>
+        <item>LLR Hall</item>
+        <item>MMM Hall</item>
+        <item>LBS Hall</item>
+        <item>Patel Hall</item>
+        <item>Nehru Hall</item>
+        <item>Azad Hall</item>
+        <item>SN/IG Hall</item>
+        <item>MT Hall</item>
+        <item>BRH Hall</item>
+        <item>N/A</item>
+    </string-array>
+
+    <string-array name="array_KGP_options_B">
+        <item>Kolkata Airport</item>
+        <item>Kharagpur Station</item>
+        <item>Mandarmani</item>
+        <item>Digha</item>
+        <item>Shankarpura</item>
+        <item>NSS Location</item>
+        <item>Dominos</item>
+        <item>Flavours</item>
+        <item>N/A</item>
+    </string-array>
+
+    <string-array name="colleges">
+        <item>IIT Kharagpur</item>
+        <item>VIT Vellore</item>
+
+    </string-array>
+</resources>
