@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5f3933ad-fb3e-4fcc-bac1-7357e7857e6b" name="Default" comment="">
+    <list default="true" id="6cdbf47c-4d70-4e94-9d2d-f6e308d314c9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bonvoyage/admin/CarAdditionActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/bonvoyage/admin/CarAdditionActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_car.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_car.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_car_new.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_car_new.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_driver.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_driver.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_place.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_place.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_allot_driver.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_allot_driver.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" />
-      <change beforePath="$PROJECT_DIR$/bonvoyage-admin.iml" afterPath="" />
     </list>
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -397,6 +389,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -408,6 +401,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-115">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -522,6 +516,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
