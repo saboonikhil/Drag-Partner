@@ -74,7 +74,6 @@ public class CarAdditionActivity extends AppCompatActivity {
         setupCollegeSpinner();
 
         addcarButton = (Button) findViewById(R.id.btn_addcar);
-        loginLink = (TextView) findViewById(R.id.link_login);
 
         addcarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,18 +81,6 @@ public class CarAdditionActivity extends AppCompatActivity {
                 saveCar();
             }
         });
-
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the car registration screen and return to the Main activity
-                Intent intent = new Intent(CarAdditionActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
-            }
-        });
-
 
         defaultPickupLocationTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
