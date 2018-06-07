@@ -245,7 +245,7 @@ public class CarAdditionActivity extends AppCompatActivity {
 
     private void saveCar() {
 
-        String defaultTravelDate = "", defaultTravelTime = "", defaultPickupLocation = "", defaultDropLocation = "";
+        String defaultTravelDate = "", defaultTravelTime = "", defaultPickupLocation = "Available to Book", defaultDropLocation = "Available to Book";
 
         seatsAvailable = seatsAvailableText.getText().toString();
         carName = carNameText.getText().toString();
@@ -267,6 +267,11 @@ public class CarAdditionActivity extends AppCompatActivity {
         mRefCarsAvailable.setValue(carDetailsAdmin);
         Toast.makeText(this, "Car added successfully!",
                 Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(CarAdditionActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
 
     }
 
