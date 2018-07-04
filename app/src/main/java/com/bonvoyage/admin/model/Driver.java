@@ -1,4 +1,4 @@
-package com.bonvoyage.admin;
+package com.bonvoyage.admin.model;
 
 /**
  * Created by nikhil on 8/6/18.

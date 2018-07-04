@@ -1,4 +1,4 @@
-package com.bonvoyage.admin;
+package com.bonvoyage.admin.model;
 
 import java.io.Serializable;
 
