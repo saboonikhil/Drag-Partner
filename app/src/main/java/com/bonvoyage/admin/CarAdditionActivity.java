@@ -40,12 +40,13 @@ public class CarAdditionActivity extends AppCompatActivity {
     private EditText orgNameText, defaultStartDateTextView, defaultStartTimeTextView;
     private Button addcarButton;
     private TextView loginLink;
-    private String seatsAvailable, carName, driverName, driverMobile, carNumber, orgName;
+    private String seatsAvailable, carName, driverName, driverMobile, carNumber, orgName, cabFare;
     private Calendar DateCalendar;
     private Calendar TimeCalendar;
     final long thirtydays = 2592000000L;
     private int CurrentDay;
     private String college;
+    private EditText CabFareTextView;
     private AutoCompleteTextView collegeSpinnerTextView, defaultPickupLocationTextView, defaultDropLocationEditText;
 
 
@@ -65,10 +66,12 @@ public class CarAdditionActivity extends AppCompatActivity {
         driverMobileText = (EditText) findViewById(R.id.driver_number);
         carNumberText = (EditText) findViewById(R.id.car_number);
         orgNameText = (EditText) findViewById(R.id.org_name);
+        CabFareTextView = (EditText)findViewById(R.id.cab_fare);
         defaultPickupLocationTextView = (AutoCompleteTextView) findViewById(R.id.default_pickup_location);
         defaultDropLocationEditText = (AutoCompleteTextView) findViewById(R.id.default_drop_location);
         defaultStartDateTextView = (EditText) findViewById(R.id.default_start_date);
         defaultStartTimeTextView = (EditText) findViewById(R.id.default_start_time);
+
 
         setupDateTimePicker();
         setupCollegeSpinner();
@@ -257,14 +260,14 @@ public class CarAdditionActivity extends AppCompatActivity {
         defaultTravelTime = defaultStartTimeTextView.getText().toString();
         defaultPickupLocation = defaultPickupLocationTextView.getText().toString();
         defaultDropLocation = defaultDropLocationEditText.getText().toString();
+        cabFare = CabFareTextView.getText().toString();
 
-
-        CarDetailsAdmin carDetailsAdmin = new CarDetailsAdmin(carName, defaultPickupLocation, defaultDropLocation,
-                defaultTravelDate, defaultTravelTime, seatsAvailable, driverName, driverMobile, carNumber, orgName, false);
+        CabDetails cabDetails = new CabDetails(college, carName, defaultPickupLocation, defaultDropLocation, defaultTravelDate,
+                defaultTravelTime, seatsAvailable, "ABCXYZ", driverName, driverMobile, carNumber, cabFare, orgName);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
-        mRefCarsAvailable.setValue(carDetailsAdmin);
+        mRefCarsAvailable.setValue(cabDetails);
         Toast.makeText(this, "Car added successfully!",
                 Toast.LENGTH_SHORT).show();
 
