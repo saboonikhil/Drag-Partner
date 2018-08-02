@@ -22,8 +22,7 @@
         <item>LHC Block</item>
         <item>LHF Block</item>
         <item>Main Gate</item>
-        <item>Gate 2</item>
-        <item>Gate 3</item>
+        <item>N/A</item>
     </string-array>
 
     <string-array name="array_VIT_options_B">
@@ -37,6 +36,7 @@
         <item>Nandi Hills</item>
         <item>Coorg</item>
         <item>Horsley Hills</item>
+        <item>N/A</item>
     </string-array>
 
 
