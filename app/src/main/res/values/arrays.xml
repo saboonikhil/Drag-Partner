@@ -2,27 +2,28 @@
 <resources>
 
     <string-array name="array_VIT_options_A">
-        <item>MHA Block</item>
-        <item>MHB Block</item>
-        <item>MHB Annex Block</item>
-        <item>MHC Block</item>
-        <item>MHD Block</item>
-        <item>MHD Annex Block</item>
-        <item>MHE Block</item>
-        <item>MHF Block</item>
-        <item>MHG Block</item>
-        <item>MHH Block</item>
-        <item>MHJ Block</item>
-        <item>MHK Block</item>
-        <item>MHL Block</item>
-        <item>MHM Block</item>
-        <item>MHN Block</item>
-        <item>MHP Block</item>
-        <item>MHQ Block</item>
-        <item>LHC Block</item>
-        <item>LHF Block</item>
+        <item>Mens Hostel A Block</item>
+        <item>Mens Hostel B Block</item>
+        <item>Mens Hostel B Annex Block</item>
+        <item>Mens Hostel C Block</item>
+        <item>Mens Hostel D Block</item>
+        <item>Mens Hostel D Annex Block</item>
+        <item>Mens Hostel E Block</item>
+        <item>Mens Hostel F Block</item>
+        <item>Mens Hostel G Block</item>
+        <item>Mens Hostel H Block</item>
+        <item>Mens Hostel J Block</item>
+        <item>Mens Hostel K Block</item>
+        <item>Mens Hostel L Block</item>
+        <item>Mens Hostel M Block</item>
+        <item>Mens Hostel N Block</item>
+        <item>Mens Hostel P Block</item>
+        <item>Mens Hostel Q Block</item>
+        <item>Ladies Hostel C Block</item>
+        <item>Ladies Hostel F Block</item>
         <item>Main Gate</item>
-        <item>N/A</item>
+        <item>All Mart</item>
+        <item>Outside Gate 3</item>
     </string-array>
 
     <string-array name="array_VIT_options_B">
@@ -31,12 +32,11 @@
         <item>Sripuram Golden Temple</item>
         <item>Cup and Saucer Waterfalls</item>
         <item>Bans Resort</item>
-        <item>Pondicherry</item>
+        <item>Puducherry</item>
         <item>Yelagiri Hills</item>
         <item>Nandi Hills</item>
         <item>Coorg</item>
         <item>Horsley Hills</item>
-        <item>N/A</item>
     </string-array>
 
 
@@ -57,8 +57,8 @@
     </string-array>
 
     <string-array name="array_KGP_options_B">
-        <item>Kolkata Airport</item>
-        <item>Kharagpur Station</item>
+        <item>NSC Bose International Airport</item>
+        <item>Kharagpur Jn Railway Station</item>
         <item>Mandarmani</item>
         <item>Digha</item>
         <item>Shankarpura</item>
@@ -71,6 +71,6 @@
     <string-array name="colleges">
         <item>IIT Kharagpur</item>
         <item>VIT Vellore</item>
-
     </string-array>
+
 </resources>
