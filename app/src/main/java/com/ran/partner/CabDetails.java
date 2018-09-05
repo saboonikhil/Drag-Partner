@@ -1,4 +1,4 @@
-package com.bonvoyage.admin;
+package com.ran.partner;
 
 import java.io.Serializable;
 

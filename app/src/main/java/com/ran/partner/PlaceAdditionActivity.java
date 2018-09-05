@@ -1,15 +1,15 @@
-package com.bonvoyage.admin;
+package com.ran.partner;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
-public class DriverAllotmentActivity extends AppCompatActivity {
+public class PlaceAdditionActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allot_driver);
+        setContentView(R.layout.activity_add_place);
         setupActionBar();
     }
 

@@ -1,4 +1,4 @@
-package com.bonvoyage.admin;
+package com.ran.partner;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

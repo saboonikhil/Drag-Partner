@@ -1,4 +1,4 @@
-package com.bonvoyage.admin;
+package com.ran.partner;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -32,6 +32,8 @@ import java.util.Locale;
 
 public class CarAdditionActivity extends AppCompatActivity {
 
+    private static final String TAG = "CarAdditionActivity";
+    final long thirtydays = 2592000000L;
     private EditText seatsAvailableText;
     private EditText carNameText;
     private EditText driverNameText;
@@ -43,14 +45,10 @@ public class CarAdditionActivity extends AppCompatActivity {
     private String seatsAvailable, carName, driverName, driverMobile, carNumber, orgName, cabFare;
     private Calendar DateCalendar;
     private Calendar TimeCalendar;
-    final long thirtydays = 2592000000L;
     private int CurrentDay;
     private String college;
     private EditText CabFareTextView;
     private AutoCompleteTextView collegeSpinnerTextView, defaultPickupLocationTextView, defaultDropLocationEditText;
-
-
-    private static final String TAG = "CarAdditionActivity";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -261,7 +259,7 @@ public class CarAdditionActivity extends AppCompatActivity {
         Intent intent = new Intent(CarAdditionActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
-        overridePendingTransition(com.bonvoyage.admin.R.anim.push_left_in, com.bonvoyage.admin.R.anim.push_left_out);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 
     }
 

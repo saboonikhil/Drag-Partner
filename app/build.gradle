@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.bonvoyage.admin"
+        applicationId "com.ran.partner"
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
@@ -20,8 +20,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

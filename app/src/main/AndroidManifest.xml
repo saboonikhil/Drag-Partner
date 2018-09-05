@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bonvoyage.admin" >
+    package="com.ran.partner" >
 
     <application
         android:allowBackup="true"
@@ -9,32 +9,32 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="com.bonvoyage.admin.MainActivity">
+            android:name="com.ran.partner.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.bonvoyage.admin.LoginActivity"/>
-        <activity android:name="com.bonvoyage.admin.CarAdditionActivity" android:label="Add Car">
+        <activity android:name="com.ran.partner.LoginActivity"/>
+        <activity android:name="com.ran.partner.CarAdditionActivity" android:label="Add Car">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bonvoyage.admin.MainActivity" />
+                android:value="com.ran.partner.MainActivity" />
         </activity>
-        <activity android:name="com.bonvoyage.admin.DriverAdditionActivity" android:label="Add Driver">
+        <activity android:name="com.ran.partner.DriverAdditionActivity" android:label="Add Driver">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bonvoyage.admin.MainActivity" />
+                android:value="com.ran.partner.MainActivity" />
         </activity>
-        <activity android:name="com.bonvoyage.admin.DriverAllotmentActivity" android:label="Allot Driver">
+        <activity android:name="com.ran.partner.DriverAllotmentActivity" android:label="Allot Driver">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bonvoyage.admin.MainActivity" />
+                android:value="com.ran.partner.MainActivity" />
         </activity>
-        <activity android:name="com.bonvoyage.admin.PlaceAdditionActivity" android:label="Add Place">
+        <activity android:name="com.ran.partner.PlaceAdditionActivity" android:label="Add Place">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bonvoyage.admin.MainActivity" />
+                android:value="com.ran.partner.MainActivity" />
         </activity>
 
     </application>

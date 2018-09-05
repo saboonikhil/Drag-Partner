@@ -45,28 +45,28 @@ public class CarDetailsAdmin implements Serializable {
         return driverName;
     }
 
-    public String getDriverMobile() {
-        return driverMobile;
-    }
-
-    public String getCarNumber() {
-        return carNumber;
-    }
-
-    public String getOrgName() {
-        return orgName;
-    }
-
     public void setDriverName(String driverName) {
         this.driverName = driverName;
+    }
+
+    public String getDriverMobile() {
+        return driverMobile;
     }
 
     public void setDriverMobile(String driverMobile) {
         this.driverMobile = driverMobile;
     }
 
+    public String getCarNumber() {
+        return carNumber;
+    }
+
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
+    }
+
+    public String getOrgName() {
+        return orgName;
     }
 
     public void setOrgName(String orgName) {
