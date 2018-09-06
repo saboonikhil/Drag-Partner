@@ -20,13 +20,7 @@
         </activity>
 
         <activity android:name="com.ran.partner.LoginActivity" />
-        <activity
-            android:name="com.ran.partner.CarAdditionActivity"
-            android:label="Add Car">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ran.partner.MainActivity" />
-        </activity>
+
         <activity
             android:name="com.ran.partner.DriverAdditionActivity"
             android:label="Add Driver">

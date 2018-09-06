@@ -3,6 +3,7 @@ package com.ran.partner;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_add_car:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                AddCarFragment frag3 = new AddCarFragment();
+                ft.replace(R.id.content_frame, frag3);
+                ft.addToBackStack("Add Car");
+                ft.commit();
                 break;
 
             case R.id.nav_logout:
