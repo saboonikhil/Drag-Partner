@@ -8,180 +8,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingBottom="24dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp">
-
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            android:src="@drawable/logo" />
-
-        <!-- Destination Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/seats_available"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Seats Available"
-                android:inputType="phone" />
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- Car Name Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/car_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Car Name"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/cab_fare"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Cab Fare"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <!--  Driver Name Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/driver_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Driver Name"
-                android:inputType="textPersonName" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <!-- driver number -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/driver_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Driver Number"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- car number -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/car_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Car Number"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- Organization Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/org_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Agency/Association Name"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
+        android:paddingTop="24dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            >
+            android:layout_marginBottom="16dp">
 
             <AutoCompleteTextView
                 android:id="@+id/spinner_select_college"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="College"
+                android:drawablePadding="8dp"
+                android:hint="@string/college"
                 android:inputType="textAutoComplete|text"
                 android:maxLines="1"
-                android:singleLine="true"
-                android:drawablePadding="8dp"
-                />
+                android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="16dp">
 
             <AutoCompleteTextView
                 android:id="@+id/default_pickup_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Pickup Location"
+                android:hint="@string/pickup_location"
                 android:inputType="text|textAutoComplete"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="16dp">
 
             <AutoCompleteTextView
                 android:id="@+id/default_drop_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Drop Location"
+                android:hint="@string/drop_location"
                 android:inputType="text|textAutoComplete"
                 android:maxLines="1"
                 android:singleLine="true" />
+
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
@@ -195,8 +81,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:drawablePadding="8dp"
-                    android:focusable="false"
-                    android:hint="Date"
+                    android:focusable="true"
+                    android:hint="@string/date"
                     android:inputType="date"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -214,8 +100,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:drawablePadding="8dp"
-                    android:focusable="false"
-                    android:hint="Time"
+                    android:focusable="true"
+                    android:hint="@string/time"
                     android:inputType="datetime"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -224,14 +110,102 @@
 
         </LinearLayout>
 
-
-        <!-- Add Car Button -->
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_addcar"
-            android:layout_width="fill_parent"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/car_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_name"
+                android:inputType="text" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/car_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_number"
+                android:inputType="text|number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/seats_available"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/seats_available"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/trip_fare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/trip_fare"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/driver_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/driver_name"
+                android:inputType="textPersonName" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/driver_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/driver_number"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_add_car"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="Add Car" />
+            android:text="@string/add_car"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:theme="@style/buttonTheme" />
+
     </LinearLayout>
+
 </ScrollView>
