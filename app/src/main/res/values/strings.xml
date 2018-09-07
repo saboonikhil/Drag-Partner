@@ -26,4 +26,9 @@
     <string name="driver_number">Driver Number</string>
     <string name="add_car">Add Car</string>
 
+    <!-- Strings related to About -->
+    <string name="content_about">We, RAN, are a start up fuelled with the intention to solve the practical problems around us. We observed that in our busy and bustling colleges that are brimming with technological advances, students have a hard time finding co-riders to share rides with if they are to travel by a rented car. This problem is a consequence of the apparently remote locations of our college which does not facilitate an availability of a quality car renting service. Moreover, a student\'s choice of mode of transport would depend a great deal on their finding co-riders so that their expenses can be cut. Well, we have a wonderful solution!</string>
+    <string name="version_info">1.0.0</string>
+    <string name="down_share_app">Share App</string>
+
 </resources>

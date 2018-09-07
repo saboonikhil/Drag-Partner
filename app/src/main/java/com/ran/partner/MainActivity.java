@@ -70,17 +70,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_add_car:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
                 AddCarFragment frag3 = new AddCarFragment();
-                ft.replace(R.id.content_frame, frag3);
-                ft.addToBackStack("Add Car");
-                ft.commit();
+                ft3.replace(R.id.content_frame, frag3);
+                ft3.addToBackStack("Add Car");
+                ft3.commit();
                 break;
 
             case R.id.nav_logout:
                 break;
 
             case R.id.nav_about:
+                FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+                AboutFragment frag4 = new AboutFragment();
+                ft4.replace(R.id.content_frame, frag4);
+                ft4.addToBackStack("About");
+                ft4.commit();
                 break;
 
             case R.id.nav_terms_of_use:
