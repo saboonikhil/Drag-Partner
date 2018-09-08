@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 break;
 
-            case R.id.nav_add_car:
+            case R.id.nav_cars:
                 FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-                AddCarFragment frag3 = new AddCarFragment();
+                CarsFragment frag3 = new CarsFragment();
                 ft3.replace(R.id.content_frame, frag3);
-                ft3.addToBackStack("Add Car");
+                ft3.addToBackStack("Cars");
                 ft3.commit();
                 break;
 

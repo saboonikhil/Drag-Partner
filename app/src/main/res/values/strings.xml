@@ -4,7 +4,7 @@
     <!-- Strings related to navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_add_car">Add Car</string>
+    <string name="navigation_cars">Cars</string>
     <string name="navigation_trips">Trips</string>
     <string name="navigation_profile">Profile</string>
     <string name="navigation_logout">Logout</string>
