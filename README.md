@@ -1,1 +1,1 @@
-Android Application for RAN Drivers
+Android Application for RAN Admin/Driver/Associations
