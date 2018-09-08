@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.nav_add_car);
+            displaySelectedScreen(R.id.nav_cars);
         } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             count = count + 1;
             if (count == 1) {
