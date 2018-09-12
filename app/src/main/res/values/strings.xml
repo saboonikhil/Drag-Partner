@@ -12,15 +12,15 @@
     <string name="navigation_terms_of_use">Terms of Use</string>
     <string name="navigation_feedback">Send feedback</string>
 
-    <!-- Strings related to car addition -->
+    <!-- Strings related to Add Car -->
     <string name="college">College</string>
-    <string name="pickup_location">Pickup Location</string>
-    <string name="drop_location">Drop Location</string>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
+    <string name="from">Pickup Location</string>
+    <string name="to">Drop Location</string>
+    <string name="date_of_ride">Date</string>
+    <string name="time_of_ride">Time</string>
+    <string name="seats">Seats</string>
     <string name="car_name">Car Name</string>
     <string name="car_number">Car Number</string>
-    <string name="seats_available">Seats Available</string>
     <string name="trip_fare">Trip Fare</string>
     <string name="driver_name">Driver Name</string>
     <string name="driver_number">Driver Number</string>
