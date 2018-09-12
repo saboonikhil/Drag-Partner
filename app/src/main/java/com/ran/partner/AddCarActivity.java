@@ -18,11 +18,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,13 +29,19 @@ import java.util.Locale;
 public class AddCarActivity extends AppCompatActivity {
 
     private final long thirtyDays = 2592000000L;
-    private EditText seatsAvailableText, carNameText, driverNameText, driverMobileText,
-            carNumberText, defaultStartDateTextView, defaultStartTimeTextView, cabFareTextView;
-    private Button addCarButton;
-    private Calendar DateCalendar, TimeCalendar;
-    private int currentDay;
+    boolean route = true;
+    private Calendar DateCalendar;
+    private Calendar TimeCalendar;
+    private Calendar now;
+    private int selectedDay;
+    private AutoCompleteTextView dropLocationTextView, collegeSpinnerTextView;
+    private AutoCompleteTextView pickupLocationTextView;
+    private EditText dateTextView, timeTextView;
+    private EditText numberOfPeopleTextView;
     private String college;
-    private AutoCompleteTextView collegeSpinnerTextView, defaultPickupLocationTextView, defaultDropLocationEditText;
+    private int seats;
+    private Button increaseSeat, decreaseSeat, addCarButton;
+    private ImageButton locationSwap;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -48,58 +52,54 @@ public class AddCarActivity extends AppCompatActivity {
         initVariables();
 
         setupDateTimePicker();
+        seats = 1;
+        numberOfPeopleTextView.setText(Integer.toString(seats));
+
+        pickupLocationTextView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                InputMethodManager imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(pickupLocationTextView.getWindowToken(), 0);
+                View focusView = null;
+                boolean cancel = false;
+                college = collegeSpinnerTextView.getText().toString();
+                if (TextUtils.isEmpty(college)) {
+                    collegeSpinnerTextView.setError("This field is required.");
+                    focusView = collegeSpinnerTextView;
+                    cancel = true;
+                }
+                if (cancel) {
+                    focusView.requestFocus();
+                    return true;
+                }
+                return true;
+            }
+        });
+
+        dropLocationTextView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                InputMethodManager imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(dropLocationTextView.getWindowToken(), 0);
+                View focusView = null;
+                boolean cancel = false;
+                college = collegeSpinnerTextView.getText().toString();
+                if (TextUtils.isEmpty(college)) {
+                    collegeSpinnerTextView.setError("This field is required.");
+                    focusView = collegeSpinnerTextView;
+                    cancel = true;
+                }
+                if (cancel) {
+                    focusView.requestFocus();
+                    return true;
+                }
+                return true;
+            }
+        });
+
         setupCollegeSpinner();
-
-        addCarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveCar();
-            }
-        });
-
-        defaultPickupLocationTextView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm != null;
-                imm.hideSoftInputFromWindow(defaultPickupLocationTextView.getWindowToken(), 0);
-                View focusView = null;
-                boolean cancel = false;
-                college = collegeSpinnerTextView.getText().toString();
-                if (TextUtils.isEmpty(college)) {
-                    collegeSpinnerTextView.setError("This Field is Required");
-                    focusView = collegeSpinnerTextView;
-                    cancel = true;
-                }
-                if (cancel) {
-                    focusView.requestFocus();
-                    return true;
-                }
-                return true;
-            }
-        });
-
-        defaultDropLocationEditText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm != null;
-                imm.hideSoftInputFromWindow(defaultDropLocationEditText.getWindowToken(), 0);
-                View focusView = null;
-                boolean cancel = false;
-                college = collegeSpinnerTextView.getText().toString();
-                if (TextUtils.isEmpty(college)) {
-                    collegeSpinnerTextView.setError("This Field is Required");
-                    focusView = collegeSpinnerTextView;
-                    cancel = true;
-                }
-                if (cancel) {
-                    focusView.requestFocus();
-                    return true;
-                }
-                return true;
-            }
-        });
 
         collegeSpinnerTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,19 +108,58 @@ public class AddCarActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                defaultPickupLocationTextView.setText("");
-                defaultDropLocationEditText.setText("");
+                pickupLocationTextView.setText("");
+                dropLocationTextView.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 college = collegeSpinnerTextView.getText().toString();
-                selectLocation(college);
+                selectLocation(college, route);
+            }
+        });
+
+
+        locationSwap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View focusView;
+                if (TextUtils.isEmpty(college)) {
+                    collegeSpinnerTextView.setError("This field is required.");
+                    focusView = collegeSpinnerTextView;
+                    focusView.requestFocus();
+                } else {
+                    route = !route;
+                    Editable location = pickupLocationTextView.getText();
+                    pickupLocationTextView.setText(dropLocationTextView.getText());
+                    dropLocationTextView.setText(location);
+                    selectLocation(college, route);
+                }
+            }
+        });
+
+        increaseSeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                seats++;
+                numberOfPeopleTextView.setText(String.valueOf(seats));
+            }
+        });
+
+        decreaseSeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (seats == 1) {
+                    Toast.makeText(getApplicationContext(), "Are you crazy!?", Toast.LENGTH_SHORT).show();
+                } else {
+                    seats--;
+                    numberOfPeopleTextView.setText(String.valueOf(seats));
+                }
             }
         });
     }
 
-    private void selectLocation(String collegeSelected) {
+    private void selectLocation(String collegeSelected, boolean routeSelected) {
         boolean isCollegePresent = false;
         String availableColleges[] = getResources().getStringArray(R.array.colleges);
         for (String college : availableColleges) {
@@ -129,32 +168,48 @@ public class AddCarActivity extends AppCompatActivity {
             }
         }
         if (isCollegePresent) {
-            setupPickupLocationSpinner(collegeSelected);
-            setupDropLocationSpinner(collegeSelected);
+            setupPickupLocationSpinner(collegeSelected, routeSelected);
+            setupDropLocationSpinner(collegeSelected, routeSelected);
         } else {
-            Toast.makeText(this, "Please Select College", Toast.LENGTH_SHORT).show();
-            defaultPickupLocationTextView.setKeyListener(null);
+            pickupLocationTextView.setKeyListener(null);
+            dropLocationTextView.setKeyListener(null);
         }
     }
 
+    private void updateLabel() {
+        String myFormat = "EEE, MMM d";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        dateTextView.setText(sdf.format(DateCalendar.getTime()));
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private void setupPickupLocationSpinner(String collegeSelected) {
+    private void setupPickupLocationSpinner(String collegeSelected, boolean routeSelected) {
         ArrayAdapter pickupSpinnerAdapter;
-        if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-            pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                    R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
+        if (routeSelected) {
+            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
+            } else {
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
+            }
         } else {
-            pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                    R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
+            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
+            } else {
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
+            }
         }
 
-        defaultPickupLocationTextView.setAdapter(pickupSpinnerAdapter);
-        defaultPickupLocationTextView.setKeyListener(null);
+        pickupLocationTextView.setAdapter(pickupSpinnerAdapter);
+        pickupLocationTextView.setKeyListener(null);
 
-        defaultPickupLocationTextView.setOnTouchListener(new View.OnTouchListener() {
+        pickupLocationTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                defaultPickupLocationTextView.setError(null);
+                pickupLocationTextView.setError(null);
                 ((AutoCompleteTextView) v).showDropDown();
                 return false;
             }
@@ -162,138 +217,44 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupDropLocationSpinner(String collegeSelected) {
+    private void setupDropLocationSpinner(String collegeSelected, boolean routeSelected) {
         ArrayAdapter dropSpinnerAdapter;
-        if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-            dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                    R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
+        if (routeSelected) {
+            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
+            } else {
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
+            }
         } else {
-            dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                    R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
+            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
+            } else {
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
+            }
         }
 
-        defaultDropLocationEditText.setAdapter(dropSpinnerAdapter);
-        defaultDropLocationEditText.setKeyListener(null);
-        defaultDropLocationEditText.setOnTouchListener(new View.OnTouchListener() {
+        dropLocationTextView.setAdapter(dropSpinnerAdapter);
+        dropLocationTextView.setKeyListener(null);
+        dropLocationTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                defaultDropLocationEditText.setError(null);
+                dropLocationTextView.setError(null);
                 ((AutoCompleteTextView) view).showDropDown();
                 return false;
             }
         });
     }
 
-    private void saveCar() {
-        String seatsAvailable = seatsAvailableText.getText().toString();
-        String carName = carNameText.getText().toString();
-        String driverName = driverNameText.getText().toString();
-        String driverMobile = driverMobileText.getText().toString();
-        String carNumber = carNumberText.getText().toString();
-        String defaultTravelDate = defaultStartDateTextView.getText().toString();
-        String defaultTravelTime = defaultStartTimeTextView.getText().toString();
-        String defaultPickupLocation = defaultPickupLocationTextView.getText().toString();
-        String defaultDropLocation = defaultDropLocationEditText.getText().toString();
-        String cabFare = cabFareTextView.getText().toString();
-        college = collegeSpinnerTextView.getText().toString();
-
-        CabDetails cabDetails = new CabDetails(college, carName, defaultPickupLocation, defaultDropLocation, defaultTravelDate,
-                defaultTravelTime, seatsAvailable, "VL76209", driverName, driverMobile, carNumber, cabFare, "KGP7387");
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
-        mRefCarsAvailable.setValue(cabDetails);
-        Toast.makeText(this, "Car added successfully!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void setupDateTimePicker() {
-        DateCalendar = Calendar.getInstance();
-        TimeCalendar = Calendar.getInstance();
-
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                DateCalendar.set(Calendar.YEAR, year);
-                DateCalendar.set(Calendar.MONTH, monthOfYear);
-                DateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == DateCalendar.get(Calendar.DAY_OF_MONTH)) {
-                    if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000) {
-                        currentDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                        updateLabel();
-                    } else {
-                        if (TextUtils.isEmpty(defaultStartTimeTextView.getText().toString())) {
-                            currentDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                            updateLabel();
-                        } else
-                            Toast.makeText(getApplicationContext(), "Invalid Date", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    currentDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                    updateLabel();
-                }
-            }
-        };
-
-        defaultStartDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                defaultStartDateTextView.setError(null);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getApplicationContext(), date,
-                        DateCalendar.get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
-                datePickerDialog.show();
-            }
-        });
-
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                TimeCalendar.set(Calendar.MINUTE, minute);
-                int h = hourOfDay % 12;
-                if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == currentDay) {
-                    if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
-                        defaultStartTimeTextView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
-                                minute, hourOfDay < 12 ? "AM" : "PM"));
-                    else
-                        Toast.makeText(getApplicationContext(), "Invalid Time", Toast.LENGTH_LONG).show();
-                } else {
-                    if (TextUtils.isEmpty(defaultStartDateTextView.getText().toString()))
-                        Toast.makeText(getApplicationContext(), "Please Enter Date!", Toast.LENGTH_LONG).show();
-                    else
-                        defaultStartTimeTextView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
-                                minute, hourOfDay < 12 ? "AM" : "PM"));
-                }
-            }
-        };
-
-        defaultStartTimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                defaultStartTimeTextView.setError(null);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(getApplicationContext(), time, TimeCalendar
-                        .get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
-                mTimePicker.show();
-            }
-        });
-    }
-
-    private void updateLabel() {
-        String myFormat = "MMMM d, yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        defaultStartDateTextView.setText(sdf.format(DateCalendar.getTime()));
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private void setupCollegeSpinner() {
-        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.colleges, R.layout.support_simple_spinner_dropdown_item);
         collegeSpinnerTextView.setAdapter(collegeSpinnerAdapter);
         collegeSpinnerTextView.setKeyListener(null);
-
         collegeSpinnerTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -304,19 +265,85 @@ public class AddCarActivity extends AppCompatActivity {
         });
     }
 
-    private void initVariables() {
-        collegeSpinnerTextView = findViewById(R.id.spinner_select_college);
-        seatsAvailableText = findViewById(R.id.seats_available);
-        carNameText = findViewById(R.id.car_name);
-        driverNameText = findViewById(R.id.driver_name);
-        driverMobileText = findViewById(R.id.driver_number);
-        carNumberText = findViewById(R.id.car_number);
-        cabFareTextView = findViewById(R.id.trip_fare);
-        defaultPickupLocationTextView = findViewById(R.id.default_pickup_location);
-        defaultDropLocationEditText = findViewById(R.id.default_drop_location);
-        defaultStartDateTextView = findViewById(R.id.default_start_date);
-        defaultStartTimeTextView = findViewById(R.id.default_start_time);
-        addCarButton = findViewById(R.id.btn_add_car);
+    private void setupDateTimePicker() {
+        now = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                DateCalendar.set(Calendar.YEAR, year);
+                DateCalendar.set(Calendar.MONTH, monthOfYear);
+                DateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if (now.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
+                    if (TextUtils.isEmpty(timeTextView.getText().toString())) {
+                        selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
+                        updateLabel();
+                    } else {
+                        if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000) {
+                            selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
+                            updateLabel();
+                        } else
+                            Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
+                    updateLabel();
+                }
+            }
+        };
+
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateCalendar = Calendar.getInstance();
+                dateTextView.setError(null);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddCarActivity.this, date, DateCalendar
+                        .get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH),
+                        DateCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
+                datePickerDialog.show();
+            }
+        });
+
+
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                TimeCalendar.set(Calendar.MINUTE, minute);
+                View focusView;
+                int h = hourOfDay % 12;
+                if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay) {
+                    if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
+                        timeTextView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
+                                minute, hourOfDay < 12 ? "AM" : "PM"));
+                    else
+                        Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
+                } else {
+                    if (TextUtils.isEmpty(dateTextView.getText().toString())) {
+                        Toast.makeText(getApplicationContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
+                        dateTextView.setError("This field is required.");
+                        focusView = dateTextView;
+                        focusView.requestFocus();
+                    } else
+                        timeTextView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
+                                minute, hourOfDay < 12 ? "AM" : "PM"));
+                }
+            }
+        };
+
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimeCalendar = Calendar.getInstance();
+                timeTextView.setError(null);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(AddCarActivity.this, time, TimeCalendar
+                        .get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
+                mTimePicker.show();
+            }
+        });
     }
 
     private void setupActionBar() {
@@ -324,5 +351,18 @@ public class AddCarActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void initVariables() {
+        collegeSpinnerTextView = findViewById(R.id.spinner_select_college);
+        dropLocationTextView = findViewById(R.id.dropLocationAutoComplete);
+        pickupLocationTextView = findViewById(R.id.pickupLocationAutoComplete);
+        dateTextView = findViewById(R.id.travel_date);
+        timeTextView = findViewById(R.id.travel_time);
+        numberOfPeopleTextView = findViewById(R.id.number_of_people);
+        increaseSeat = findViewById(R.id.button_increase_seat);
+        decreaseSeat = findViewById(R.id.button_decrease_seat);
+        locationSwap = findViewById(R.id.location_swap);
+        addCarButton = findViewById(R.id.button_add_car);
     }
 }
