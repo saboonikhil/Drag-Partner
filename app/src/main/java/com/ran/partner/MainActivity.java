@@ -64,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (itemId) {
 
             case R.id.nav_trips:
+                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                TripsFragment frag1 = new TripsFragment();
+                ft1.replace(R.id.content_frame, frag1);
+                ft1.addToBackStack("Trips");
+                ft1.commit();
                 break;
 
             case R.id.nav_profile:
