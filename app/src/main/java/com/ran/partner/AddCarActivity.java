@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -141,6 +142,56 @@ public class AddCarActivity extends AppCompatActivity {
                     seats--;
                     seatsView.setText(String.valueOf(seats));
                 }
+            }
+        });
+
+        driverContactView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                driverContactView.setFocusableInTouchMode(true);
+                driverContactView.requestFocus();
+                imm.showSoftInput(driverContactView, InputMethodManager.SHOW_IMPLICIT);
+                return true;
+            }
+        });
+
+        driverContactView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (driverContactView.getText().toString().length() == 0) {
+                        driverContactView.setText(countryCode);
+                        Selection.setSelection(driverContactView.getText(), driverContactView.getText().length());
+                    }
+                    imm.showSoftInput(driverContactView, InputMethodManager.SHOW_IMPLICIT);
+                } else {
+                    if (driverContactView.getText().toString().equals(countryCode)) {
+                        driverContactView.removeTextChangedListener(textWatcher);
+                        driverContactView.getText().clear();
+                        driverContactView.addTextChangedListener(textWatcher);
+                    }
+                }
+            }
+        });
+
+        driverContactView.addTextChangedListener(textWatcher = new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().startsWith("+91 ")) {
+                    driverContactView.setText(countryCode);
+                    Selection.setSelection(driverContactView.getText(), driverContactView.getText().length());
+                }
+
             }
         });
 
@@ -358,6 +409,13 @@ public class AddCarActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(carNumber)) {
             focusView = carNumberView;
+            cancel = true;
+        } else if (driverContact.equals(countryCode)) {
+            driverContactView.removeTextChangedListener(textWatcher);
+            driverContactView.getText().clear();
+            driverContactView.addTextChangedListener(textWatcher);
+        } else if (driverContact.length() > 4 && driverContact.length() < 14) {
+            focusView = driverContactView;
             cancel = true;
         }
 
