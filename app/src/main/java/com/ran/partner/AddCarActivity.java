@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,15 +33,19 @@ import java.util.Locale;
 
 public class AddCarActivity extends AppCompatActivity {
 
-    private final long thirtyDays = 2592000000L;
-    private boolean route = true;
-    private Calendar DateCalendar, TimeCalendar, now;
-    private int selectedDay, seats;
-    private AutoCompleteTextView dropView, collegeNameView, pickupView;
+    private AutoCompleteTextView collegeNameView, pickupView, dropView;
     private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView, driverNameView, driverContactView;
-    private String collegeNameText;
-    private Button increaseSeatView, decreaseSeatView, addCarView;
     private ImageButton swapLocationView;
+    private Button increaseSeatView, decreaseSeatView, addCarView;
+    private InputMethodManager imm;
+    private TextWatcher textWatcher;
+    private Calendar DateCalendar, TimeCalendar, now;
+    private String collegeNameText;
+    private String countryCode = "+91 ";
+    private long thirtyDays = 2592000000L;
+    private int selectedDay;
+    private int seats = 4;
+    private boolean route = true;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -50,56 +55,8 @@ public class AddCarActivity extends AppCompatActivity {
         setupActionBar();
         initVariables();
 
-        setupDateTimePicker();
-        seats = 1;
-        String numberAsString = "" + seats;
-        seatsView.setText(numberAsString);
-
-        pickupView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                InputMethodManager imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm != null;
-                imm.hideSoftInputFromWindow(pickupView.getWindowToken(), 0);
-                View focusView = null;
-                boolean cancel = false;
-                collegeNameText = collegeNameView.getText().toString();
-                if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.setError("This field is required.");
-                    focusView = collegeNameView;
-                    cancel = true;
-                }
-                if (cancel) {
-                    focusView.requestFocus();
-                    return true;
-                }
-                return true;
-            }
-        });
-
-        dropView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                InputMethodManager imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm != null;
-                imm.hideSoftInputFromWindow(dropView.getWindowToken(), 0);
-                View focusView = null;
-                boolean cancel = false;
-                collegeNameText = collegeNameView.getText().toString();
-                if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.setError("This field is required.");
-                    focusView = collegeNameView;
-                    cancel = true;
-                }
-                if (cancel) {
-                    focusView.requestFocus();
-                    return true;
-                }
-                return true;
-            }
-        });
-
         setupCollegeSpinner();
+        setupDateTimePicker();
 
         collegeNameView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,14 +76,41 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
+        pickupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                imm.hideSoftInputFromWindow(pickupView.getWindowToken(), 0);
+                if (TextUtils.isEmpty(collegeNameText)) {
+                    collegeNameView.requestFocus();
+                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                }
+                return true;
+            }
+        });
+
+        dropView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                imm.hideSoftInputFromWindow(dropView.getWindowToken(), 0);
+                if (TextUtils.isEmpty(collegeNameText)) {
+                    collegeNameView.requestFocus();
+                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                }
+                return true;
+            }
+        });
+
         swapLocationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View focusView;
                 if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.setError("This field is required.");
-                    focusView = collegeNameView;
-                    focusView.requestFocus();
+                    collegeNameView.requestFocus();
+                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    imm.hideSoftInputFromWindow(collegeNameView.getWindowToken(), 0);
+                } else if ((TextUtils.isEmpty(pickupView.getText().toString())) && (TextUtils.isEmpty(dropView.getText().toString()))) {
+                    pickupView.requestFocus();
+                    pickupView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    imm.hideSoftInputFromWindow(pickupView.getWindowToken(), 0);
                 } else {
                     route = !route;
                     Editable location = pickupView.getText();
@@ -137,20 +121,23 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
+        String numberAsString = "" + seats;
+        seatsView.setText(numberAsString);
+
         increaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                seats++;
-                seatsView.setText(String.valueOf(seats));
+                if (seats != 14) {
+                    seats++;
+                    seatsView.setText(String.valueOf(seats));
+                }
             }
         });
 
         decreaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (seats == 1) {
-                    Toast.makeText(getApplicationContext(), "Are you crazy!?", Toast.LENGTH_SHORT).show();
-                } else {
+                if (seats != 1) {
                     seats--;
                     seatsView.setText(String.valueOf(seats));
                 }
@@ -182,36 +169,19 @@ public class AddCarActivity extends AppCompatActivity {
         }
     }
 
-    private void saveCar() {
-        String seats = seatsView.getText().toString();
-        String carName = carNameView.getText().toString();
-        String driverName = driverNameView.getText().toString();
-        String driverContact = driverContactView.getText().toString();
-        String carNumber = carNumberView.getText().toString();
-        String collegeName = collegeNameView.getText().toString();
-        String startDate = startDateView.getText().toString();
-        String startTime = startTimeView.getText().toString();
-        String pickup = pickupView.getText().toString();
-        String drop = dropView.getText().toString();
-        String fare = fareView.getText().toString();
-
-        CabDetails cabDetails = new CabDetails(collegeName, carName, pickup, drop, startDate,
-                startTime, seats, "Admin", driverName, driverContact, carNumber, fare, "Admin");
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
-        mRefCarsAvailable.setValue(cabDetails);
-        Toast.makeText(this, "Car added successfully!", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(AddCarActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void updateLabel() {
-        String myFormat = "EEE, MMM d";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        startDateView.setText(sdf.format(DateCalendar.getTime()));
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupCollegeSpinner() {
+        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.colleges, R.layout.support_simple_spinner_dropdown_item);
+        collegeNameView.setAdapter(collegeSpinnerAdapter);
+        collegeNameView.setKeyListener(null);
+        collegeNameView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ((AutoCompleteTextView) view).showDropDown();
+                return false;
+            }
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -234,13 +204,11 @@ public class AddCarActivity extends AppCompatActivity {
                         R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
             }
         }
-
         pickupView.setAdapter(pickupSpinnerAdapter);
         pickupView.setKeyListener(null);
         pickupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                pickupView.setError(null);
                 ((AutoCompleteTextView) v).showDropDown();
                 return false;
             }
@@ -267,29 +235,11 @@ public class AddCarActivity extends AppCompatActivity {
                         R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
             }
         }
-
         dropView.setAdapter(dropSpinnerAdapter);
         dropView.setKeyListener(null);
         dropView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                dropView.setError(null);
-                ((AutoCompleteTextView) view).showDropDown();
-                return false;
-            }
-        });
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupCollegeSpinner() {
-        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.colleges, R.layout.support_simple_spinner_dropdown_item);
-        collegeNameView.setAdapter(collegeSpinnerAdapter);
-        collegeNameView.setKeyListener(null);
-        collegeNameView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                collegeNameView.setError(null);
                 ((AutoCompleteTextView) view).showDropDown();
                 return false;
             }
@@ -325,11 +275,10 @@ public class AddCarActivity extends AppCompatActivity {
         startDateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imm.hideSoftInputFromWindow(startDateView.getWindowToken(), 0);
                 DateCalendar = Calendar.getInstance();
-                startDateView.setError(null);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddCarActivity.this, date, DateCalendar
-                        .get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH),
-                        DateCalendar.get(Calendar.DAY_OF_MONTH));
+                        .get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
                 datePickerDialog.show();
@@ -342,7 +291,6 @@ public class AddCarActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 TimeCalendar.set(Calendar.MINUTE, minute);
-                View focusView;
                 int h = hourOfDay % 12;
                 if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay) {
                     if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
@@ -353,9 +301,9 @@ public class AddCarActivity extends AppCompatActivity {
                 } else {
                     if (TextUtils.isEmpty(startDateView.getText().toString())) {
                         Toast.makeText(getApplicationContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
-                        startDateView.setError("This field is required.");
-                        focusView = startDateView;
-                        focusView.requestFocus();
+                        startDateView.setFocusable(true);
+                        startDateView.requestFocus();
+                        startDateView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                     } else
                         startTimeView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
                                 minute, hourOfDay < 12 ? "AM" : "PM"));
@@ -366,14 +314,69 @@ public class AddCarActivity extends AppCompatActivity {
         startTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startTimeView.requestFocus();
+                imm.hideSoftInputFromWindow(startTimeView.getWindowToken(), 0);
                 TimeCalendar = Calendar.getInstance();
-                startTimeView.setError(null);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(AddCarActivity.this, time, TimeCalendar
                         .get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
                 mTimePicker.show();
             }
         });
+    }
+
+    private void updateLabel() {
+        String myFormat = "EEE, MMM d";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        startDateView.setText(sdf.format(DateCalendar.getTime()));
+    }
+
+    private void saveCar() {
+        String collegeName = collegeNameView.getText().toString();
+        String pickup = pickupView.getText().toString();
+        String drop = dropView.getText().toString();
+        String startDate = startDateView.getText().toString();
+        String startTime = startTimeView.getText().toString();
+        String seats = seatsView.getText().toString();
+        String fare = fareView.getText().toString();
+        String carName = carNameView.getText().toString();
+        String carNumber = carNumberView.getText().toString();
+        String driverName = driverNameView.getText().toString();
+        String driverContact = driverContactView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(collegeName)) {
+            focusView = collegeNameView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(seats)) {
+            focusView = seatsView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(carName)) {
+            focusView = carNameView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(carNumber)) {
+            focusView = carNumberView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+            focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            CabDetails cabDetails = new CabDetails(collegeName, carName, pickup, drop, startDate,
+                    startTime, seats, "Admin", driverName, driverContact, carNumber, fare, "Admin");
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
+            mRefCarsAvailable.setValue(cabDetails);
+            Toast.makeText(this, "Car added successfully!", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(AddCarActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void setupActionBar() {
@@ -399,5 +402,6 @@ public class AddCarActivity extends AppCompatActivity {
         driverNameView = findViewById(R.id.add_car_driver_name);
         driverContactView = findViewById(R.id.add_car_driver_contact);
         addCarView = findViewById(R.id.button_add_car);
+        imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 }
