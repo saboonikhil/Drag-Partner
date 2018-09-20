@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,9 +28,15 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -35,7 +44,7 @@ import java.util.Locale;
 public class AddCarActivity extends AppCompatActivity {
 
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
-    private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView, driverNameView, driverContactView;
+    private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView, driverContactView;
     private ImageButton swapLocationView;
     private Button increaseSeatView, decreaseSeatView, addCarView;
     private InputMethodManager imm;
@@ -57,8 +66,6 @@ public class AddCarActivity extends AppCompatActivity {
         initVariables();
 
         setupCollegeSpinner();
-        setupDateTimePicker();
-
         collegeNameView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -122,6 +129,7 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
+        setupDateTimePicker();
         String numberAsString = "" + seats;
         seatsView.setText(numberAsString);
 
@@ -191,7 +199,6 @@ public class AddCarActivity extends AppCompatActivity {
                     driverContactView.setText(countryCode);
                     Selection.setSelection(driverContactView.getText(), driverContactView.getText().length());
                 }
-
             }
         });
 
@@ -308,17 +315,17 @@ public class AddCarActivity extends AppCompatActivity {
                 if (now.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
                     if (TextUtils.isEmpty(startTimeView.getText().toString())) {
                         selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                        updateLabel();
+                        startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
                     } else {
                         if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000) {
                             selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                            updateLabel();
+                            startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
                         } else
                             Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                    updateLabel();
+                    startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
                 }
             }
         };
@@ -328,8 +335,8 @@ public class AddCarActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imm.hideSoftInputFromWindow(startDateView.getWindowToken(), 0);
                 DateCalendar = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddCarActivity.this, date, DateCalendar
-                        .get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddCarActivity.this, date,
+                        DateCalendar.get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
                 datePickerDialog.show();
@@ -350,12 +357,9 @@ public class AddCarActivity extends AppCompatActivity {
                     else
                         Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                 } else {
-                    if (TextUtils.isEmpty(startDateView.getText().toString())) {
+                    if (TextUtils.isEmpty(startDateView.getText().toString()))
                         Toast.makeText(getApplicationContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
-                        startDateView.setFocusable(true);
-                        startDateView.requestFocus();
-                        startDateView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-                    } else
+                    else
                         startTimeView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
                                 minute, hourOfDay < 12 ? "AM" : "PM"));
                 }
@@ -369,30 +373,22 @@ public class AddCarActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(startTimeView.getWindowToken(), 0);
                 TimeCalendar = Calendar.getInstance();
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(AddCarActivity.this, time, TimeCalendar
-                        .get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
+                mTimePicker = new TimePickerDialog(AddCarActivity.this, time,
+                        TimeCalendar.get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
                 mTimePicker.show();
             }
         });
     }
 
-    private void updateLabel() {
-        String myFormat = "EEE, MMM d";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        startDateView.setText(sdf.format(DateCalendar.getTime()));
-    }
-
     private void saveCar() {
         String collegeName = collegeNameView.getText().toString();
-        String pickup = pickupView.getText().toString();
-        String drop = dropView.getText().toString();
-        String startDate = startDateView.getText().toString();
-        String startTime = startTimeView.getText().toString();
+        //String pickup = pickupView.getText().toString();
+        //String drop = dropView.getText().toString();
         String seats = seatsView.getText().toString();
         String fare = fareView.getText().toString();
         String carName = carNameView.getText().toString();
         String carNumber = carNumberView.getText().toString();
-        String driverName = driverNameView.getText().toString();
+        //String driverName = driverNameView.getText().toString();
         String driverContact = driverContactView.getText().toString();
 
         boolean cancel = false;
@@ -403,6 +399,9 @@ public class AddCarActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(seats)) {
             focusView = seatsView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(fare)) {
+            focusView = fareView;
             cancel = true;
         } else if (TextUtils.isEmpty(carName)) {
             focusView = carNameView;
@@ -423,18 +422,54 @@ public class AddCarActivity extends AppCompatActivity {
             focusView.requestFocus();
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
-            CabDetails cabDetails = new CabDetails(collegeName, carName, pickup, drop, startDate,
-                    startTime, seats, "Admin", driverName, driverContact, carNumber, fare, "Admin");
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference mRefCarsAvailable = database.getReference().child("Cars Available").push();
-            mRefCarsAvailable.setValue(cabDetails);
-            Toast.makeText(this, "Car added successfully!", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(AddCarActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if (checkNetworkConnection())
+                new HTTPAsyncTask().execute("http://fefabea8.ngrok.io/cabs");
+            else
+                Toast.makeText(this, "Unable to connect to server. Check your internet connection!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public boolean checkNetworkConnection() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connMgr != null;
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private String httpPost(String myUrl) throws IOException, JSONException {
+        URL url = new URL(myUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        JSONObject jsonObject = buildJsonObject();
+        setPostRequestContent(conn, jsonObject);
+        conn.connect();
+        return conn.getResponseMessage() + "";
+    }
+
+    private JSONObject buildJsonObject() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.accumulate("collegeName", collegeNameView.getText().toString());
+        jsonObject.accumulate("pickup", pickupView.getText().toString());
+        jsonObject.accumulate("drop", dropView.getText().toString());
+        jsonObject.accumulate("startDate", startDateView.getText().toString());
+        jsonObject.accumulate("startTime", startTimeView.getText().toString());
+        jsonObject.accumulate("seats", seatsView.getText().toString());
+        jsonObject.accumulate("fare", fareView.getText().toString());
+        jsonObject.accumulate("carName", carNameView.getText().toString());
+        jsonObject.accumulate("carNumber", carNumberView.getText().toString());
+
+        return jsonObject;
+    }
+
+    private void setPostRequestContent(HttpURLConnection conn, JSONObject jsonObject) throws IOException {
+        OutputStream os = conn.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+        writer.write(jsonObject.toString());
+        Log.i(AddCarActivity.class.toString(), jsonObject.toString());
+        writer.flush();
+        writer.close();
+        os.close();
     }
 
     private void setupActionBar() {
@@ -457,9 +492,31 @@ public class AddCarActivity extends AppCompatActivity {
         fareView = findViewById(R.id.add_car_fare);
         carNameView = findViewById(R.id.add_car_name);
         carNumberView = findViewById(R.id.add_car_number);
-        driverNameView = findViewById(R.id.add_car_driver_name);
+        //EditText driverNameView = findViewById(R.id.add_car_driver_name);
         driverContactView = findViewById(R.id.add_car_driver_contact);
         addCarView = findViewById(R.id.button_add_car);
         imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                try {
+                    return httpPost(urls[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return "Error!";
+                }
+            } catch (IOException e) {
+                return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
     }
 }
