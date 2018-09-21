@@ -50,7 +50,7 @@ public class AddCarActivity extends AppCompatActivity {
     private InputMethodManager imm;
     private TextWatcher textWatcher;
     private Calendar DateCalendar, TimeCalendar, now;
-    private String collegeNameText;
+    private String collegeNameText, startDate, startTime;
     private String countryCode = "+91 ";
     private long thirtyDays = 2592000000L;
     private int selectedDay;
@@ -315,17 +315,17 @@ public class AddCarActivity extends AppCompatActivity {
                 if (now.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
                     if (TextUtils.isEmpty(startTimeView.getText().toString())) {
                         selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                        startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
+                        formatDate();
                     } else {
                         if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000) {
                             selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                            startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
+                            formatDate();
                         } else
                             Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                    startDateView.setText(new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime()));
+                    formatDate();
                 }
             }
         };
@@ -344,24 +344,20 @@ public class AddCarActivity extends AppCompatActivity {
         });
 
         final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @SuppressLint("DefaultLocale")
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 TimeCalendar.set(Calendar.MINUTE, minute);
-                int h = hourOfDay % 12;
                 if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay) {
                     if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
-                        startTimeView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
-                                minute, hourOfDay < 12 ? "AM" : "PM"));
+                        formatTime();
                     else
                         Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                 } else {
                     if (TextUtils.isEmpty(startDateView.getText().toString()))
                         Toast.makeText(getApplicationContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
                     else
-                        startTimeView.setText(String.format("%02d:%02d %s", h == 0 ? 12 : h,
-                                minute, hourOfDay < 12 ? "AM" : "PM"));
+                        formatTime();
                 }
             }
         };
@@ -378,6 +374,20 @@ public class AddCarActivity extends AppCompatActivity {
                 mTimePicker.show();
             }
         });
+    }
+
+    private void formatDate() {
+        String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime());
+        String defaultFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(DateCalendar.getTime());
+        startDateView.setText(displayFormat);
+        startDate = defaultFormat;
+    }
+
+    private void formatTime() {
+        String displayFormat = new SimpleDateFormat("hh:mm a", Locale.US).format(TimeCalendar.getTime());
+        String defaultFormat = new SimpleDateFormat("HH:mm:ss", Locale.US).format(TimeCalendar.getTime());
+        startTimeView.setText(displayFormat);
+        startTime = defaultFormat;
     }
 
     private void saveCar() {
@@ -423,7 +433,7 @@ public class AddCarActivity extends AppCompatActivity {
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (checkNetworkConnection())
-                new HTTPAsyncTask().execute("http://fefabea8.ngrok.io/cabs");
+                new HTTPAsyncTask().execute("http://af4ea417.ngrok.io/cabs");
             else
                 Toast.makeText(this, "Unable to connect to server. Check your internet connection!", Toast.LENGTH_SHORT).show();
         }
@@ -452,8 +462,8 @@ public class AddCarActivity extends AppCompatActivity {
         jsonObject.accumulate("collegeName", collegeNameView.getText().toString());
         jsonObject.accumulate("pickup", pickupView.getText().toString());
         jsonObject.accumulate("drop", dropView.getText().toString());
-        jsonObject.accumulate("startDate", startDateView.getText().toString());
-        jsonObject.accumulate("startTime", startTimeView.getText().toString());
+        jsonObject.accumulate("startDate", startDate);
+        jsonObject.accumulate("startTime", startTime);
         jsonObject.accumulate("seats", seatsView.getText().toString());
         jsonObject.accumulate("fare", fareView.getText().toString());
         jsonObject.accumulate("carName", carNameView.getText().toString());
