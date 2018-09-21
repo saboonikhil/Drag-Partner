@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -43,12 +45,14 @@ import java.util.Locale;
 
 public class AddCarActivity extends AppCompatActivity {
 
+    private LinearLayout rootLayout;
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
     private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView, driverContactView;
     private ImageButton swapLocationView;
     private Button increaseSeatView, decreaseSeatView, addCarView;
     private InputMethodManager imm;
     private TextWatcher textWatcher;
+    private Snackbar snackbar;
     private Calendar DateCalendar, TimeCalendar, now;
     private String collegeNameText, startDate, startTime;
     private String countryCode = "+91 ";
@@ -435,11 +439,12 @@ public class AddCarActivity extends AppCompatActivity {
             if (checkNetworkConnection())
                 new HTTPAsyncTask().execute("http://af4ea417.ngrok.io/cabs");
             else
-                Toast.makeText(this, "Unable to connect to server. Check your internet connection!", Toast.LENGTH_SHORT).show();
+                snackbar.show();
         }
     }
 
     public boolean checkNetworkConnection() {
+        snackbar = Snackbar.make(rootLayout, "NO INTERNET CONNECTION!", Snackbar.LENGTH_LONG);
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connMgr != null;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -454,7 +459,7 @@ public class AddCarActivity extends AppCompatActivity {
         JSONObject jsonObject = buildJsonObject();
         setPostRequestContent(conn, jsonObject);
         conn.connect();
-        return conn.getResponseMessage() + "";
+        return conn.getResponseCode() + "";
     }
 
     private JSONObject buildJsonObject() throws JSONException {
@@ -490,6 +495,7 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
     private void initVariables() {
+        rootLayout = findViewById(R.id.add_car_layout);
         collegeNameView = findViewById(R.id.add_car_college);
         pickupView = findViewById(R.id.add_car_pickup);
         dropView = findViewById(R.id.add_car_drop);
@@ -514,18 +520,23 @@ public class AddCarActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try {
                 try {
-                    return httpPost(urls[0]);
+                    if (httpPost(urls[0]).equals("201")) {
+                        return "Car added successfully!";
+                    }
+                    return null;
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    return "Error!";
+                    return "Error while connecting to the server!";
                 }
             } catch (IOException e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                return "Unable to connect to the server.";
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
+            Toast.makeText(AddCarActivity.this, result, Toast.LENGTH_LONG).show();
+            finish();
             super.onPostExecute(result);
         }
     }
