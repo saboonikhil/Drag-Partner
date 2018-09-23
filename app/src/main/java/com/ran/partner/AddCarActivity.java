@@ -271,6 +271,7 @@ public class AddCarActivity extends AppCompatActivity {
         pickupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                imm.hideSoftInputFromWindow(pickupView.getWindowToken(), 0);
                 ((AutoCompleteTextView) v).showDropDown();
                 return false;
             }
@@ -302,6 +303,7 @@ public class AddCarActivity extends AppCompatActivity {
         dropView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                imm.hideSoftInputFromWindow(dropView.getWindowToken(), 0);
                 ((AutoCompleteTextView) view).showDropDown();
                 return false;
             }
@@ -511,7 +513,7 @@ public class AddCarActivity extends AppCompatActivity {
         //EditText driverNameView = findViewById(R.id.add_car_driver_name);
         driverContactView = findViewById(R.id.add_car_driver_contact);
         addCarView = findViewById(R.id.button_add_car);
-        imm = (InputMethodManager) AddCarActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @SuppressLint("StaticFieldLeak")

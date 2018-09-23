@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.getMenu().getItem(0).setChecked(true);
-        displaySelectedScreen(R.id.nav_trips);
+        displaySelectedScreen(R.id.nav_now);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             count = count + 1;
             if (count == 1) {
-                Toast.makeText(MainActivity.this, "Press again to close RAN",
+                Toast.makeText(MainActivity.this, "Press again to close RAN Partner",
                         Toast.LENGTH_SHORT).show();
             } else {
                 finish();
@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void displaySelectedScreen(int itemId) {
 
         switch (itemId) {
+
+            case R.id.nav_now:
+                break;
 
             case R.id.nav_trips:
                 break;
@@ -80,20 +83,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 break;
 
-            case R.id.nav_about:
+            case R.id.nav_support:
                 FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
                 AboutFragment frag4 = new AboutFragment();
                 ft4.replace(R.id.content_frame, frag4);
                 ft4.addToBackStack("About");
                 ft4.commit();
                 break;
-
-            case R.id.nav_terms_of_use:
-                break;
-
-            case R.id.nav_feedback:
-                break;
-
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
