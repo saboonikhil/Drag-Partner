@@ -11,7 +11,10 @@
     <string name="navigation_logout">Logout</string>
     <string name="navigation_support"> Call Support</string>
 
-    <!-- Strings related to Add Car -->
+    <!-- Strings related to Now -->
+    <string name="action_now">Start Trip</string>
+
+    <!-- Strings related to Cars -->
     <string name="college">College</string>
     <string name="pickup_location">Pickup Location</string>
     <string name="drop_location">Drop Location</string>
