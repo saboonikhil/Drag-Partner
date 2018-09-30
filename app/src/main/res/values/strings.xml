@@ -12,7 +12,10 @@
     <string name="navigation_support"> Call Support</string>
 
     <!-- Strings related to Now -->
-    <string name="action_now">Start Trip</string>
+    <string name="trip_id">Trip ID</string>
+    <string name="ready_to_pickup">Ready To Pickup</string>
+    <string name="start_trip">Start Trip</string>
+    <string name="end_trip">End Trip</string>
 
     <!-- Strings related to Cars -->
     <string name="college">College</string>
