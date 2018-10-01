@@ -1,4 +1,4 @@
-package com.bonvoyage.admin.model;
+package com.ran.partner.model;
 
 import java.io.Serializable;
 
