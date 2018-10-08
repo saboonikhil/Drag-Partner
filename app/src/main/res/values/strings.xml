@@ -36,4 +36,5 @@
     <string name="version_info">1.0.0</string>
     <string name="down_share_app">Share App</string>
 
+    <string name="today">Today</string>
 </resources>
