@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".CarsFragment">
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
 
-    <com.ran.partner.util.ScrollDatePicker.ScrollDatePicker
-        android:id="@+id/cars_scroll_date_picker"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/cars_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="24dp">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_car_button"
-            android:layout_width="wrap_content"
+        <com.ran.partner.util.HorizontalCalendar.HorizontalCalendarView
+            android:id="@+id/cars_calendar_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:clickable="true"
-            android:focusable="true"
-            app:elevation="4dp"
-            app:rippleColor="?attr/colorButtonNormal"
-            app:srcCompat="@drawable/ic_add_white_24dp"
-            tools:ignore="VectorDrawableCompat" />
+            android:background="@color/colorPrimary"
+            app:textColorSelected="#FF4081" />
 
-    </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
 
-</LinearLayout>
+</RelativeLayout>

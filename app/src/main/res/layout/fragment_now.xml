@@ -46,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:text="VLR652887"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="#000" />
 
                 </LinearLayout>
 
@@ -202,7 +202,7 @@
                                 android:layout_width="2dp"
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorAccent"
+                                android:background="#000"
                                 tools:ignore="NestedWeights" />
 
                             <ImageView

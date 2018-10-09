@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#ffffff</color>
+
     <color name="black">#000000</color>
     <color name="jet">#222222</color>
     <color name="oil">#333333</color>
@@ -22,11 +23,4 @@
     <color name="grey_60">#666666</color>
     <color name="grey_80">#37474F</color>
     <color name="grey_90">#263238</color>
-
-    <color name="today_border">#e4e4e4</color>
-    <color name="today_background">#85f7f7f7</color>
-    <color name="secundaryTextColor">#757575</color>
-    <color name="primaryTextColor">#4d4d4d</color>
-    <color name="colorHover">#30818181</color>
-
 </resources>
