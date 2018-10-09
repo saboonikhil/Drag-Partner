@@ -6,4 +6,20 @@
         <attr name="border_color" format="color" />
         <attr name="shadow" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="HorizontalCalendarView">
+        <attr name="textColorNormal" format="color" />
+        <attr name="colorTopText" format="color" />
+        <attr name="colorMiddleText" format="color" />
+        <attr name="colorBottomText" format="color" />
+        <attr name="textColorSelected" format="color" />
+        <attr name="colorTopTextSelected" format="color" />
+        <attr name="colorMiddleTextSelected" format="color" />
+        <attr name="colorBottomTextSelected" format="color" />
+        <attr name="selectedDateBackground" format="reference" />
+        <attr name="selectorColor" format="color" />
+        <attr name="sizeTopText" format="dimension" />
+        <attr name="sizeMiddleText" format="dimension" />
+        <attr name="sizeBottomText" format="dimension" />
+    </declare-styleable>
 </resources>
