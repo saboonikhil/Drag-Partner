@@ -11,6 +11,10 @@
     <string name="navigation_logout">Logout</string>
     <string name="navigation_support"> Call Support</string>
 
+    <string name="upcoming">Upcoming</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="completed">Completed</string>
+
     <!-- Strings related to Now -->
     <string name="trip_id">Trip ID</string>
     <string name="ready_to_pickup">Ready To Pickup</string>
