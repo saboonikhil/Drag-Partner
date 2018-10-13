@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.ran.partner.adapter.TripsCardAdapter;
 
-public class TripsFragment extends Fragment {
+public class CompletedFragment extends Fragment {
 
     private Activity parentActivity;
 
@@ -27,7 +27,7 @@ public class TripsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parentActivity.setTitle("My Trips");
+        parentActivity.setTitle("Completed Trips");
         RecyclerView recyclerView = view.findViewById(R.id.my_trips_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);

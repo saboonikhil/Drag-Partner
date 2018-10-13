@@ -16,7 +16,7 @@
         <item
             android:id="@+id/navigation_drawer_connections"
             android:icon="@drawable/ic_connections"
-            android:title="@string/organizations" />
+            android:title="@string/connections" />
 
         <item
             android:id="@+id/navigation_drawer_cars"
@@ -34,6 +34,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_drawer_support"
+            android:checkable="false"
             android:icon="@drawable/ic_phone"
             android:title="@string/call_support" />
     </group>

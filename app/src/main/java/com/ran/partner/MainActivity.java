@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,15 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout rootLayout;
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
     private NestedScrollView nestedScrollView;
     private BottomNavigationView bottomNavigationView;
-    private boolean isNavigationHide = false;
-    private int count = 0;
+    private boolean isNavigationHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,41 +35,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initVariables();
         setSupportActionBar(toolbarView);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, rootLayout, toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootLayout,
+                toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
         rootLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationDrawerView.setNavigationItemSelectedListener(this);
-        navigationDrawerView.getMenu().getItem(0).setChecked(true);
-        displaySelectedScreen(R.id.navigation_drawer_dashboard);
+        navigationDrawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Fragment frag;
+                switch (item.getItemId()) {
+                    case R.id.navigation_drawer_dashboard:
+                        break;
+
+                    case R.id.navigation_drawer_connections:
+                        break;
+
+                    case R.id.navigation_drawer_profile:
+                        break;
+
+                    case R.id.navigation_drawer_cars:
+                        frag = new CarsFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
+                        break;
+
+                    case R.id.navigation_drawer_logout:
+                        break;
+
+                    case R.id.navigation_drawer_support:
+                        break;
+                }
+                rootLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY < oldScrollY) { // up
-                    animateNavigation(false);
+                    animateBottomNavigation(false);
                 }
                 if (scrollY > oldScrollY) { // down
-                    animateNavigation(true);
+                    animateBottomNavigation(true);
                 }
             }
         });
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.bottom_navigation_upcoming:
-                        return true;
-                    case R.id.bottom_navigation_ongoing:
-                        return true;
-                    case R.id.bottom_navigation_completed:
-                        return true;
-                }
-                return false;
-            }
-        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+        displaySelectedScreen(R.id.bottom_navigation_ongoing);
     }
 
     @Override
@@ -79,51 +95,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void displaySelectedScreen(int itemId) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment frag;
         switch (itemId) {
-            case R.id.navigation_drawer_dashboard:
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                NowFragment frag1 = new NowFragment();
-                ft1.replace(R.id.main_content_frame, frag1);
-                ft1.addToBackStack("Now");
-                ft1.commit();
+            case R.id.bottom_navigation_upcoming:
                 break;
 
-            case R.id.navigation_drawer_connections:
-                FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-                TripsFragment frag2 = new TripsFragment();
-                ft2.replace(R.id.main_content_frame, frag2);
-                ft2.addToBackStack("Trips");
-                ft2.commit();
+            case R.id.bottom_navigation_ongoing:
+                frag = new OngoingFragment();
+                ft.replace(R.id.main_content_frame, frag).commit();
                 break;
 
-            case R.id.navigation_drawer_profile:
-                break;
-
-            case R.id.navigation_drawer_cars:
-                FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-                CarsFragment frag3 = new CarsFragment();
-                ft3.replace(R.id.main_content_frame, frag3);
-                ft3.addToBackStack("Cars");
-                ft3.commit();
-                break;
-
-            case R.id.navigation_drawer_logout:
-                break;
-
-            case R.id.navigation_drawer_support:
-                FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
-                AboutFragment frag4 = new AboutFragment();
-                ft4.replace(R.id.main_content_frame, frag4);
-                ft4.addToBackStack("About");
-                ft4.commit();
+            case R.id.bottom_navigation_completed:
+                frag = new CompletedFragment();
+                ft.replace(R.id.main_content_frame, frag).commit();
                 break;
         }
-        rootLayout.closeDrawer(GravityCompat.START);
+        int size = navigationDrawerView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationDrawerView.getMenu().getItem(i).setChecked(false);
+        }
     }
 
-    private void animateNavigation(final boolean hide) {
-        if (isNavigationHide && hide || !isNavigationHide && !hide) return;
-        isNavigationHide = hide;
+    private void animateBottomNavigation(final boolean hide) {
+        if (isNavigationHidden && hide || !isNavigationHidden && !hide) return;
+        isNavigationHidden = hide;
         int moveY = hide ? (2 * bottomNavigationView.getHeight()) : 0;
         bottomNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
@@ -132,17 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (rootLayout.isDrawerOpen(GravityCompat.START)) {
             rootLayout.closeDrawer(GravityCompat.START);
-        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_cars);
-        } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            count = count + 1;
-            if (count == 1) {
-                Toast.makeText(MainActivity.this, "Press again to close RAN Partner",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                finish();
-            }
+        } else {
+            finish();
         }
     }
 

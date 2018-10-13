@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class NowFragment extends Fragment {
+public class OngoingFragment extends Fragment {
 
     private Activity parentActivity;
     private Calendar now;
@@ -43,7 +43,7 @@ public class NowFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parentActivity.setTitle("RAN Partner");
+        parentActivity.setTitle("Ongoing Trips");
         initVariables();
 
         timeLayout.setVisibility(View.GONE);

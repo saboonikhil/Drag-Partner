@@ -6,7 +6,7 @@
     <string name="close_navigation_drawer">Close navigation drawer</string>
     <string name="dashboard">Dashboard</string>
     <string name="profile">Profile</string>
-    <string name="organizations">Organizations</string>
+    <string name="connections">Connections</string>
     <string name="cars">Cars</string>
     <string name="logout">Logout</string>
     <string name="call_support">Call Support</string>
