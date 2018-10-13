@@ -47,12 +47,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Fragment frag;
                 switch (item.getItemId()) {
                     case R.id.navigation_drawer_dashboard:
+                        frag = new DashboardFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_connections:
+                        frag = new ConnectionsFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_profile:
+                        frag = new ProfileFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_cars:
@@ -99,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Fragment frag;
         switch (itemId) {
             case R.id.bottom_navigation_upcoming:
+                frag = new UpcomingFragment();
+                ft.replace(R.id.main_content_frame, frag).commit();
                 break;
 
             case R.id.bottom_navigation_ongoing:
