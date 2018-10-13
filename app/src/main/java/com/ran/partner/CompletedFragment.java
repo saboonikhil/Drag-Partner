@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ran.partner.adapter.TripsCardAdapter;
+import com.ran.partner.adapter.CompletedAdapter;
 
 public class CompletedFragment extends Fragment {
 
@@ -21,7 +21,7 @@ public class CompletedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         parentActivity = getActivity();
-        return inflater.inflate(R.layout.fragment_trips, container, false);
+        return inflater.inflate(R.layout.fragment_completed, container, false);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CompletedFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.my_trips_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        TripsCardAdapter tripsCardAdapter = new TripsCardAdapter();
-        recyclerView.setAdapter(tripsCardAdapter);
+        CompletedAdapter completedAdapter = new CompletedAdapter();
+        recyclerView.setAdapter(completedAdapter);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.ran.partner.R;
 
-public class TripsCardAdapter extends RecyclerView.Adapter<TripsCardAdapter.MyViewHolder> {
+public class CompletedAdapter extends RecyclerView.Adapter<CompletedAdapter.MyViewHolder> {
     private TextView date_time;
     private TextView carName;
     private TextView carNumber;
@@ -23,14 +23,14 @@ public class TripsCardAdapter extends RecyclerView.Adapter<TripsCardAdapter.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.layout_trips, parent, false);
+        View view = inflater.inflate(R.layout.layout_completed, parent, false);
 
         return new MyViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(TripsCardAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(CompletedAdapter.MyViewHolder holder, int position) {
         date_time.setText("Sun , 24 May, 10:45 PM");
         carName.setText("Toyota Etios");
         carNumber.setText("WB 01 EQ 6789");

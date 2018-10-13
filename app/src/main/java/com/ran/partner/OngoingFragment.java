@@ -37,13 +37,13 @@ public class OngoingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         parentActivity = getActivity();
-        return inflater.inflate(R.layout.fragment_now, container, false);
+        return inflater.inflate(R.layout.fragment_ongoing, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parentActivity.setTitle("Ongoing Trips");
+        parentActivity.setTitle("Ongoing Trip");
         initVariables();
 
         timeLayout.setVisibility(View.GONE);
