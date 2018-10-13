@@ -8,7 +8,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.ran.partner.util.CircularImageView
-        android:id="@+id/nav_imageView"
+        android:id="@+id/navigation_drawer_picture"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="8dp"
@@ -22,7 +22,7 @@
         app:border_width="1dp" />
 
     <TextView
-        android:id="@+id/nav_textView_name"
+        android:id="@+id/navigation_drawer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/nav_textView_email"
+        android:id="@+id/navigation_drawer_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

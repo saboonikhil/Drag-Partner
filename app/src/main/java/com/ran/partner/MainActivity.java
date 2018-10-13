@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbarView);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, rootLayout, toolbarView, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, rootLayout, toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
         rootLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationDrawerView.setNavigationItemSelectedListener(this);
         navigationDrawerView.getMenu().getItem(0).setChecked(true);
-        displaySelectedScreen(R.id.nav_now);
+        displaySelectedScreen(R.id.navigation_drawer_dashboard);
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void displaySelectedScreen(int itemId) {
         switch (itemId) {
-            case R.id.nav_now:
+            case R.id.navigation_drawer_dashboard:
                 FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
                 NowFragment frag1 = new NowFragment();
                 ft1.replace(R.id.main_content_frame, frag1);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft1.commit();
                 break;
 
-            case R.id.nav_trips:
+            case R.id.navigation_drawer_connections:
                 FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                 TripsFragment frag2 = new TripsFragment();
                 ft2.replace(R.id.main_content_frame, frag2);
@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft2.commit();
                 break;
 
-            case R.id.nav_profile:
+            case R.id.navigation_drawer_profile:
                 break;
 
-            case R.id.nav_cars:
+            case R.id.navigation_drawer_cars:
                 FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
                 CarsFragment frag3 = new CarsFragment();
                 ft3.replace(R.id.main_content_frame, frag3);
@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft3.commit();
                 break;
 
-            case R.id.nav_logout:
+            case R.id.navigation_drawer_logout:
                 break;
 
-            case R.id.nav_support:
+            case R.id.navigation_drawer_support:
                 FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
                 AboutFragment frag4 = new AboutFragment();
                 ft4.replace(R.id.main_content_frame, frag4);
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             rootLayout.closeDrawer(GravityCompat.START);
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.nav_cars);
+            displaySelectedScreen(R.id.navigation_drawer_cars);
         } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             count = count + 1;
             if (count == 1) {

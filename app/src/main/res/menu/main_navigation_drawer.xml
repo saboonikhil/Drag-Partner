@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_drawer_dashboard"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/dashboard" />
+
+        <item
+            android:id="@+id/navigation_drawer_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile" />
+
+        <item
+            android:id="@+id/navigation_drawer_connections"
+            android:icon="@drawable/ic_connections"
+            android:title="@string/organizations" />
+
+        <item
+            android:id="@+id/navigation_drawer_cars"
+            android:icon="@drawable/ic_cars"
+            android:title="@string/cars" />
+
+        <item
+            android:id="@+id/navigation_drawer_logout"
+            android:checkable="false"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout" />
+    </group>
+    <group
+        android:id="@+id/group_information"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_drawer_support"
+            android:icon="@drawable/ic_phone"
+            android:title="@string/call_support" />
+    </group>
+</menu>

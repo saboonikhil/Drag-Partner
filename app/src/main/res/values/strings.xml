@@ -1,16 +1,15 @@
 <resources>
     <string name="app_name">RAN Partner</string>
 
-    <!-- Strings related to navigation drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_now">Now</string>
-    <string name="navigation_cars">Cars</string>
-    <string name="navigation_trips">Trips</string>
-    <string name="navigation_profile">Profile</string>
-    <string name="navigation_logout">Logout</string>
-    <string name="navigation_support"> Call Support</string>
-
+    <!-- Strings related to Main -->
+    <string name="open_navigation_drawer">Open navigation drawer</string>
+    <string name="close_navigation_drawer">Close navigation drawer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="profile">Profile</string>
+    <string name="organizations">Organizations</string>
+    <string name="cars">Cars</string>
+    <string name="logout">Logout</string>
+    <string name="call_support">Call Support</string>
     <string name="upcoming">Upcoming</string>
     <string name="ongoing">Ongoing</string>
     <string name="completed">Completed</string>
