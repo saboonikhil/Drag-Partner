@@ -1,5 +1,6 @@
 package com.ran.partner;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private SharedPreferences pref;
     private DrawerLayout rootLayout;
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initVariables();
         setSupportActionBar(toolbarView);
 
-        SharedPreferences pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+        pref = getSharedPreferences("AppPref", MODE_PRIVATE);
         String role = pref.getString("role", "");
         customLayout(role);
 
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         break;
 
                     case R.id.navigation_drawer_logout:
+                        showLogoutDialog();
                         break;
 
                     case R.id.navigation_drawer_support:
@@ -169,6 +173,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
             }
         }
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(MainActivity.this, R.style.MaterialAlertDialogStyle)
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Logout",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                pref.edit().clear().apply();
+                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.
+                                        FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                                finish();
+                            }
+                        })
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     private void customLayout(String role) {
