@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.ran.partner.LoginActivity" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -39,8 +41,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ran.partner.MainActivity" />
         </activity>
-
-        <activity android:name="com.ran.partner.LoginActivity" />
     </application>
 
 </manifest>

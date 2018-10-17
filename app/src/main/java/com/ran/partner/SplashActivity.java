@@ -14,12 +14,9 @@ public class SplashActivity extends Activity {
 
         int SPLASH_TIME_OUT = 3000;
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
-
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(i);
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 finish();
             }
         }, SPLASH_TIME_OUT);

@@ -1,6 +1,7 @@
 package com.ran.partner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         initVariables();
         setSupportActionBar(toolbarView);
+
+        SharedPreferences pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+        String role = pref.getString("role", "");
+        customLayout(role);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootLayout,
                 toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
@@ -163,6 +168,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    private void customLayout(String role) {
+        switch (role) {
+            case "admin":
+
+                break;
+            case "org":
+
+                break;
+            case "driver":
+                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
+                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_cars);
+                break;
         }
     }
 
