@@ -1,10 +1,13 @@
 package com.ran.partner;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -17,10 +20,13 @@ import com.ran.partner.util.HorizontalCalendar.util.HorizontalCalendarListener;
 
 import java.util.Calendar;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class CarsFragment extends Fragment {
 
     private Activity parentActivity;
     private View rootView;
+    private FloatingActionButton addCarView;
 
     @Nullable
     @Override
@@ -34,9 +40,13 @@ public class CarsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentActivity.setTitle("My Cars");
+        initVariables();
+
+        SharedPreferences pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
+        String role = pref.getString("role", "");
+        customLayout(role);
 
         Calendar startDate = Calendar.getInstance();
-
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_MONTH, 30);
 
@@ -60,5 +70,26 @@ public class CarsFragment extends Fragment {
                 Toast.makeText(getContext(), DateFormat.format("EEE, MMM d, yyyy", date) + " is selected!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        addCarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(parentActivity, AddCarActivity.class));
+            }
+        });
+    }
+
+    private void customLayout(String role) {
+        switch (role) {
+            case "admin":
+                break;
+            case "org":
+                addCarView.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    private void initVariables() {
+        addCarView = parentActivity.findViewById(R.id.cars_add_car);
     }
 }
