@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void customLayout(String role) {
         switch (role) {
             case "admin":
-
+                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
                 break;
             case "org":
 

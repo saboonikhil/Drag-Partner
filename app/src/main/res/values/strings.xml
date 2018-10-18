@@ -21,6 +21,13 @@
     <string name="start_trip">Start Trip</string>
     <string name="end_trip">End Trip</string>
 
+    <!-- Strings related to Profile -->
+    <string name="rin">RIN</string>
+    <string name="email">Email</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="alternate_number">Alternate Number</string>
+    <string name="address">Address</string>
+
     <!-- Strings related to Cars -->
     <string name="college">College</string>
     <string name="pickup_location">Pickup Location</string>
