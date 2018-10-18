@@ -4,9 +4,9 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_drawer_dashboard"
-            android:icon="@drawable/ic_dashboard"
-            android:title="@string/dashboard" />
+            android:id="@+id/navigation_drawer_trips"
+            android:icon="@drawable/ic_trips"
+            android:title="@string/trips" />
 
         <item
             android:id="@+id/navigation_drawer_profile"

@@ -54,22 +54,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 Fragment frag;
                 switch (item.getItemId()) {
-                    case R.id.navigation_drawer_dashboard:
-                        frag = new DashboardFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
-                        break;
-
-                    case R.id.navigation_drawer_connections:
-                        frag = new ConnectionsFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
+                    case R.id.navigation_drawer_trips:
+                        animateBottomNavigation(false);
+                        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                        displaySelectedScreen(R.id.bottom_navigation_ongoing);
                         break;
 
                     case R.id.navigation_drawer_profile:
+                        animateBottomNavigation(true);
                         frag = new ProfileFragment();
                         ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
+                    case R.id.navigation_drawer_connections:
+                        animateBottomNavigation(true);
+                        frag = new ConnectionsFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
+                        break;
+
                     case R.id.navigation_drawer_cars:
+                        animateBottomNavigation(true);
                         frag = new CarsFragment();
                         ft.replace(R.id.main_content_frame, frag).commit();
                         break;
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
 
+        navigationDrawerView.getMenu().getItem(0).setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.getMenu().getItem(1).setChecked(true);
         displaySelectedScreen(R.id.bottom_navigation_ongoing);
@@ -127,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 frag = new CompletedFragment();
                 ft.replace(R.id.main_content_frame, frag).commit();
                 break;
-        }
-        int size = navigationDrawerView.getMenu().size();
-        for (int i = 0; i < size; i++) {
-            navigationDrawerView.getMenu().getItem(i).setChecked(false);
         }
     }
 
