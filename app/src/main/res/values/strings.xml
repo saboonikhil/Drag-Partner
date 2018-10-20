@@ -25,6 +25,13 @@
     <string name="add_driver">Add Driver</string>
     <string name="add_sub_driver">Add Sub Driver</string>
 
+    <!-- Strings related to Add Driver -->
+    <string name="new_driver">New Driver</string>
+    <string name="save">Save</string>
+    <string name="id">Id</string>
+    <string name="name">Name</string>
+    <string name="sub_driver_id">Sub Driver Id</string>
+
     <!-- Strings related to Profile -->
     <string name="rin">RIN</string>
     <string name="email">Email</string>
