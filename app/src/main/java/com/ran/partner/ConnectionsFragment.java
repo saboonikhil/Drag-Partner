@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import com.ran.partner.util.ViewAnimation;
 
 public class ConnectionsFragment extends Fragment {
 
-    private Activity parentActivity;
     private View rootView;
     private View addDriverLayout, addSubDriverLayout, newBackgroundView;
     private FloatingActionButton addDriverView, addConnectionsView, addSubDriverView;
@@ -24,8 +24,9 @@ public class ConnectionsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        parentActivity = getActivity();
+        Activity parentActivity = getActivity();
         rootView = inflater.inflate(R.layout.fragment_connections, container, false);
+        assert parentActivity != null;
         parentActivity.setTitle("Connections");
         initVariables();
 
@@ -50,7 +51,10 @@ public class ConnectionsFragment extends Fragment {
         addDriverView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Driver clicked", Toast.LENGTH_SHORT).show();
+                AddDriverFragment dialog = new AddDriverFragment();
+                assert getFragmentManager() != null;
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, AddDriverFragment.TAG);
             }
         });
 
