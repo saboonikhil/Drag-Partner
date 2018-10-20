@@ -13,7 +13,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,15 +46,13 @@ public class AddCarActivity extends AppCompatActivity {
 
     private LinearLayout rootLayout;
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
-    private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView, driverContactView;
+    private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView;
     private ImageButton swapLocationView;
     private Button increaseSeatView, decreaseSeatView, addCarView;
     private InputMethodManager imm;
-    private TextWatcher textWatcher;
     private Snackbar snackbar;
     private Calendar DateCalendar, TimeCalendar, now;
     private String collegeNameText, startDate, startTime;
-    private String countryCode = "+91 ";
     private long thirtyDays = 2592000000L;
     private int selectedDay;
     private int seats = 4;
@@ -153,55 +150,6 @@ public class AddCarActivity extends AppCompatActivity {
                 if (seats != 1) {
                     seats--;
                     seatsView.setText(String.valueOf(seats));
-                }
-            }
-        });
-
-        driverContactView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                driverContactView.setFocusableInTouchMode(true);
-                driverContactView.requestFocus();
-                imm.showSoftInput(driverContactView, InputMethodManager.SHOW_IMPLICIT);
-                return true;
-            }
-        });
-
-        driverContactView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    if (driverContactView.getText().toString().length() == 0) {
-                        driverContactView.setText(countryCode);
-                        Selection.setSelection(driverContactView.getText(), driverContactView.getText().length());
-                    }
-                    imm.showSoftInput(driverContactView, InputMethodManager.SHOW_IMPLICIT);
-                } else {
-                    if (driverContactView.getText().toString().equals(countryCode)) {
-                        driverContactView.removeTextChangedListener(textWatcher);
-                        driverContactView.getText().clear();
-                        driverContactView.addTextChangedListener(textWatcher);
-                    }
-                }
-            }
-        });
-
-        driverContactView.addTextChangedListener(textWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().startsWith("+91 ")) {
-                    driverContactView.setText(countryCode);
-                    Selection.setSelection(driverContactView.getText(), driverContactView.getText().length());
                 }
             }
         });
@@ -404,8 +352,6 @@ public class AddCarActivity extends AppCompatActivity {
         String fare = fareView.getText().toString();
         String carName = carNameView.getText().toString();
         String carNumber = carNumberView.getText().toString();
-        //String driverName = driverNameView.getText().toString();
-        String driverContact = driverContactView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -424,13 +370,6 @@ public class AddCarActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(carNumber)) {
             focusView = carNumberView;
-            cancel = true;
-        } else if (driverContact.equals(countryCode)) {
-            driverContactView.removeTextChangedListener(textWatcher);
-            driverContactView.getText().clear();
-            driverContactView.addTextChangedListener(textWatcher);
-        } else if (driverContact.length() > 4 && driverContact.length() < 14) {
-            focusView = driverContactView;
             cancel = true;
         }
 
@@ -510,8 +449,6 @@ public class AddCarActivity extends AppCompatActivity {
         fareView = findViewById(R.id.add_car_fare);
         carNameView = findViewById(R.id.add_car_name);
         carNumberView = findViewById(R.id.add_car_number);
-        //EditText driverNameView = findViewById(R.id.add_car_driver_name);
-        driverContactView = findViewById(R.id.add_car_driver_contact);
         addCarView = findViewById(R.id.button_add_car);
         imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
