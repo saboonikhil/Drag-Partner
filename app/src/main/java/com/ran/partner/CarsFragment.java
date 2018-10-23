@@ -1,5 +1,6 @@
 package com.ran.partner;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,6 +80,7 @@ public class CarsFragment extends Fragment {
         });
     }
 
+    @SuppressLint("RestrictedApi")
     private void customLayout(String role) {
         switch (role) {
             case "admin":
