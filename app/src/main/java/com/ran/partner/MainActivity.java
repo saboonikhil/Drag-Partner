@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private SharedPreferences pref;
-    private DrawerLayout rootLayout;
+    private DrawerLayout rootView;
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
     private NestedScrollView nestedScrollView;
@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         String role = pref.getString("role", "");
         customLayout(role);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootLayout,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootView,
                 toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
-        rootLayout.addDrawerListener(toggle);
+        rootView.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationDrawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -55,27 +55,72 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Fragment frag;
                 switch (item.getItemId()) {
                     case R.id.navigation_drawer_trips:
+                        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                            @Override
+                            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                if (scrollY < oldScrollY) { // up
+                                    animateBottomNavigation(false);
+                                }
+                                if (scrollY > oldScrollY) { // down
+                                    animateBottomNavigation(true);
+                                }
+                            }
+                        });
                         animateBottomNavigation(false);
                         bottomNavigationView.getMenu().getItem(1).setChecked(true);
                         displaySelectedScreen(R.id.bottom_navigation_ongoing);
                         break;
 
                     case R.id.navigation_drawer_profile:
+                        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                            @Override
+                            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                if (scrollY < oldScrollY) { // up
+                                    animateBottomNavigation(true);
+                                }
+                                if (scrollY > oldScrollY) { // down
+                                    animateBottomNavigation(true);
+                                }
+                            }
+                        });
                         animateBottomNavigation(true);
                         frag = new ProfileFragment();
                         ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_connections:
+                        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                            @Override
+                            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                if (scrollY < oldScrollY) { // up
+                                    animateBottomNavigation(true);
+                                }
+                                if (scrollY > oldScrollY) { // down
+                                    animateBottomNavigation(true);
+                                }
+                            }
+                        });
                         animateBottomNavigation(true);
                         frag = new ConnectionsFragment();
                         ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_cars:
+                        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                            @Override
+                            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                if (scrollY < oldScrollY) { // up
+                                    animateBottomNavigation(true);
+                                }
+                                if (scrollY > oldScrollY) { // down
+                                    animateBottomNavigation(true);
+                                }
+                            }
+                        });
                         animateBottomNavigation(true);
                         frag = new CarsFragment();
                         ft.replace(R.id.main_content_frame, frag).commit();
+
                         break;
 
                     case R.id.navigation_drawer_logout:
@@ -85,20 +130,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     case R.id.navigation_drawer_support:
                         break;
                 }
-                rootLayout.closeDrawer(GravityCompat.START);
+                rootView.closeDrawer(GravityCompat.START);
                 return true;
-            }
-        });
-
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY < oldScrollY) { // up
-                    animateBottomNavigation(false);
-                }
-                if (scrollY > oldScrollY) { // down
-                    animateBottomNavigation(true);
-                }
             }
         });
 
@@ -144,8 +177,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onBackPressed() {
-        if (rootLayout.isDrawerOpen(GravityCompat.START)) {
-            rootLayout.closeDrawer(GravityCompat.START);
+        if (rootView.isDrawerOpen(GravityCompat.START)) {
+            rootView.closeDrawer(GravityCompat.START);
         } else {
             finish();
         }
@@ -212,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void initVariables() {
-        rootLayout = findViewById(R.id.activity_main_layout);
+        rootView = findViewById(R.id.activity_main_layout);
         toolbarView = findViewById(R.id.main_toolbar);
         navigationDrawerView = findViewById(R.id.main_navigation_drawer);
         nestedScrollView = findViewById(R.id.main_nested_scroll);
