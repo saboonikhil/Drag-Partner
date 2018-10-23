@@ -10,12 +10,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ran.partner.adapter.CarsAdapter;
 import com.ran.partner.util.HorizontalCalendar.HorizontalCalendar;
 import com.ran.partner.util.HorizontalCalendar.util.HorizontalCalendarListener;
 
@@ -71,6 +74,10 @@ public class CarsFragment extends Fragment {
                 Toast.makeText(getContext(), DateFormat.format("EEE, MMM d, yyyy", date) + " is selected!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        RecyclerView recyclerView = view.findViewById(R.id.cars_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new CarsAdapter());
 
         addCarView.setOnClickListener(new View.OnClickListener() {
             @Override
