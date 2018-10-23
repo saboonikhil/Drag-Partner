@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="10dp"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -23,26 +22,27 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:text="Hyundai Xcent"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            tools:text="Hyundai Xcent" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/cars_car_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:text="TN 04 H 67 4569"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/grey_40"
-            tools:text="TN 04 H 67 4569" />
+            android:textColor="@color/grey_40" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
@@ -53,7 +53,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="14dp"
                 android:layout_marginTop="16dp"
                 android:background="@null"
                 android:src="@mipmap/upper"
@@ -74,8 +74,8 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-light"
                     android:lineSpacingExtra="2dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    tools:text="IIT Kharagpur" />
+                    android:text="IIT Kharagpur"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             </LinearLayout>
 
@@ -88,7 +88,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="14dp"
                 android:background="@null"
                 android:src="@mipmap/lower"
                 tools:ignore="ContentDescription" />
@@ -108,8 +108,8 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-light"
                     android:lineSpacingExtra="2dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    tools:text="NSC Bose International Airport" />
+                    android:text="NSC Bose International Airport"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             </LinearLayout>
 
@@ -120,6 +120,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
         android:baselineAligned="false"
         android:gravity="center_vertical"
@@ -135,7 +138,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="5dp"
                 android:tint="@color/grey_20"
                 app:srcCompat="@drawable/ic_seats"
                 tools:ignore="ContentDescription" />
@@ -145,9 +148,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:text="4"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40"
-                tools:text="4" />
+                android:textColor="@color/grey_40" />
 
         </LinearLayout>
 
@@ -161,7 +164,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="5dp"
                 android:tint="@color/grey_20"
                 app:srcCompat="@drawable/ic_fare"
                 tools:ignore="ContentDescription" />
@@ -171,9 +174,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:text="2650"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40"
-                tools:text="2650" />
+                android:textColor="@color/grey_40" />
 
         </LinearLayout>
 
@@ -187,22 +190,24 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="5dp"
                 android:tint="@color/grey_20"
                 app:srcCompat="@drawable/ic_time"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/cars_start_time"
+                android:id="@+id/cars_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:text="10:00 AM"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40"
-                tools:text="10:00 AM" />
+                android:textColor="@color/grey_40" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <View style="@style/DividerWithMargin" />
 
 </LinearLayout>
