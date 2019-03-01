@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button adminView, organizationView, driverView;
+    private Button adminView, partnerView;
     private SharedPreferences pref;
     
     @Override
@@ -33,22 +33,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        organizationView.setOnClickListener(new View.OnClickListener() {
+        partnerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor edit = pref.edit();
-                edit.putString("role", "org");
-                edit.apply();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            }
-        });
-
-        driverView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor edit = pref.edit();
-                edit.putString("role", "driver");
+                edit.putString("role", "partner");
                 edit.apply();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
@@ -65,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initVariables() {
         adminView = findViewById(R.id.button_admin);
-        organizationView = findViewById(R.id.button_organization);
-        driverView = findViewById(R.id.button_driver);
+        partnerView = findViewById(R.id.button_partner);
     }
 }
