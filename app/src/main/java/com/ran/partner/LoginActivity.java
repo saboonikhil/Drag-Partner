@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
@@ -79,6 +80,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                 attemptLogin();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isTokenValid()) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
+    }
+
+    private boolean isTokenValid() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPref", MODE_PRIVATE);
+        String exp = sharedPreferences.getString("expires", "");
+        long time = System.currentTimeMillis();
+        long expires;
+        try {
+            expires = Long.parseLong(exp);
+        } catch (NumberFormatException nfe) {
+            expires = 0;
+        }
+        return time < expires;
     }
 
     private void attemptLogin() {
