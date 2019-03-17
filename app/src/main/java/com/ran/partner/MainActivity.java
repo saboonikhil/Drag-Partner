@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 Fragment frag;
                 switch (item.getItemId()) {
                     case R.id.navigation_drawer_trips:
+                        frag = new TripsFragment();
+                        ft.replace(R.id.main_content_frame, frag).commit();
                         break;
 
                     case R.id.navigation_drawer_profile:
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationDrawerView.getMenu().getItem(0).setChecked(true);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment frag;
+        frag = new TripsFragment();
+        ft.replace(R.id.main_content_frame, frag).commit();
     }
 
     @Override
