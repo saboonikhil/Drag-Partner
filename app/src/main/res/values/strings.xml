@@ -27,6 +27,9 @@
     <string name="start_trip">Start Trip</string>
     <string name="end_trip">End Trip</string>
 
+    <!-- Strings related to Trips -->
+    <string name="crn">CRN:</string>
+
     <!-- Strings related to Connections -->
     <string name="add_driver">Add Driver</string>
     <string name="add_sub_driver">Add Sub Driver</string>
