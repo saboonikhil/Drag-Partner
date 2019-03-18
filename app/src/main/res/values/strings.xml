@@ -21,18 +21,15 @@
     <string name="ongoing">Ongoing</string>
     <string name="completed">Completed</string>
 
-    <!-- Strings related to Ongoing -->
-    <string name="trip_id">Trip ID</string>
-    <string name="ready_to_pickup">Ready To Pickup</string>
-    <string name="start_trip">Start Trip</string>
-    <string name="end_trip">End Trip</string>
-
     <!-- Strings related to Trips -->
     <string name="crn">CRN:</string>
 
     <!-- Strings related to Connections -->
-    <string name="add_driver">Add Driver</string>
-    <string name="add_sub_driver">Add Sub Driver</string>
+    <string name="users">USERS</string>
+    <string name="partners">PARTNERS</string>
+    <string name="places">PLACES</string>
+    <string name="add_partner">Add Partner</string>
+    <string name="add_place">Add Place</string>
 
     <!-- Strings related to Add Driver -->
     <string name="new_driver">New Driver</string>
