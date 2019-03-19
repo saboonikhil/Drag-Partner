@@ -1,45 +1,66 @@
 package com.ran.partner;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ran.partner.adapter.ConnectionsAdapter;
 import com.ran.partner.util.ViewAnimation;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ConnectionsFragment extends Fragment {
 
+    private Activity parentActivity;
     private View rootView;
-    private View addDriverLayout, addSubDriverLayout, newBackgroundView;
-    private FloatingActionButton addDriverView, addConnectionsView, addSubDriverView;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private View addPartnerLayout, addPlaceLayout, newBackgroundView;
+    private FloatingActionButton addPartnerView, addConnectionsView, addPlaceView;
     private boolean rotate = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Activity parentActivity = getActivity();
+        parentActivity = getActivity();
         rootView = inflater.inflate(R.layout.fragment_connections, container, false);
-        assert parentActivity != null;
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         parentActivity.setTitle("Connections");
-        initVariables();
+        initViews();
 
-        SharedPreferences pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
-        String role = pref.getString("role", "");
-        customLayout(role);
+        ConnectionsAdapter adapter = new ConnectionsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-        ViewAnimation.initShowOut(addDriverLayout);
-        ViewAnimation.initShowOut(addSubDriverLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        ViewAnimation.initShowOut(addPartnerLayout);
+        ViewAnimation.initShowOut(addPlaceLayout);
         newBackgroundView.setVisibility(View.GONE);
 
         addConnectionsView.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +77,7 @@ public class ConnectionsFragment extends Fragment {
             }
         });
 
-        addDriverView.setOnClickListener(new View.OnClickListener() {
+        addPartnerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddDriverFragment dialog = new AddDriverFragment();
@@ -66,46 +87,35 @@ public class ConnectionsFragment extends Fragment {
             }
         });
 
-        addSubDriverView.setOnClickListener(new View.OnClickListener() {
+        addPlaceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Sub Driver clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Place clicked", Toast.LENGTH_SHORT).show();
             }
         });
-
-        return rootView;
     }
 
     private void toggleFabMode(View v) {
         rotate = ViewAnimation.rotateFab(v, !rotate);
         if (rotate) {
-            ViewAnimation.showIn(addDriverLayout);
-            ViewAnimation.showIn(addSubDriverLayout);
+            ViewAnimation.showIn(addPartnerLayout);
+            ViewAnimation.showIn(addPlaceLayout);
             newBackgroundView.setVisibility(View.VISIBLE);
         } else {
-            ViewAnimation.showOut(addDriverLayout);
-            ViewAnimation.showOut(addSubDriverLayout);
+            ViewAnimation.showOut(addPartnerLayout);
+            ViewAnimation.showOut(addPlaceLayout);
             newBackgroundView.setVisibility(View.GONE);
         }
     }
 
-    @SuppressLint("RestrictedApi")
-    private void customLayout(String role) {
-        switch (role) {
-            case "admin":
-                break;
-            case "org":
-                addConnectionsView.setVisibility(View.GONE);
-                break;
-        }
-    }
-
-    private void initVariables() {
+    private void initViews() {
         addConnectionsView = rootView.findViewById(R.id.connections_add);
         newBackgroundView = rootView.findViewById(R.id.connections_new_background);
-        addDriverLayout = rootView.findViewById(R.id.connections_add_driver_layout);
-        addDriverView = rootView.findViewById(R.id.connections_add_driver);
-        addSubDriverLayout = rootView.findViewById(R.id.connections_add_sub_driver_layout);
-        addSubDriverView = rootView.findViewById(R.id.connections_add_sub_driver);
+        addPartnerLayout = rootView.findViewById(R.id.connections_add_partner_layout);
+        addPartnerView = rootView.findViewById(R.id.connections_add_partner);
+        addPlaceLayout = rootView.findViewById(R.id.connections_add_place_layout);
+        addPlaceView = rootView.findViewById(R.id.connections_add_place);
+        tabLayout = rootView.findViewById(R.id.connections_tab_layout);
+        viewPager = rootView.findViewById(R.id.connections_view_pager);
     }
 }
