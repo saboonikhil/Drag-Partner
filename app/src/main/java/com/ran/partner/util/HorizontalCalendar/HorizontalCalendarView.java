@@ -44,7 +44,7 @@ public class HorizontalCalendarView extends RecyclerView {
             int colorBottomTextSelected = a.getColor(R.styleable.HorizontalCalendarView_colorBottomTextSelected, textColorSelected);
             Drawable selectedDateBackground = a.getDrawable(R.styleable.HorizontalCalendarView_selectedDateBackground);
 
-            int selectorColor = a.getColor(R.styleable.HorizontalCalendarView_selectorColor, fetchAccentColor());
+            int selectorColor = a.getColor(R.styleable.HorizontalCalendarView_selectorColor, Color.WHITE);
             float sizeTopText = getRawSizeValue(a, R.styleable.HorizontalCalendarView_sizeTopText,
                     HorizontalCalendarConfig.DEFAULT_SIZE_TEXT_TOP);
             float sizeMiddleText = getRawSizeValue(a, R.styleable.HorizontalCalendarView_sizeMiddleText,
