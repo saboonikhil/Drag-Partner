@@ -18,6 +18,7 @@
             android:layout_gravity="start"
             android:background="@color/colorPrimary"
             app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/white"
             app:tabMode="fixed"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Subhead">
 
@@ -164,10 +165,7 @@
             android:id="@+id/connections_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="18dp"
             android:clickable="true"
             android:focusable="true"
             android:tint="@android:color/white"
@@ -177,5 +175,11 @@
             app:srcCompat="@drawable/ic_add" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/connections_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
 
 </RelativeLayout>
