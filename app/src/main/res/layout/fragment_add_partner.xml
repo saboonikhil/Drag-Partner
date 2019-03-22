@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/add_driver_close"
+                android:id="@+id/add_partner_close"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -24,17 +24,21 @@
                 app:srcCompat="@drawable/ic_close"
                 tools:ignore="ContentDescription" />
 
+            <View
+                android:layout_width="15dp"
+                android:layout_height="0dp" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/new_driver"
+                android:text="@string/new_partner"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/white" />
 
             <Button
-                android:id="@+id/add_driver_save"
+                android:id="@+id/add_partner_save"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -58,21 +62,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_driver_id_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/add_driver_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/id"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/add_driver_name_layout"
@@ -149,21 +138,6 @@
                     android:hint="@string/address"
                     android:inputType="text"
                     android:maxLines="3" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_driver_sub_driver_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/add_driver_sub_driver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/sub_driver_id"
-                    android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
 

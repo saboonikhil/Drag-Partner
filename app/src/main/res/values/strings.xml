@@ -31,12 +31,11 @@
     <string name="add_partner">Add Partner</string>
     <string name="add_place">Add Place</string>
 
-    <!-- Strings related to Add Driver -->
-    <string name="new_driver">New Driver</string>
+    <!-- Strings related to Add Partner -->
+    <string name="new_partner">New Partner</string>
     <string name="save">Save</string>
     <string name="id">Id</string>
     <string name="name">Name</string>
-    <string name="sub_driver_id">Sub Driver Id</string>
 
     <!-- Strings related to Profile -->
     <string name="rin">RIN</string>

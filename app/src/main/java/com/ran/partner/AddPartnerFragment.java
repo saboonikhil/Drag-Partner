@@ -13,17 +13,17 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class AddDriverFragment extends DialogFragment {
+public class AddPartnerFragment extends DialogFragment {
 
-    public static String TAG = "AddDriverFragment";
+    public static String TAG = "AddPartnerFragment";
     private View rootView;
     private ImageButton closeView;
     private Button saveView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_add_driver, container, false);
-        initVariables();
+        rootView = inflater.inflate(R.layout.fragment_add_partner, container, false);
+        initViews();
 
         closeView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +60,8 @@ public class AddDriverFragment extends DialogFragment {
         }
     }
 
-    private void initVariables() {
-        closeView = rootView.findViewById(R.id.add_driver_close);
-        saveView = rootView.findViewById(R.id.add_driver_save);
+    private void initViews() {
+        closeView = rootView.findViewById(R.id.add_partner_close);
+        saveView = rootView.findViewById(R.id.add_partner_save);
     }
 }

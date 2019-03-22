@@ -80,10 +80,10 @@ public class ConnectionsFragment extends Fragment {
         addPartnerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddDriverFragment dialog = new AddDriverFragment();
+                AddPartnerFragment dialog = new AddPartnerFragment();
                 assert getFragmentManager() != null;
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, AddDriverFragment.TAG);
+                dialog.show(ft, AddPartnerFragment.TAG);
             }
         });
 
