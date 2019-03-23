@@ -16,22 +16,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SharedPreferences pref;
     private DrawerLayout rootView;
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initVariables();
+        initViews();
         setSupportActionBar(toolbarView);
 
         pref = getSharedPreferences("AppPref", MODE_PRIVATE);
@@ -43,83 +43,67 @@ public class MainActivity extends AppCompatActivity {
         rootView.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationDrawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                Fragment frag;
-                switch (item.getItemId()) {
-                    case R.id.navigation_drawer_trips:
-                        frag = new TripsFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
-                        break;
-
-                    case R.id.navigation_drawer_profile:
-                        frag = new ProfileFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
-                        break;
-
-                    case R.id.navigation_drawer_connections:
-                        frag = new ConnectionsFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
-                        break;
-
-                    case R.id.navigation_drawer_cars:
-                        frag = new CarsFragment();
-                        ft.replace(R.id.main_content_frame, frag).commit();
-                        break;
-
-                    case R.id.navigation_drawer_logout:
-                        showLogoutDialog();
-                        break;
-
-                    case R.id.navigation_drawer_support:
-                        break;
-                }
-                rootView.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
+        navigationDrawerView.setNavigationItemSelectedListener(this);
         navigationDrawerView.getMenu().getItem(0).setChecked(true);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment frag;
-        frag = new TripsFragment();
-        ft.replace(R.id.main_content_frame, frag).commit();
+        displaySelectedScreen(R.id.navigation_drawer_trips);
     }
 
     @Override
     public void onBackPressed() {
+        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
         if (rootView.isDrawerOpen(GravityCompat.START)) {
             rootView.closeDrawer(GravityCompat.START);
+        } else if (currentFragment != null && currentFragment.isVisible()) {
+            count = count + 1;
+            if (count == 1)
+                Toast.makeText(MainActivity.this, "Press again to close RAN Partner", Toast.LENGTH_SHORT).show();
+            else if (count == 2)
+                finish();
         } else {
-            finish();
+            navigationDrawerView.getMenu().getItem(0).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_trips);
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
+    private void displaySelectedScreen(int itemId) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment frag;
+        switch (itemId) {
+            case R.id.navigation_drawer_trips:
+                count = 0;
+                frag = new TripsFragment();
+                ft.replace(R.id.main_content_frame, frag, "Trips").commit();
+                break;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
-    }
+            case R.id.navigation_drawer_profile:
+                frag = new ProfileFragment();
+                ft.replace(R.id.main_content_frame, frag, "Profile").commit();
+                break;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                    String riderContact = "+91 9876543210";
-                    startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + riderContact)));
-                } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-            }
+            case R.id.navigation_drawer_connections:
+                frag = new ConnectionsFragment();
+                ft.replace(R.id.main_content_frame, frag, "Connections").commit();
+                break;
+
+            case R.id.navigation_drawer_cars:
+                frag = new CarsFragment();
+                ft.replace(R.id.main_content_frame, frag, "Cars").commit();
+                break;
+
+            case R.id.navigation_drawer_logout:
+                showLogoutDialog();
+                break;
+
+            case R.id.navigation_drawer_support:
+                break;
         }
+        rootView.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        displaySelectedScreen(item.getItemId());
+        return true;
     }
 
     private void showLogoutDialog() {
@@ -142,6 +126,21 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                    String riderContact = "+91 9876543210";
+                    startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + riderContact)));
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     private void customLayout(String role) {
         switch (role) {
             case "admin":
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initVariables() {
+    private void initViews() {
         rootView = findViewById(R.id.activity_main_layout);
         toolbarView = findViewById(R.id.main_toolbar);
         navigationDrawerView = findViewById(R.id.main_navigation_drawer);
