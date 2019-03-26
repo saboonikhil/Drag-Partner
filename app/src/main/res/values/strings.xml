@@ -24,13 +24,17 @@
     <!-- Strings related to Trip details -->
     <string name="trip_details">Trip details</string>
     <string name="update">Update</string>
-    <string name="user_info">User Info</string>
+    <string name="rider_info">Rider Info</string>
     <string name="driver_info">Driver Info</string>
     <string name="car_info">Car Info</string>
     <string name="location_info">Location Info</string>
     <string name="fare_info">Fare Info</string>
     <string name="seats">Seats</string>
     <string name="total_amount">Total Amount</string>
+    <string name="driver_name">Driver Name</string>
+    <string name="driver_number">Driver Number</string>
+    <string name="car_name">Car Name</string>
+    <string name="car_number">Car Number</string>
 
     <!-- Strings related to Connections -->
     <string name="users">USERS</string>
@@ -57,11 +61,7 @@
     <string name="drop_location">Drop Location</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
-    <string name="car_name">Car Name</string>
-    <string name="car_number">Car Number</string>
-    <string name="trip_fare">Trip Fare</string>
-    <string name="driver_name">Driver Name</string>
-    <string name="driver_number">Driver Number</string>
+    <string name="trip_fare">Trip fare</string>
     <string name="add_car">Add Car</string>
 
 </resources>

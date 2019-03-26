@@ -88,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:text="@string/user_info" />
+                            android:text="@string/rider_info" />
 
                         <View style="@style/DividerWithMargin" />
 
@@ -98,7 +98,7 @@
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:id="@+id/trip_details_user_name"
+                                android:id="@+id/trip_details_rider_name"
                                 style="@style/body1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                                 android:text="Lorem Ipsum" />
 
                             <TextView
-                                android:id="@+id/trip_details_user_contact"
+                                android:id="@+id/trip_details_rider_contact"
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -174,8 +174,6 @@
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_phone"
-                                android:drawablePadding="8dp"
                                 android:text="9876543210" />
 
                         </LinearLayout>

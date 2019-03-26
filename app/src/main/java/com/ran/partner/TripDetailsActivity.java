@@ -1,6 +1,7 @@
 package com.ran.partner;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,7 +21,7 @@ public class TripDetailsActivity extends AppCompatActivity {
 
     private ImageButton backView;
     private Button updateView;
-    private TextView userContactView, carNameView, pickupView, dropView, seatsView, driverContactView, carNumberView, fareView;
+    private TextView riderContactView, carNameView, pickupView, dropView, seatsView, driverContactView, carNumberView, fareView;
     private AlertDialog dialog;
 
     @Override
@@ -37,14 +38,22 @@ public class TripDetailsActivity extends AppCompatActivity {
             }
         });
 
-        userContactView.setOnClickListener(new View.OnClickListener() {
+        updateView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                callAction();
+            public void onClick(View v) {
+                @SuppressLint("InflateParams") View customView = getLayoutInflater().inflate(R.layout.layout_update_trip, null);
+
+                dialog = new AlertDialog.Builder(TripDetailsActivity.this, R.style.MaterialAlertDialogStyle)
+                        .setTitle("Update Trip")
+                        .setView(customView)
+                        .setPositiveButton("Save", null)
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
             }
         });
 
-        driverContactView.setOnClickListener(new View.OnClickListener() {
+        riderContactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callAction();
@@ -53,9 +62,9 @@ public class TripDetailsActivity extends AppCompatActivity {
     }
 
     private void callAction() {
-        String driverContact = driverContactView.getText().toString();
+        String riderContact = riderContactView.getText().toString();
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + "+91" + driverContact));
+        callIntent.setData(Uri.parse("tel:" + "+91" + riderContact));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             Log.v("TAG", "Calling permission is revoked");
@@ -88,7 +97,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private void initViews() {
         backView = findViewById(R.id.trip_details_back);
         updateView = findViewById(R.id.trip_details_update);
-        userContactView = findViewById(R.id.trip_details_user_contact);
+        riderContactView = findViewById(R.id.trip_details_rider_contact);
         driverContactView = findViewById(R.id.trip_details_driver_contact);
         carNameView = findViewById(R.id.trip_details_car_name);
         carNumberView = findViewById(R.id.trip_details_car_number);
