@@ -17,12 +17,20 @@
     <string name="cars">Cars</string>
     <string name="logout">Logout</string>
     <string name="call_support">Call Support</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="ongoing">Ongoing</string>
-    <string name="completed">Completed</string>
 
     <!-- Strings related to Trips -->
     <string name="crn">CRN:</string>
+
+    <!-- Strings related to Trip details -->
+    <string name="trip_details">Trip details</string>
+    <string name="update">Update</string>
+    <string name="user_info">User Info</string>
+    <string name="driver_info">Driver Info</string>
+    <string name="car_info">Car Info</string>
+    <string name="location_info">Location Info</string>
+    <string name="fare_info">Fare Info</string>
+    <string name="seats">Seats</string>
+    <string name="total_amount">Total Amount</string>
 
     <!-- Strings related to Connections -->
     <string name="users">USERS</string>
@@ -49,7 +57,6 @@
     <string name="drop_location">Drop Location</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
-    <string name="seats">Seats</string>
     <string name="car_name">Car Name</string>
     <string name="car_number">Car Number</string>
     <string name="trip_fare">Trip Fare</string>
