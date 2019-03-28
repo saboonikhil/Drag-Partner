@@ -1,22 +1,17 @@
 package com.ran.partner;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ran.partner.adapter.CarsAdapter;
 import com.ran.partner.util.HorizontalCalendar.HorizontalCalendar;
@@ -24,12 +19,12 @@ import com.ran.partner.util.HorizontalCalendar.util.HorizontalCalendarListener;
 
 import java.util.Calendar;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class CarsFragment extends Fragment {
 
     private Activity parentActivity;
     private View rootView;
+    private HorizontalCalendar horizontalCalendar;
+    private ViewPager viewPager;
     private FloatingActionButton addCarView;
 
     @Nullable
@@ -44,17 +39,13 @@ public class CarsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentActivity.setTitle("My Cars");
-        initVariables();
-
-        SharedPreferences pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
-        String role = pref.getString("role", "");
-        customLayout(role);
+        initViews();
 
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_MONTH, 30);
 
-        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.cars_calendar_view)
+        horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.cars_calendar_view)
                 .range(startDate, endDate)
                 .datesNumberOnScreen(5)
                 .configure()
@@ -68,16 +59,32 @@ public class CarsFragment extends Fragment {
                 .end()
                 .build();
 
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+        CarsAdapter adapter = new CarsAdapter(getChildFragmentManager(), startDate);
+        viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onDateSelected(Calendar date, int position) {
-                Toast.makeText(getContext(), DateFormat.format("EEE, MMM d, yyyy", date) + " is selected!", Toast.LENGTH_SHORT).show();
+            public void onPageScrolled(int i, float v, int i1) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                horizontalCalendar.centerCalendarToPosition(i + 2);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
             }
         });
 
-        RecyclerView recyclerView = view.findViewById(R.id.cars_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new CarsAdapter());
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+                CarsAdapter adapter = new CarsAdapter(getChildFragmentManager(), date);
+                viewPager.setAdapter(adapter);
+                viewPager.setCurrentItem(position - 2);
+            }
+        });
 
         addCarView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,18 +94,8 @@ public class CarsFragment extends Fragment {
         });
     }
 
-    @SuppressLint("RestrictedApi")
-    private void customLayout(String role) {
-        switch (role) {
-            case "admin":
-                break;
-            case "org":
-                addCarView.setVisibility(View.GONE);
-                break;
-        }
-    }
-
-    private void initVariables() {
-        addCarView = parentActivity.findViewById(R.id.cars_add_car);
+    private void initViews() {
+        viewPager = rootView.findViewById(R.id.cars_view_pager);
+        addCarView = rootView.findViewById(R.id.cars_add_car);
     }
 }
