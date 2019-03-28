@@ -1,45 +1,32 @@
 package com.ran.partner.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.annotation.SuppressLint;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ran.partner.R;
+import com.ran.partner.CarsListFragment;
 
-public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.CarsViewHolder> {
-    private TextView carNameView, carNumberView, pickupView, dropView, seatsView, fareView, timeView;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-    @NonNull
+public class CarsAdapter extends FragmentPagerAdapter {
+
+    private Calendar date;
+
+    public CarsAdapter(FragmentManager fm, Calendar date) {
+        super(fm);
+        this.date = date;
+    }
+
+    @SuppressLint("SimpleDateFormat")
     @Override
-    public CarsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.layout_cars, parent, false);
-        return new CarsViewHolder(view);
+    public Fragment getItem(int position) {
+        return CarsListFragment.newInstance(new SimpleDateFormat("EEE, MMM d, yyyy").format(date.getTime()));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CarsAdapter.CarsViewHolder holder, int position) {
-    }
-
-    @Override
-    public int getItemCount() {
-        return 8;
-    }
-
-    class CarsViewHolder extends RecyclerView.ViewHolder {
-        CarsViewHolder(View itemView) {
-            super(itemView);
-            carNameView = itemView.findViewById(R.id.cars_car_name);
-            carNumberView = itemView.findViewById(R.id.cars_car_number);
-            pickupView = itemView.findViewById(R.id.cars_pickup);
-            dropView = itemView.findViewById(R.id.cars_drop);
-            seatsView = itemView.findViewById(R.id.cars_seats);
-            fareView = itemView.findViewById(R.id.cars_fare);
-            timeView = itemView.findViewById(R.id.cars_time);
-        }
+    public int getCount() {
+        return 31;
     }
 }
-
