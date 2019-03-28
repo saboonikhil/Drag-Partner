@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/cars_app_bar"
@@ -22,23 +19,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/cars_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cars_app_bar"
+        tools:layout_editor_absoluteX="8dp" />
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/cars_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                android:scrollingCache="true" />
-
-        </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/cars_add_car"
@@ -56,4 +47,4 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-</LinearLayout>
+</RelativeLayout>
