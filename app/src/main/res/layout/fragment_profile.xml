@@ -62,38 +62,6 @@
         <View style="@style/DividerWithMargin" />
 
         <LinearLayout
-            android:id="@+id/profile_id_layout"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:id="@+id/profile_id_tv"
-                style="@style/body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="8dp"
-                android:drawableStart="@drawable/ic_id"
-                android:text="@string/rin" />
-
-            <TextView
-                android:id="@+id/profile_id"
-                style="@style/body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                android:textSize="14sp"
-                tools:text="VLR837379" />
-
-        </LinearLayout>
-
-        <View style="@style/DividerWithMargin" />
-
-        <LinearLayout
             android:id="@+id/profile_email_layout"
             android:layout_width="match_parent"
             android:layout_height="52dp"
@@ -107,8 +75,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="8dp"
                 android:text="@string/email" />
 
             <TextView
@@ -139,8 +107,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="8dp"
                 android:text="@string/mobile_number" />
 
             <TextView
@@ -171,8 +139,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="8dp"
                 android:text="@string/alternate_number" />
 
             <TextView
@@ -203,8 +171,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_address"
+                android:drawablePadding="8dp"
                 android:text="@string/address" />
 
             <TextView
