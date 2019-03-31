@@ -37,14 +37,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".AddCarActivity"
-            android:label="Add Car">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ran.partner.MainActivity" />
-        </activity>
-
-        <activity
             android:name=".TripDetailsActivity"
             android:screenOrientation="portrait">
             <meta-data

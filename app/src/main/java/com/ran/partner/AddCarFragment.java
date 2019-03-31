@@ -1,23 +1,31 @@
 package com.ran.partner;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +33,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,13 +49,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AddCarActivity extends AppCompatActivity {
+public class AddCarFragment extends DialogFragment {
 
-    private LinearLayout rootLayout;
+    public static String TAG = "AddCarFragment";
+    public Activity parentActivity;
+    private View rootView;
+    private ImageButton closeView;
+    private Button saveView;
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
     private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView;
     private ImageButton swapLocationView;
-    private Button increaseSeatView, decreaseSeatView, addCarView;
+    private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
     private Snackbar snackbar;
     private Calendar DateCalendar, TimeCalendar, now;
@@ -58,13 +69,34 @@ public class AddCarActivity extends AppCompatActivity {
     private int seats = 4;
     private boolean route = true;
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        parentActivity = getActivity();
+        rootView = inflater.inflate(R.layout.fragment_add_car, container, false);
+        return rootView;
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_car);
-        setupActionBar();
-        initVariables();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
+
+        imm = (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        closeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        saveView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveCar();
+            }
+        });
 
         setupCollegeSpinner();
         collegeNameView.addTextChangedListener(new TextWatcher() {
@@ -153,13 +185,6 @@ public class AddCarActivity extends AppCompatActivity {
                 }
             }
         });
-
-        addCarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveCar();
-            }
-        });
     }
 
     private void selectLocation(String collegeSelected, boolean routeSelected) {
@@ -181,7 +206,7 @@ public class AddCarActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupCollegeSpinner() {
-        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                 R.array.colleges, R.layout.support_simple_spinner_dropdown_item);
         collegeNameView.setAdapter(collegeSpinnerAdapter);
         collegeNameView.setKeyListener(null);
@@ -199,18 +224,18 @@ public class AddCarActivity extends AppCompatActivity {
         ArrayAdapter pickupSpinnerAdapter;
         if (routeSelected) {
             if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
             } else {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
             }
         } else {
             if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
             } else {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
             }
         }
@@ -231,18 +256,18 @@ public class AddCarActivity extends AppCompatActivity {
         ArrayAdapter dropSpinnerAdapter;
         if (routeSelected) {
             if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
             } else {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
             }
         } else {
             if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
             } else {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
                         R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
             }
         }
@@ -275,7 +300,7 @@ public class AddCarActivity extends AppCompatActivity {
                             selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
                             formatDate();
                         } else
-                            Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
@@ -289,7 +314,7 @@ public class AddCarActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imm.hideSoftInputFromWindow(startDateView.getWindowToken(), 0);
                 DateCalendar = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddCarActivity.this, date,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(parentActivity, date,
                         DateCalendar.get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
@@ -306,10 +331,10 @@ public class AddCarActivity extends AppCompatActivity {
                     if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
                         formatTime();
                     else
-                        Toast.makeText(getApplicationContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                 } else {
                     if (TextUtils.isEmpty(startDateView.getText().toString()))
-                        Toast.makeText(getApplicationContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
                     else
                         formatTime();
                 }
@@ -323,7 +348,7 @@ public class AddCarActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(startTimeView.getWindowToken(), 0);
                 TimeCalendar = Calendar.getInstance();
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(AddCarActivity.this, time,
+                mTimePicker = new TimePickerDialog(parentActivity, time,
                         TimeCalendar.get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
                 mTimePicker.show();
             }
@@ -385,8 +410,8 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
     public boolean checkNetworkConnection() {
-        snackbar = Snackbar.make(rootLayout, "NO INTERNET CONNECTION!", Snackbar.LENGTH_LONG);
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        snackbar = Snackbar.make(rootView, "NO INTERNET CONNECTION!", Snackbar.LENGTH_LONG);
+        ConnectivityManager connMgr = (ConnectivityManager) parentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connMgr != null;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
@@ -422,35 +447,45 @@ public class AddCarActivity extends AppCompatActivity {
         OutputStream os = conn.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
         writer.write(jsonObject.toString());
-        Log.i(AddCarActivity.class.toString(), jsonObject.toString());
+        Log.i(AddCarFragment.class.toString(), jsonObject.toString());
         writer.flush();
         writer.close();
         os.close();
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window dialogWindow = getDialog().getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialogWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         }
     }
 
-    private void initVariables() {
-        rootLayout = findViewById(R.id.add_car_layout);
-        collegeNameView = findViewById(R.id.add_car_college);
-        pickupView = findViewById(R.id.add_car_pickup);
-        dropView = findViewById(R.id.add_car_drop);
-        swapLocationView = findViewById(R.id.add_car_swap_location);
-        startDateView = findViewById(R.id.add_car_date);
-        startTimeView = findViewById(R.id.add_car_time);
-        seatsView = findViewById(R.id.add_car_seats);
-        increaseSeatView = findViewById(R.id.add_car_increase_seat);
-        decreaseSeatView = findViewById(R.id.add_car_decrease_seat);
-        fareView = findViewById(R.id.add_car_fare);
-        carNameView = findViewById(R.id.add_car_name);
-        carNumberView = findViewById(R.id.add_car_number);
-        addCarView = findViewById(R.id.button_add_car);
-        imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void initViews() {
+        closeView = rootView.findViewById(R.id.add_car_close);
+        saveView = rootView.findViewById(R.id.add_car_save);
+        collegeNameView = rootView.findViewById(R.id.add_car_college);
+        pickupView = rootView.findViewById(R.id.add_car_pickup);
+        dropView = rootView.findViewById(R.id.add_car_drop);
+        swapLocationView = rootView.findViewById(R.id.add_car_swap_location);
+        startDateView = rootView.findViewById(R.id.add_car_date);
+        startTimeView = rootView.findViewById(R.id.add_car_time);
+        seatsView = rootView.findViewById(R.id.add_car_seats);
+        increaseSeatView = rootView.findViewById(R.id.add_car_increase_seat);
+        decreaseSeatView = rootView.findViewById(R.id.add_car_decrease_seat);
+        fareView = rootView.findViewById(R.id.add_car_fare);
+        carNameView = rootView.findViewById(R.id.add_car_name);
+        carNumberView = rootView.findViewById(R.id.add_car_number);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -474,8 +509,8 @@ public class AddCarActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(AddCarActivity.this, result, Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
+            dismiss();
             super.onPostExecute(result);
         }
     }

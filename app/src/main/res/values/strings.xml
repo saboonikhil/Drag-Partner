@@ -54,13 +54,13 @@
     <string name="alternate_number">Alternate Number</string>
     <string name="address">Address</string>
 
-    <!-- Strings related to Cars -->
+    <!-- Strings related to Add Car -->
+    <string name="new_car">New Car</string>
     <string name="college">College</string>
     <string name="pickup_location">Pickup Location</string>
     <string name="drop_location">Drop Location</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="trip_fare">Trip fare</string>
-    <string name="add_car">Add Car</string>
 
 </resources>
