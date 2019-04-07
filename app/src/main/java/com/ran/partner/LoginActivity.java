@@ -22,6 +22,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -32,14 +33,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.ran.partner.model.Partner;
+import com.ran.partner.network.APIUtils;
+import com.ran.partner.network.EndPointInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_READ_CONTACTS = 0;
     private LinearLayout rootLayout;
     private TextInputLayout emailLayout, passwordLayout;
@@ -47,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     private EditText passwordView;
     private Button loginView;
     private InputMethodManager imm;
+    private SharedPreferences pref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         initViews();
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        pref = getSharedPreferences("AppPref", MODE_PRIVATE);
         populateAutoComplete();
 
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -132,10 +146,50 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                EndPointInterface service = APIUtils.getAPIService();
+                service.authSignIn(email, password, "partner").enqueue(new Callback<Partner>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                        if (response.body() != null) {
+                            if (response.body().res()) {
+                                SharedPreferences.Editor edit = pref.edit();
+                                edit.putString("token", response.body().token().token());
+                                edit.putString("expires", response.body().token().expires());
+                                edit.putString("partner", new Gson().toJson(response.body().token().partner()));
+                                edit.apply();
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            } else {
+                                displayResponse(response.body().response());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                        Log.e(TAG + "On Failure", t.getMessage());
+                        Toast.makeText(getApplicationContext(), "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
+                    }
+                });
             } else
                 Snackbar.make(rootLayout, "No Internet Connection", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void displayResponse(String message) {
+        switch (message) {
+            case "Invalid Password":
+                passwordLayout.setError("Password not valid.");
+                passwordView.requestFocus();
+                break;
+            case "Email Not Registered":
+                emailLayout.setError("Email address not registered.");
+                emailView.requestFocus();
+                break;
+            case "Invalid Credentials":
+                emailLayout.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                passwordLayout.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                break;
         }
     }
 
@@ -212,8 +266,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
 
     private boolean isConnectedToInternet() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connMgr != null;
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
         return networkInfo != null && networkInfo.isConnected();
     }
 

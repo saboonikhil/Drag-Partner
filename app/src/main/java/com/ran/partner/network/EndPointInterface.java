@@ -1,6 +1,7 @@
 package com.ran.partner.network;
 
 import com.ran.partner.model.Cab;
+import com.ran.partner.model.Partner;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -9,6 +10,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface EndPointInterface {
+
+    @POST("/signIn")
+    @FormUrlEncoded
+    Call<Partner> authSignIn(
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("role") String role
+    );
 
     @POST("/api/admin/cabs")
     @FormUrlEncoded
