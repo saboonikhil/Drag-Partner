@@ -146,8 +146,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
+                String role = email.equals("admin@comingsoon.com") ? "user" : "partner";
                 EndPointInterface service = APIUtils.getAPIService();
-                service.authSignIn(email, password, "partner").enqueue(new Callback<Partner>() {
+                service.authSignIn(email, password, role).enqueue(new Callback<Partner>() {
                     @Override
                     public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
                         if (response.body() != null) {
@@ -155,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                                 SharedPreferences.Editor edit = pref.edit();
                                 edit.putString("token", response.body().token().token());
                                 edit.putString("expires", response.body().token().expires());
-                                edit.putString("partner", new Gson().toJson(response.body().token().partner()));
+                                edit.putString("dbObj", new Gson().toJson(response.body().token().partner()));
                                 edit.apply();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
