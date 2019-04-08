@@ -8,9 +8,10 @@ public class Partner implements Serializable {
 
     private static Partner instance = null;
     private String _id;
-    private String partnerName;
-    private String partnerEmail;
-    private String partnerContact;
+    private String name;
+    private String email;
+    private String contact;
+    private String alternateContact;
     private Cab[] cabs;
 
     private Boolean res;
@@ -20,10 +21,10 @@ public class Partner implements Serializable {
     private Partner() {
     }
 
-    public Partner(String partnerName, String partnerEmail, String partnerContact) {
-        this.partnerName = partnerName;
-        this.partnerEmail = partnerEmail;
-        this.partnerContact = partnerContact;
+    public Partner(String name, String email, String contact) {
+        this.name = name;
+        this.email = email;
+        this.contact = contact;
     }
 
     public static Partner getInstance() {
@@ -37,28 +38,28 @@ public class Partner implements Serializable {
         return _id;
     }
 
-    public String getPartnerName() {
-        return partnerName;
+    public String getName() {
+        return name;
     }
 
-    public void setPartnerName(String partnerName) {
-        this.partnerName = partnerName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPartnerEmail() {
-        return partnerEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPartnerEmail(String partnerEmail) {
-        this.partnerEmail = partnerEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPartnerContact() {
-        return partnerContact;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPartnerContact(String partnerContact) {
-        this.partnerContact = partnerContact;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public Cab[] getCabs() {
@@ -79,5 +80,13 @@ public class Partner implements Serializable {
 
     public LoginResponse token() {
         return token;
+    }
+
+    public String getAlternateContact() {
+        return alternateContact;
+    }
+
+    public void setAlternateContact(String alternateContact) {
+        this.alternateContact = alternateContact;
     }
 }
