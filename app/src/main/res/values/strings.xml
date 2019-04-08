@@ -48,6 +48,7 @@
     <string name="save">Save</string>
     <string name="id">Id</string>
     <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
 
     <!-- Strings related to Profile -->
     <string name="mobile_number">Mobile Number</string>
