@@ -19,6 +19,18 @@ public interface EndPointInterface {
             @Field("role") String role
     );
 
+    @POST("/api/admin/signup")
+    @FormUrlEncoded
+    Call<Partner> addPartner(
+            @Query("x_key") String key,
+            @Query("token") String token,
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("contact") String contact,
+            @Field("alternateContact") String alternateContact,
+            @Field("password") String password
+    );
+
     @POST("/api/admin/cabs")
     @FormUrlEncoded
     Call<Cab> addCab(
@@ -31,6 +43,6 @@ public interface EndPointInterface {
             @Field("seats") String seats,
             @Field("fare") String fare,
             @Field("carName") String carName,
-            @Field("startTime") String carNumber
+            @Field("carNumber") String carNumber
     );
 }

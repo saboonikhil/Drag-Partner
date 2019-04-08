@@ -12,12 +12,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,9 +29,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ran.partner.model.Partner;
+import com.ran.partner.network.APIUtils;
+import com.ran.partner.network.EndPointInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -280,6 +289,33 @@ public class AddPartnerFragment extends DialogFragment {
         if (cancel) {
             focusView.requestFocus();
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            if (isConnectedToInternet()) {
+                EndPointInterface service = APIUtils.getAPIService();
+                Call<Partner> call = service.addPartner(
+                        partner.getEmail(), token, name, email, contact, alternateContact, password);
+
+                call.enqueue(new Callback<Partner>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                        if (response.body() != null) {
+                            if (response.body().res()) {
+                                Toast.makeText(parentActivity, response.body().response(), Toast.LENGTH_LONG).show();
+                                dismiss();
+                            } else {
+                                Toast.makeText(parentActivity, response.body().response(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                        Log.e(TAG + " On Failure", t.getMessage());
+                        Toast.makeText(parentActivity, "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else
+                Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
         }
     }
 
