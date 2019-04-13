@@ -17,7 +17,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.ran.partner.model.Partner;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,9 +39,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initViews();
         setSupportActionBar(toolbarView);
 
+        View navHeader = navigationDrawerView.getHeaderView(0);
+        TextView nameView = navHeader.findViewById(R.id.navigation_drawer_name);
+        TextView emailView = navHeader.findViewById(R.id.navigation_drawer_email);
+
         pref = getSharedPreferences("AppPref", MODE_PRIVATE);
-        String role = pref.getString("role", "");
-        customLayout(role);
+        String json = pref.getString("dbObj", "");
+        Partner partner = new Gson().fromJson(json, Partner.class);
+        if (partner != null) {
+            nameView.setText(partner.getName());
+            emailView.setText(partner.getEmail());
+        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootView,
                 toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
