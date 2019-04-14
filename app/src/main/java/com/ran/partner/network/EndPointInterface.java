@@ -1,12 +1,12 @@
 package com.ran.partner.network;
 
-import com.ran.partner.model.Cab;
 import com.ran.partner.model.Partner;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface EndPointInterface {
@@ -31,9 +31,10 @@ public interface EndPointInterface {
             @Field("password") String password
     );
 
-    @POST("/api/admin/cabs")
+    @POST("/api/admin/{pID}/cabs")
     @FormUrlEncoded
-    Call<Cab> addCab(
+    Call<Partner> addCab(
+            @Path("pID") String pID,
             @Query("x_key") String key,
             @Query("token") String token,
             @Field("collegeName") String collegeName,

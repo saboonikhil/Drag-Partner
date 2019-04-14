@@ -6,12 +6,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,34 +36,39 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.ran.partner.model.Partner;
+import com.ran.partner.network.APIUtils;
+import com.ran.partner.network.EndPointInterface;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class AddCarFragment extends DialogFragment {
 
     public static String TAG = "AddCarFragment";
     public Activity parentActivity;
     private View rootView;
+    private SharedPreferences pref;
+    private Partner partner;
     private ImageButton closeView;
     private Button saveView;
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
-    private EditText startDateView, startTimeView, seatsView, fareView, carNameView, carNumberView;
+    private EditText dateView, timeView, seatsView, fareView, carNameView, carNumberView;
     private ImageButton swapLocationView;
     private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
-    private Snackbar snackbar;
     private Calendar DateCalendar, TimeCalendar, now;
-    private String collegeNameText, startDate, startTime;
+    private String collegeNameText, isoDate, isoTime, startTime, token, pickup, drop;
     private long thirtyDays = 2592000000L;
     private int selectedDay;
     private int seats = 4;
@@ -81,6 +86,11 @@ public class AddCarFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews();
+
+        pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
+        token = pref.getString("token", "");
+        String json = pref.getString("dbObj", "");
+        partner = new Gson().fromJson(json, Partner.class);
 
         imm = (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -292,7 +302,7 @@ public class AddCarFragment extends DialogFragment {
                 DateCalendar.set(Calendar.MONTH, monthOfYear);
                 DateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 if (now.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
-                    if (TextUtils.isEmpty(startTimeView.getText().toString())) {
+                    if (TextUtils.isEmpty(timeView.getText().toString())) {
                         selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
                         formatDate();
                     } else {
@@ -309,10 +319,10 @@ public class AddCarFragment extends DialogFragment {
             }
         };
 
-        startDateView.setOnClickListener(new View.OnClickListener() {
+        dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imm.hideSoftInputFromWindow(startDateView.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(dateView.getWindowToken(), 0);
                 DateCalendar = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(parentActivity, date,
                         DateCalendar.get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
@@ -333,7 +343,7 @@ public class AddCarFragment extends DialogFragment {
                     else
                         Toast.makeText(getContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
                 } else {
-                    if (TextUtils.isEmpty(startDateView.getText().toString()))
+                    if (TextUtils.isEmpty(dateView.getText().toString()))
                         Toast.makeText(getContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
                     else
                         formatTime();
@@ -341,11 +351,11 @@ public class AddCarFragment extends DialogFragment {
             }
         };
 
-        startTimeView.setOnClickListener(new View.OnClickListener() {
+        timeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimeView.requestFocus();
-                imm.hideSoftInputFromWindow(startTimeView.getWindowToken(), 0);
+                timeView.requestFocus();
+                imm.hideSoftInputFromWindow(timeView.getWindowToken(), 0);
                 TimeCalendar = Calendar.getInstance();
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(parentActivity, time,
@@ -355,28 +365,41 @@ public class AddCarFragment extends DialogFragment {
         });
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void formatDate() {
         String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime());
-        String defaultFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(DateCalendar.getTime());
-        startDateView.setText(displayFormat);
-        startDate = defaultFormat;
+        dateView.setText(displayFormat);
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        df.setTimeZone(tz);
+        isoDate = df.format(DateCalendar.getTime());
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void formatTime() {
         String displayFormat = new SimpleDateFormat("hh:mm a", Locale.US).format(TimeCalendar.getTime());
-        String defaultFormat = new SimpleDateFormat("HH:mm:ss", Locale.US).format(TimeCalendar.getTime());
-        startTimeView.setText(displayFormat);
-        startTime = defaultFormat;
+        timeView.setText(displayFormat);
+
+        DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        df.setTimeZone(tz);
+        isoTime = df.format(TimeCalendar.getTime());
     }
 
     private void saveCar() {
         String collegeName = collegeNameView.getText().toString();
-        //String pickup = pickupView.getText().toString();
-        //String drop = dropView.getText().toString();
         String seats = seatsView.getText().toString();
         String fare = fareView.getText().toString();
         String carName = carNameView.getText().toString();
         String carNumber = carNumberView.getText().toString();
+
+        if (!TextUtils.isEmpty(pickupView.getText().toString()))
+            pickup = pickupView.getText().toString();
+        if (!TextUtils.isEmpty(dropView.getText().toString()))
+            drop = dropView.getText().toString();
+        if (!TextUtils.isEmpty(isoDate) && !TextUtils.isEmpty(isoTime))
+            startTime = isoDate + 'T' + isoTime + 'Z';
 
         boolean cancel = false;
         View focusView = null;
@@ -402,55 +425,41 @@ public class AddCarFragment extends DialogFragment {
             focusView.requestFocus();
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
-            if (checkNetworkConnection())
-                new HTTPAsyncTask().execute("http://af4ea417.ngrok.io/cabs");
-            else
-                snackbar.show();
+            if (isConnectedToInternet()) {
+                EndPointInterface service = APIUtils.getAPIService();
+                Call<Partner> call = service.addCab(
+                        partner.get_id(), partner.getEmail(), token, collegeName, pickup, drop, startTime, seats, fare, carName, carNumber);
+
+                call.enqueue(new Callback<Partner>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                        if (response.body() != null) {
+                            SharedPreferences.Editor edit = pref.edit();
+                            edit.putString("dbObj", new Gson().toJson(response.body()));
+                            edit.apply();
+                            Toast.makeText(parentActivity, "Car added successfully", Toast.LENGTH_SHORT).show();
+                            dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                        Log.e(TAG + " On Failure", t.getMessage());
+                        Toast.makeText(parentActivity, "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else
+                Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    public boolean checkNetworkConnection() {
-        snackbar = Snackbar.make(rootView, "NO INTERNET CONNECTION!", Snackbar.LENGTH_LONG);
+    public boolean isConnectedToInternet() {
         ConnectivityManager connMgr = (ConnectivityManager) parentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connMgr != null;
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
         return networkInfo != null && networkInfo.isConnected();
-    }
-
-    private String httpPost(String myUrl) throws IOException, JSONException {
-        URL url = new URL(myUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-        JSONObject jsonObject = buildJsonObject();
-        setPostRequestContent(conn, jsonObject);
-        conn.connect();
-        return conn.getResponseCode() + "";
-    }
-
-    private JSONObject buildJsonObject() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.accumulate("collegeName", collegeNameView.getText().toString());
-        jsonObject.accumulate("pickup", pickupView.getText().toString());
-        jsonObject.accumulate("drop", dropView.getText().toString());
-        jsonObject.accumulate("startDate", startDate);
-        jsonObject.accumulate("startTime", startTime);
-        jsonObject.accumulate("seats", seatsView.getText().toString());
-        jsonObject.accumulate("fare", fareView.getText().toString());
-        jsonObject.accumulate("carName", carNameView.getText().toString());
-        jsonObject.accumulate("carNumber", carNumberView.getText().toString());
-
-        return jsonObject;
-    }
-
-    private void setPostRequestContent(HttpURLConnection conn, JSONObject jsonObject) throws IOException {
-        OutputStream os = conn.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-        writer.write(jsonObject.toString());
-        Log.i(AddCarFragment.class.toString(), jsonObject.toString());
-        writer.flush();
-        writer.close();
-        os.close();
     }
 
     @NonNull
@@ -478,40 +487,13 @@ public class AddCarFragment extends DialogFragment {
         pickupView = rootView.findViewById(R.id.add_car_pickup);
         dropView = rootView.findViewById(R.id.add_car_drop);
         swapLocationView = rootView.findViewById(R.id.add_car_swap_location);
-        startDateView = rootView.findViewById(R.id.add_car_date);
-        startTimeView = rootView.findViewById(R.id.add_car_time);
+        dateView = rootView.findViewById(R.id.add_car_date);
+        timeView = rootView.findViewById(R.id.add_car_time);
         seatsView = rootView.findViewById(R.id.add_car_seats);
         increaseSeatView = rootView.findViewById(R.id.add_car_increase_seat);
         decreaseSeatView = rootView.findViewById(R.id.add_car_decrease_seat);
         fareView = rootView.findViewById(R.id.add_car_fare);
         carNameView = rootView.findViewById(R.id.add_car_name);
         carNumberView = rootView.findViewById(R.id.add_car_number);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                try {
-                    if (httpPost(urls[0]).equals("201")) {
-                        return "Car added successfully!";
-                    }
-                    return null;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return "Error while connecting to the server!";
-                }
-            } catch (IOException e) {
-                return "Unable to connect to the server.";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
-            dismiss();
-            super.onPostExecute(result);
-        }
     }
 }
