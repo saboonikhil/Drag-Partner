@@ -18,10 +18,10 @@ public class Cab implements Serializable {
     private String fare;
     private String _id;
 
-    public Cab(String collegeName, String pickup, String drop, String startTime, String endTime,
+    public Cab(Boolean isShared, Boolean isBooked, String collegeName, String pickup, String drop, String startTime, String endTime,
                String seats, String carName, String carNumber, String driver, String fare) {
-        this.isShared = false;
-        this.isBooked = false;
+        this.isShared = isShared;
+        this.isBooked = isBooked;
         this.collegeName = collegeName;
         this.pickup = pickup;
         this.drop = drop;
@@ -40,22 +40,6 @@ public class Cab implements Serializable {
 
     public void set_id(String _id) {
         this._id = _id;
-    }
-
-    public boolean isShared() {
-        return isShared;
-    }
-
-    public void setShared(boolean isShared) {
-        this.isShared = isShared;
-    }
-
-    public boolean isBooked() {
-        return isShared;
-    }
-
-    public void setBooked(boolean isBooked) {
-        this.isBooked = isBooked;
     }
 
     public String getCollegeName() {
@@ -136,5 +120,21 @@ public class Cab implements Serializable {
 
     public void setFare(String fare) {
         this.fare = fare;
+    }
+
+    public boolean isShared() {
+        return isShared;
+    }
+
+    public void setShared(boolean shared) {
+        isShared = shared;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
     }
 }
