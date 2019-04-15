@@ -46,7 +46,7 @@
                         style="@style/body1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Sun, May 24, 10:45 PM" />
+                        tools:text="Sun, May 24, 10:45 PM" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                             style="@style/body1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="KGP471089" />
+                            tools:text="KGP471089" />
 
                     </LinearLayout>
 
@@ -80,7 +80,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:gravity="center_vertical"
-                    android:text="₹ 2000" />
+                    tools:text="₹ 2000" />
 
             </RelativeLayout>
 
@@ -120,7 +120,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:maxLines="2"
-                            android:text="RP Hall, IIT Kharagpur" />
+                            tools:text="RP Hall, IIT Kharagpur" />
 
                     </LinearLayout>
 
@@ -153,7 +153,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:maxLines="2"
-                            android:text="Kolkata International Airport" />
+                            tools:text="Kolkata International Airport" />
 
                     </LinearLayout>
 

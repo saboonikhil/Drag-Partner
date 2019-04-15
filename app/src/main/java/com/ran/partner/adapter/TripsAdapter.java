@@ -1,5 +1,6 @@
 package com.ran.partner.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,10 +12,26 @@ import android.widget.TextView;
 
 import com.ran.partner.R;
 import com.ran.partner.TripDetailsActivity;
+import com.ran.partner.model.Cab;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardViewHolder> {
 
+    private Cab[] cabs;
     private Context mContext;
+
+    public TripsAdapter(Cab[] cabs) {
+        this.cabs = cabs;
+    }
+
+    public void refreshData(Cab[] dataSet) {
+        cabs = dataSet;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -23,14 +40,34 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
         return new TripsCardViewHolder(view);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(@NonNull TripsCardViewHolder holder, int position) {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            String startTime = cabs[position].getStartTime();
+            if (startTime != null) {
+                Date displayTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(startTime);
+                calendar.setTime(displayTime);
+                calendar.add(Calendar.HOUR, 5);
+                calendar.add(Calendar.MINUTE, 30);
+                holder.startTimeView.setText(new SimpleDateFormat("EEE, MMM d, hh:mm a").format(calendar.getTime()));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        holder.idView.setText(cabs[position].get_id());
+        holder.pickupView.setText(cabs[position].getPickup());
+        holder.dropView.setText(cabs[position].getDrop());
+
+        String displayFare = "₹ " + cabs[position].getFare();
+        holder.fareView.setText(displayFare);
     }
 
     @Override
     public int getItemCount() {
-        return 8;
+        return cabs.length;
     }
 
     class TripsCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -51,6 +88,8 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
         public void onClick(View view) {
             int itemPosition = getLayoutPosition();
             Intent intent = new Intent(mContext, TripDetailsActivity.class);
+            intent.putExtra("position", itemPosition + "");
+            intent.putExtra("trip_details", cabs);
             mContext.startActivity(intent);
         }
     }
