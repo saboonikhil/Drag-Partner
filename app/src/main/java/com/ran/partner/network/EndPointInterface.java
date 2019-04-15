@@ -5,6 +5,7 @@ import com.ran.partner.model.Partner;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -17,6 +18,13 @@ public interface EndPointInterface {
             @Field("email") String email,
             @Field("password") String password,
             @Field("role") String role
+    );
+
+    @GET("/api/admin/partners/{pID}")
+    Call<Partner> partnerDetail(
+            @Path("pID") String pID,
+            @Query("x_key") String key,
+            @Query("token") String token
     );
 
     @POST("/api/admin/signup")
