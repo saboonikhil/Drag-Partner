@@ -17,6 +17,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ran.partner.model.Cab;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class TripDetailsActivity extends AppCompatActivity {
 
     private ImageButton backView;
@@ -24,12 +31,17 @@ public class TripDetailsActivity extends AppCompatActivity {
     private TextView riderContactView, carNameView, pickupView, dropView, seatsView, driverContactView, carNumberView, fareView;
     private AlertDialog dialog;
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
         setContentView(R.layout.activity_trip_details);
         initViews();
+
+        Intent intent = getIntent();
+        Cab[] cabsBooked = (Cab[]) intent.getSerializableExtra("trip_details");
+        int position = Integer.parseInt(intent.getStringExtra("position"));
 
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,12 +65,35 @@ public class TripDetailsActivity extends AppCompatActivity {
             }
         });
 
+        try {
+            Calendar calendar = Calendar.getInstance();
+            String startTime = cabsBooked[position].getStartTime();
+            if (startTime != null) {
+                Date displayTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(startTime);
+                calendar.setTime(displayTime);
+                calendar.add(Calendar.HOUR, 5);
+                calendar.add(Calendar.MINUTE, 30);
+                setTitle(new SimpleDateFormat("EEE, MMM d, hh:mm a").format(calendar.getTime()));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         riderContactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callAction();
             }
         });
+
+        carNameView.setText(cabsBooked[position].getCarName());
+        carNumberView.setText(cabsBooked[position].getCarNumber());
+        pickupView.setText(cabsBooked[position].getPickup());
+        dropView.setText(cabsBooked[position].getDrop());
+        seatsView.setText(cabsBooked[position].getSeats());
+
+        String displayFare = "₹ " + cabsBooked[position].getFare();
+        fareView.setText(displayFare);
     }
 
     private void callAction() {

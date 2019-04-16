@@ -105,7 +105,7 @@
                                 android:layout_weight="1"
                                 android:paddingTop="16dp"
                                 android:paddingBottom="16dp"
-                                android:text="Lorem Ipsum" />
+                                tools:text="Lorem Ipsum" />
 
                             <TextView
                                 android:id="@+id/trip_details_rider_contact"
@@ -114,7 +114,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableStart="@drawable/ic_phone"
                                 android:drawablePadding="8dp"
-                                android:text="9876543210" />
+                                tools:text="9876543210" />
 
                         </LinearLayout>
 
@@ -167,14 +167,14 @@
                                 android:layout_weight="1"
                                 android:paddingTop="16dp"
                                 android:paddingBottom="16dp"
-                                android:text="Manohar Lal Sharma" />
+                                tools:text="Manohar Lal Sharma" />
 
                             <TextView
                                 android:id="@+id/trip_details_driver_contact"
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="9876543210" />
+                                tools:text="9876543210" />
 
                         </LinearLayout>
 
@@ -224,7 +224,8 @@
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_car" />
+                                android:src="@drawable/ic_car"
+                                tools:ignore="ContentDescription" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -239,7 +240,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginTop="16dp"
                                     android:gravity="center_vertical"
-                                    android:text="Maruti Suzuki Swift" />
+                                    tools:text="Maruti Suzuki Swift" />
 
                                 <TextView
                                     android:id="@+id/trip_details_car_number"
@@ -248,7 +249,7 @@
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="16dp"
                                     android:gravity="center_vertical"
-                                    android:text="TN 06H 34 5938" />
+                                    tools:text="TN 06H 34 5938" />
 
                             </LinearLayout>
 
@@ -321,7 +322,7 @@
                                     android:layout_marginTop="16dp"
                                     android:layout_marginBottom="16dp"
                                     android:maxLines="2"
-                                    android:text="RK Hall, IIT Kharagpur" />
+                                    tools:text="RK Hall, IIT Kharagpur" />
 
                             </LinearLayout>
 
@@ -357,7 +358,7 @@
                                     android:layout_marginTop="16dp"
                                     android:layout_marginBottom="16dp"
                                     android:maxLines="2"
-                                    android:text="Kolkata International Airport" />
+                                    tools:text="Kolkata International Airport" />
 
                             </LinearLayout>
 
@@ -418,7 +419,7 @@
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4" />
+                                tools:text="4" />
 
                         </LinearLayout>
 
@@ -440,7 +441,7 @@
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="₹ 2000" />
+                                tools:text="₹ 2000" />
 
                         </LinearLayout>
 
