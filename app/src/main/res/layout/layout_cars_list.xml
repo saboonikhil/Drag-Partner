@@ -22,28 +22,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Hyundai Xcent"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Hyundai Xcent" />
 
         <TextView
             android:id="@+id/cars_car_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="TN 04 H 67 4569"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/grey_40" />
+            android:textColor="@color/grey_40"
+            tools:text="TN 04 H 67 4569" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -69,13 +69,13 @@
                     android:id="@+id/cars_pickup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="sans-serif-light"
                     android:lineSpacingExtra="2dp"
-                    android:text="IIT Kharagpur"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    tools:text="IIT Kharagpur" />
 
             </LinearLayout>
 
@@ -103,13 +103,13 @@
                     android:id="@+id/cars_drop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="sans-serif-light"
                     android:lineSpacingExtra="2dp"
-                    android:text="NSC Bose International Airport"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    tools:text="NSC Bose International Airport" />
 
             </LinearLayout>
 
@@ -120,10 +120,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -148,9 +148,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="4"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40" />
+                android:textColor="@color/grey_40"
+                tools:text="4" />
 
         </LinearLayout>
 
@@ -174,9 +174,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="2650"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40" />
+                android:textColor="@color/grey_40"
+                tools:text="2650" />
 
         </LinearLayout>
 
@@ -200,9 +200,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="10:00 AM"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/grey_40" />
+                android:textColor="@color/grey_40"
+                tools:text="10:00 AM" />
 
         </LinearLayout>
 
