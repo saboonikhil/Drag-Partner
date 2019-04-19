@@ -78,7 +78,6 @@ public class AddCarFragment extends DialogFragment {
     private Calendar fromDateCalendar, toDateCalendar, DateCalendar, TimeCalendar;
     private String collegeNameText, isoDate, isoTime, token, pickup, drop;
     private long thirtyDays = 2592000000L;
-    private int selectedDay;
     private int seats = 4;
     private boolean route = true;
 
@@ -372,28 +371,17 @@ public class AddCarFragment extends DialogFragment {
     }
 
     private void setupDateTimePicker() {
-        now = Calendar.getInstance();
+        DateCalendar = Calendar.getInstance();
+        DateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        TimeCalendar = Calendar.getInstance();
+
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 DateCalendar.set(Calendar.YEAR, year);
                 DateCalendar.set(Calendar.MONTH, monthOfYear);
                 DateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                if (now.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
-                    if (TextUtils.isEmpty(timeView.getText().toString())) {
-                        selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                        formatDate();
-                    } else {
-                        if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000) {
-                            selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                            formatDate();
-                        } else
-                            Toast.makeText(getContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    selectedDay = DateCalendar.get(Calendar.DAY_OF_MONTH);
-                    formatDate();
-                }
+                formatDate();
             }
         };
 
@@ -401,10 +389,9 @@ public class AddCarFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 imm.hideSoftInputFromWindow(dateView.getWindowToken(), 0);
-                DateCalendar = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(parentActivity, date,
                         DateCalendar.get(Calendar.YEAR), DateCalendar.get(Calendar.MONTH), DateCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + 86400000);
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
                 datePickerDialog.show();
             }
@@ -415,28 +402,15 @@ public class AddCarFragment extends DialogFragment {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 TimeCalendar.set(Calendar.MINUTE, minute);
-                if (TimeCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay) {
-                    if (TimeCalendar.getTimeInMillis() >= System.currentTimeMillis() - 60000)
-                        formatTime();
-                    else
-                        Toast.makeText(getContext(), "Don't look back you're not going that way!", Toast.LENGTH_LONG).show();
-                } else {
-                    if (TextUtils.isEmpty(dateView.getText().toString()))
-                        Toast.makeText(getContext(), "Hey! You missed selecting the date.", Toast.LENGTH_LONG).show();
-                    else
-                        formatTime();
-                }
+                formatTime();
             }
         };
 
         timeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timeView.requestFocus();
                 imm.hideSoftInputFromWindow(timeView.getWindowToken(), 0);
-                TimeCalendar = Calendar.getInstance();
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(parentActivity, time,
+                TimePickerDialog mTimePicker = new TimePickerDialog(parentActivity, time,
                         TimeCalendar.get(Calendar.HOUR_OF_DAY), TimeCalendar.get(Calendar.MINUTE), false);
                 mTimePicker.show();
             }
