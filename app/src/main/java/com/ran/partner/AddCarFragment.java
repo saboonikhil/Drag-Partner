@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -60,7 +61,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class AddCarFragment extends DialogFragment {
 
     public static String TAG = "AddCarFragment";
-    public Activity parentActivity;
+    private Activity parentActivity;
     private View rootView;
     private SharedPreferences pref;
     private Partner partner;
@@ -428,7 +429,7 @@ public class AddCarFragment extends DialogFragment {
             isoTime = df.format(calendar.getTime());
         }
 
-        startTime = isoDate + 'T' + isoTime + 'Z';
+        String startTime = isoDate + 'T' + isoTime + 'Z';
         boolean cancel = false;
         View focusView = null;
 
@@ -436,11 +437,8 @@ public class AddCarFragment extends DialogFragment {
             focusView = collegeNameView;
             cancel = true;
         } else if (TextUtils.isEmpty(isoDate)) {
-            focusView = dateView;
-            cancel = true;
-        } else if (TextUtils.isEmpty(seats)) {
             Toast.makeText(parentActivity, "Please select date", Toast.LENGTH_LONG).show();
-            focusView = seatsView;
+            focusView = dateView;
             cancel = true;
         } else if (TextUtils.isEmpty(fare)) {
             focusView = fareView;
@@ -469,6 +467,11 @@ public class AddCarFragment extends DialogFragment {
                             SharedPreferences.Editor edit = pref.edit();
                             edit.putString("dbObj", new Gson().toJson(response.body()));
                             edit.apply();
+                            if (getFragmentManager() != null) {
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.main_content_frame, new CarsFragment());
+                                ft.commit();
+                            }
                             Toast.makeText(parentActivity, "Car added successfully", Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
@@ -477,7 +480,7 @@ public class AddCarFragment extends DialogFragment {
                     @Override
                     public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
                         Log.e(TAG + " On Failure", t.getMessage());
-                        Toast.makeText(parentActivity, "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
+                        Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
                     }
                 });
             } else

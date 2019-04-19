@@ -92,6 +92,8 @@ public class CarsFragment extends Fragment {
                 carsAdapter.refreshData(trips);
                 if (trips.length == 0)
                     emptyView.setVisibility(View.VISIBLE);
+                else
+                    emptyView.setVisibility(View.GONE);
             }
         });
 
