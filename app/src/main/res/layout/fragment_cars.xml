@@ -37,6 +37,15 @@
                 android:scrollbars="vertical"
                 android:scrollingCache="true" />
 
+            <ImageView
+                android:id="@+id/cars_empty_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_empty_view"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
