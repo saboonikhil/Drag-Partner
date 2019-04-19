@@ -30,9 +30,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -61,10 +65,13 @@ public class AddCarFragment extends DialogFragment {
     private SharedPreferences pref;
     private Partner partner;
     private ImageButton closeView;
+    private TextView titleView;
     private Button saveView;
+    private Switch switchDateView;
     private AutoCompleteTextView collegeNameView, pickupView, dropView;
-    private EditText dateView, timeView, seatsView, fareView, carNameView, carNumberView;
+    private EditText fromDateView, toDateView, dateView, timeView, seatsView, fareView, carNameView, carNumberView;
     private ImageButton swapLocationView;
+    private LinearLayout fromToDateLayout, dateTimeLayout;
     private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
     private Calendar DateCalendar, TimeCalendar, now;
@@ -105,6 +112,20 @@ public class AddCarFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 saveCar();
+            }
+        });
+
+        switchDateView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    titleView.setText(R.string.new_cars);
+                    fromToDateLayout.setVisibility(View.VISIBLE);
+                    dateTimeLayout.setVisibility(View.GONE);
+                } else {
+                    titleView.setText(R.string.new_car);
+                    fromToDateLayout.setVisibility(View.GONE);
+                    dateTimeLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -179,7 +200,7 @@ public class AddCarFragment extends DialogFragment {
         increaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (seats != 14) {
+                if (seats != 6) {
                     seats++;
                     seatsView.setText(String.valueOf(seats));
                 }
@@ -387,6 +408,7 @@ public class AddCarFragment extends DialogFragment {
         isoTime = df.format(TimeCalendar.getTime());
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void saveCar() {
         String collegeName = collegeNameView.getText().toString();
         String seats = seatsView.getText().toString();
@@ -398,16 +420,26 @@ public class AddCarFragment extends DialogFragment {
             pickup = pickupView.getText().toString();
         if (!TextUtils.isEmpty(dropView.getText().toString()))
             drop = dropView.getText().toString();
-        if (!TextUtils.isEmpty(isoDate) && !TextUtils.isEmpty(isoTime))
-            startTime = isoDate + 'T' + isoTime + 'Z';
+        if (TextUtils.isEmpty(isoTime)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(23400000L);
+            DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            isoTime = df.format(calendar.getTime());
+        }
 
+        startTime = isoDate + 'T' + isoTime + 'Z';
         boolean cancel = false;
         View focusView = null;
 
         if (TextUtils.isEmpty(collegeName)) {
             focusView = collegeNameView;
             cancel = true;
+        } else if (TextUtils.isEmpty(isoDate)) {
+            focusView = dateView;
+            cancel = true;
         } else if (TextUtils.isEmpty(seats)) {
+            Toast.makeText(parentActivity, "Please select date", Toast.LENGTH_LONG).show();
             focusView = seatsView;
             cancel = true;
         } else if (TextUtils.isEmpty(fare)) {
@@ -482,11 +514,17 @@ public class AddCarFragment extends DialogFragment {
 
     private void initViews() {
         closeView = rootView.findViewById(R.id.add_car_close);
+        titleView = rootView.findViewById(R.id.add_car_title);
         saveView = rootView.findViewById(R.id.add_car_save);
-        collegeNameView = rootView.findViewById(R.id.add_car_college);
+        collegeNameView = rootView.findViewById(R.id.add_car_college_name);
+        switchDateView = rootView.findViewById(R.id.add_car_switch_date);
         pickupView = rootView.findViewById(R.id.add_car_pickup);
         dropView = rootView.findViewById(R.id.add_car_drop);
         swapLocationView = rootView.findViewById(R.id.add_car_swap_location);
+        fromToDateLayout = rootView.findViewById(R.id.add_car_from_to_date_layout);
+        fromDateView = rootView.findViewById(R.id.add_car_from_date);
+        toDateView = rootView.findViewById(R.id.add_car_to_date);
+        dateTimeLayout = rootView.findViewById(R.id.add_car_date_time_layout);
         dateView = rootView.findViewById(R.id.add_car_date);
         timeView = rootView.findViewById(R.id.add_car_time);
         seatsView = rootView.findViewById(R.id.add_car_seats);

@@ -29,6 +29,7 @@
                 android:layout_height="0dp" />
 
             <TextView
+                android:id="@+id/add_car_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -63,25 +64,42 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_car_college_layout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/add_car_college"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_car_college_layout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_college"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/college"
-                    android:inputType="textAutoComplete|text"
-                    android:longClickable="false"
-                    android:nextFocusLeft="@id/add_car_college"
-                    android:nextFocusUp="@id/add_car_college" />
+                    android:layout_weight="1">
 
-            </android.support.design.widget.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/add_car_college_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_college"
+                        android:drawablePadding="8dp"
+                        android:hint="@string/college"
+                        android:inputType="textAutoComplete|text"
+                        android:longClickable="false"
+                        android:nextFocusLeft="@id/add_car_college_name"
+                        android:nextFocusUp="@id/add_car_college_name" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Switch
+                    android:id="@+id/add_car_switch_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:scaleX="1.1"
+                    android:scaleY="1.1" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -142,6 +160,59 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/add_car_from_to_date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_car_from_date_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    tools:ignore="NestedWeights">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_car_from_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_date"
+                        android:drawablePadding="8dp"
+                        android:focusable="false"
+                        android:hint="@string/from"
+                        android:inputType="date"
+                        android:longClickable="false" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_car_to_date_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:ignore="NestedWeights">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_car_to_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_date"
+                        android:drawablePadding="8dp"
+                        android:focusable="false"
+                        android:hint="@string/to"
+                        android:inputType="date"
+                        android:longClickable="false" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_car_date_time_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
