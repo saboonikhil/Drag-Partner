@@ -75,8 +75,8 @@ public class AddCarFragment extends DialogFragment {
     private LinearLayout fromToDateLayout, dateTimeLayout;
     private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
-    private Calendar DateCalendar, TimeCalendar, now;
-    private String collegeNameText, isoDate, isoTime, startTime, token, pickup, drop;
+    private Calendar fromDateCalendar, toDateCalendar, DateCalendar, TimeCalendar;
+    private String collegeNameText, isoDate, isoTime, token, pickup, drop;
     private long thirtyDays = 2592000000L;
     private int selectedDay;
     private int seats = 4;
@@ -194,6 +194,7 @@ public class AddCarFragment extends DialogFragment {
             }
         });
 
+        setupFromToDatePicker();
         setupDateTimePicker();
         String numberAsString = "" + seats;
         seatsView.setText(numberAsString);
@@ -315,6 +316,61 @@ public class AddCarFragment extends DialogFragment {
         });
     }
 
+    private void setupFromToDatePicker() {
+        fromDateCalendar = Calendar.getInstance();
+        fromDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        toDateCalendar = Calendar.getInstance();
+        toDateCalendar.add(Calendar.DAY_OF_MONTH, 2);
+
+        final DatePickerDialog.OnDateSetListener fromDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                fromDateCalendar.set(Calendar.YEAR, year);
+                fromDateCalendar.set(Calendar.MONTH, monthOfYear);
+                fromDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setDate(fromDateView, fromDateCalendar);
+                if (fromDateCalendar.getTimeInMillis() >= toDateCalendar.getTimeInMillis()) {
+                    toDateView.getText().clear();
+                    toDateCalendar.setTimeInMillis(fromDateCalendar.getTimeInMillis() + 86400000);
+                }
+            }
+        };
+
+        fromDateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imm.hideSoftInputFromWindow(fromDateView.getWindowToken(), 0);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(parentActivity, fromDate,
+                        fromDateCalendar.get(Calendar.YEAR), fromDateCalendar.get(Calendar.MONTH), fromDateCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + 86400000);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
+                datePickerDialog.show();
+            }
+        });
+
+        final DatePickerDialog.OnDateSetListener toDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                toDateCalendar.set(Calendar.YEAR, year);
+                toDateCalendar.set(Calendar.MONTH, monthOfYear);
+                toDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setDate(toDateView, toDateCalendar);
+            }
+        };
+
+        toDateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imm.hideSoftInputFromWindow(toDateView.getWindowToken(), 0);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(parentActivity, toDate,
+                        toDateCalendar.get(Calendar.YEAR), toDateCalendar.get(Calendar.MONTH), toDateCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(fromDateCalendar.getTimeInMillis() + 86400000);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + thirtyDays);
+                datePickerDialog.show();
+            }
+        });
+    }
+
     private void setupDateTimePicker() {
         now = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -385,6 +441,11 @@ public class AddCarFragment extends DialogFragment {
                 mTimePicker.show();
             }
         });
+    }
+
+    private void setDate(EditText et, Calendar calendar) {
+        String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(calendar.getTime());
+        et.setText(displayFormat);
     }
 
     @SuppressLint("SimpleDateFormat")
