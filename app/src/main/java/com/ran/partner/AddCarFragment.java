@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,9 +18,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,13 +40,23 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ran.partner.model.Partner;
+import com.ran.partner.network.APIUtils;
+import com.ran.partner.network.EndPointInterface;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -69,6 +82,7 @@ public class AddCarFragment extends DialogFragment {
     private long thirtyDays = 2592000000L;
     private int seatsText = 4;
     private boolean route = true;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -442,14 +456,116 @@ public class AddCarFragment extends DialogFragment {
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
+                if (fromToDateLayout.getVisibility() == View.VISIBLE) {
+                    if (TextUtils.isEmpty(fromDateView.getText()))
+                        Toast.makeText(parentActivity, "Please select from date", Toast.LENGTH_SHORT).show();
+                    else if (TextUtils.isEmpty(toDateView.getText()))
+                        Toast.makeText(parentActivity, "Please select to date", Toast.LENGTH_SHORT).show();
+                    else {
+                        progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setMessage("Saving...");
+                        progressDialog.show();
+                        saveCars();
+                    }
+                } else {
+                    if (TextUtils.isEmpty(dateView.getText()))
+                        Toast.makeText(parentActivity, "Please select date", Toast.LENGTH_SHORT).show();
+                    else {
+                        Date date = DateCalendar.getTime();
+                        progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setMessage("Saving...");
+                        progressDialog.show();
+                        if (!TextUtils.isEmpty(timeView.getText())) {
+                            Date time = TimeCalendar.getTime();
+                            String startTime = formatDateTime(date, time);
+                            addCab(startTime);
+                        } else {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTimeInMillis(23400000);
+                            Date time = calendar.getTime();
+                            String startTime = formatDateTime(date, time);
+                            addCab(startTime);
+                        }
+                    }
+                }
             } else
                 Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
         }
     }
 
+    private void saveCars() {
+        if (fromDateCalendar.before(toDateCalendar) || fromDateCalendar.equals(toDateCalendar)) {
+            Date date = fromDateCalendar.getTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(23400000);
+            Date time = calendar.getTime();
+            String startTime = formatDateTime(date, time);
+            addCab(startTime);
+        } else {
+            postOnResponse();
+            Toast.makeText(parentActivity, "Cars added successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addCab(String startTime) {
+        EndPointInterface service = APIUtils.getAPIService();
+        Call<Partner> call = service.addCab(
+                partner.get_id(), partner.getEmail(), token, collegeName, pickup, drop, startTime, seats, fare, carName, carNumber);
+
+        call.enqueue(new Callback<Partner>() {
+            @Override
+            public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                if (response.body() != null) {
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("dbObj", new Gson().toJson(response.body()));
+                    edit.apply();
+                    if (fromToDateLayout.getVisibility() == View.GONE) {
+                        postOnResponse();
+                        Toast.makeText(parentActivity, "Car added successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (response.isSuccessful()) {
+                            fromDateCalendar.add(Calendar.DATE, 1);
+                            saveCars();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                progressDialog.cancel();
+                Log.e(TAG + " On Failure", t.getMessage());
+                Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void postOnResponse() {
+        if (getFragmentManager() != null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.main_content_frame, new CarsFragment());
+            ft.commit();
+        }
+        progressDialog.cancel();
+        dismiss();
+    }
+
     private void setDate(EditText et, Calendar calendar) {
         String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(calendar.getTime());
         et.setText(displayFormat);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String formatDateTime(Date date, Date time) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String isoDate = df.format(date);
+
+        DateFormat df1 = new SimpleDateFormat("HH:mm:ss.SSS");
+        df1.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String isoTime = df1.format(time);
+
+        return isoDate + 'T' + isoTime + 'Z';
     }
 
     private boolean isConnectedToInternet() {
