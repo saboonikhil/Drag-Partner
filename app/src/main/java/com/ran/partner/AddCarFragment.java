@@ -17,11 +17,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,22 +37,13 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ran.partner.model.Partner;
-import com.ran.partner.network.APIUtils;
-import com.ran.partner.network.EndPointInterface;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.TimeZone;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -76,9 +65,9 @@ public class AddCarFragment extends DialogFragment {
     private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
     private Calendar fromDateCalendar, toDateCalendar, DateCalendar, TimeCalendar;
-    private String collegeNameText, isoDate, isoTime, token, pickup, drop;
+    private String collegeNameText, token, pickup, drop, collegeName, seats, fare, carName, carNumber;
     private long thirtyDays = 2592000000L;
-    private int seats = 4;
+    private int seatsText = 4;
     private boolean route = true;
 
     @Override
@@ -195,15 +184,15 @@ public class AddCarFragment extends DialogFragment {
 
         setupFromToDatePicker();
         setupDateTimePicker();
-        String numberAsString = "" + seats;
+        String numberAsString = "" + seatsText;
         seatsView.setText(numberAsString);
 
         increaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (seats != 6) {
-                    seats++;
-                    seatsView.setText(String.valueOf(seats));
+                if (seatsText != 6) {
+                    seatsText++;
+                    seatsView.setText(String.valueOf(seatsText));
                 }
             }
         });
@@ -211,9 +200,9 @@ public class AddCarFragment extends DialogFragment {
         decreaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (seats != 1) {
-                    seats--;
-                    seatsView.setText(String.valueOf(seats));
+                if (seatsText != 1) {
+                    seatsText--;
+                    seatsView.setText(String.valueOf(seatsText));
                 }
             }
         });
@@ -317,9 +306,9 @@ public class AddCarFragment extends DialogFragment {
 
     private void setupFromToDatePicker() {
         fromDateCalendar = Calendar.getInstance();
-        fromDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        fromDateCalendar.add(Calendar.DATE, 1);
         toDateCalendar = Calendar.getInstance();
-        toDateCalendar.add(Calendar.DAY_OF_MONTH, 2);
+        toDateCalendar.add(Calendar.DATE, 2);
 
         final DatePickerDialog.OnDateSetListener fromDate = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -372,7 +361,7 @@ public class AddCarFragment extends DialogFragment {
 
     private void setupDateTimePicker() {
         DateCalendar = Calendar.getInstance();
-        DateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        DateCalendar.add(Calendar.DATE, 1);
         TimeCalendar = Calendar.getInstance();
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -381,7 +370,7 @@ public class AddCarFragment extends DialogFragment {
                 DateCalendar.set(Calendar.YEAR, year);
                 DateCalendar.set(Calendar.MONTH, monthOfYear);
                 DateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                formatDate();
+                setDate(dateView, DateCalendar);
             }
         };
 
@@ -402,7 +391,8 @@ public class AddCarFragment extends DialogFragment {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 TimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 TimeCalendar.set(Calendar.MINUTE, minute);
-                formatTime();
+                String displayFormat = new SimpleDateFormat("hh:mm a", Locale.US).format(TimeCalendar.getTime());
+                timeView.setText(displayFormat);
             }
         };
 
@@ -417,63 +407,24 @@ public class AddCarFragment extends DialogFragment {
         });
     }
 
-    private void setDate(EditText et, Calendar calendar) {
-        String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(calendar.getTime());
-        et.setText(displayFormat);
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private void formatDate() {
-        String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(DateCalendar.getTime());
-        dateView.setText(displayFormat);
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        df.setTimeZone(tz);
-        isoDate = df.format(DateCalendar.getTime());
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private void formatTime() {
-        String displayFormat = new SimpleDateFormat("hh:mm a", Locale.US).format(TimeCalendar.getTime());
-        timeView.setText(displayFormat);
-
-        DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        df.setTimeZone(tz);
-        isoTime = df.format(TimeCalendar.getTime());
-    }
-
     @SuppressLint("SimpleDateFormat")
     private void saveCar() {
-        String collegeName = collegeNameView.getText().toString();
-        String seats = seatsView.getText().toString();
-        String fare = fareView.getText().toString();
-        String carName = carNameView.getText().toString();
-        String carNumber = carNumberView.getText().toString();
+        collegeName = collegeNameView.getText().toString();
+        seats = seatsView.getText().toString();
+        fare = fareView.getText().toString();
+        carName = carNameView.getText().toString();
+        carNumber = carNumberView.getText().toString();
 
         if (!TextUtils.isEmpty(pickupView.getText().toString()))
             pickup = pickupView.getText().toString();
         if (!TextUtils.isEmpty(dropView.getText().toString()))
             drop = dropView.getText().toString();
-        if (TextUtils.isEmpty(isoTime)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(23400000L);
-            DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
-            df.setTimeZone(TimeZone.getTimeZone("UTC"));
-            isoTime = df.format(calendar.getTime());
-        }
 
-        String startTime = isoDate + 'T' + isoTime + 'Z';
         boolean cancel = false;
         View focusView = null;
 
         if (TextUtils.isEmpty(collegeName)) {
             focusView = collegeNameView;
-            cancel = true;
-        } else if (TextUtils.isEmpty(isoDate)) {
-            Toast.makeText(parentActivity, "Please select date", Toast.LENGTH_LONG).show();
-            focusView = dateView;
             cancel = true;
         } else if (TextUtils.isEmpty(fare)) {
             focusView = fareView;
@@ -491,39 +442,17 @@ public class AddCarFragment extends DialogFragment {
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
-                EndPointInterface service = APIUtils.getAPIService();
-                Call<Partner> call = service.addCab(
-                        partner.get_id(), partner.getEmail(), token, collegeName, pickup, drop, startTime, seats, fare, carName, carNumber);
-
-                call.enqueue(new Callback<Partner>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
-                        if (response.body() != null) {
-                            SharedPreferences.Editor edit = pref.edit();
-                            edit.putString("dbObj", new Gson().toJson(response.body()));
-                            edit.apply();
-                            if (getFragmentManager() != null) {
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.replace(R.id.main_content_frame, new CarsFragment());
-                                ft.commit();
-                            }
-                            Toast.makeText(parentActivity, "Car added successfully", Toast.LENGTH_SHORT).show();
-                            dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
-                        Log.e(TAG + " On Failure", t.getMessage());
-                        Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
-                    }
-                });
             } else
                 Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    public boolean isConnectedToInternet() {
+    private void setDate(EditText et, Calendar calendar) {
+        String displayFormat = new SimpleDateFormat("EEE, MMM d", Locale.US).format(calendar.getTime());
+        et.setText(displayFormat);
+    }
+
+    private boolean isConnectedToInternet() {
         ConnectivityManager connMgr = (ConnectivityManager) parentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = null;
         if (connMgr != null) {
