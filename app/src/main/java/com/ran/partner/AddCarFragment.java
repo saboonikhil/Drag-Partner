@@ -43,9 +43,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.ran.partner.model.Location;
 import com.ran.partner.model.Partner;
 import com.ran.partner.network.APIUtils;
 import com.ran.partner.network.EndPointInterface;
+import com.ran.partner.util.ObjectSerializer;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,6 +67,8 @@ public class AddCarFragment extends DialogFragment {
     public static String TAG = "AddCarFragment";
     private Activity parentActivity;
     private View rootView;
+    private Location[] locations;
+    private String[] colleges;
     private SharedPreferences pref;
     private Partner partner;
     private ImageButton closeView;
@@ -101,6 +105,12 @@ public class AddCarFragment extends DialogFragment {
         token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
         partner = new Gson().fromJson(json, Partner.class);
+
+        locations = (Location[]) ObjectSerializer.deserialize(pref.getString("locations",
+                ObjectSerializer.serialize(new Location[10])));
+        colleges = new String[locations.length];
+        for (int i = 0; i < locations.length; i++)
+            colleges[i] = locations[i].getCollegeName();
 
         imm = (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -224,15 +234,16 @@ public class AddCarFragment extends DialogFragment {
 
     private void selectLocation(String collegeSelected, boolean routeSelected) {
         boolean isCollegePresent = false;
-        String availableColleges[] = getResources().getStringArray(R.array.colleges);
-        for (String college : availableColleges) {
-            if (collegeSelected.equals(college)) {
+        int position = 0;
+        for (int i = 0; i < colleges.length; i++) {
+            if (collegeSelected.equals(colleges[i])) {
                 isCollegePresent = true;
+                position = i;
             }
         }
         if (isCollegePresent) {
-            setupPickupLocationSpinner(collegeSelected, routeSelected);
-            setupDropLocationSpinner(collegeSelected, routeSelected);
+            setupPickupLocationSpinner(position, routeSelected);
+            setupDropLocationSpinner(position, routeSelected);
         } else {
             pickupView.setKeyListener(null);
             dropView.setKeyListener(null);
@@ -241,8 +252,8 @@ public class AddCarFragment extends DialogFragment {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupCollegeSpinner() {
-        ArrayAdapter collegeSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                R.array.colleges, R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<String> collegeSpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                R.layout.support_simple_spinner_dropdown_item, colleges);
         collegeNameView.setAdapter(collegeSpinnerAdapter);
         collegeNameView.setKeyListener(null);
         collegeNameView.setOnTouchListener(new View.OnTouchListener() {
@@ -255,24 +266,14 @@ public class AddCarFragment extends DialogFragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupPickupLocationSpinner(String collegeSelected, boolean routeSelected) {
-        ArrayAdapter pickupSpinnerAdapter;
+    private void setupPickupLocationSpinner(int position, boolean routeSelected) {
+        ArrayAdapter<String> pickupSpinnerAdapter;
         if (routeSelected) {
-            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
-            } else {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
-            }
+            pickupSpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                    R.layout.support_simple_spinner_dropdown_item, locations[position].getSetA());
         } else {
-            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
-            } else {
-                pickupSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
-            }
+            pickupSpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                    R.layout.support_simple_spinner_dropdown_item, locations[position].getSetB());
         }
         pickupView.setAdapter(pickupSpinnerAdapter);
         pickupView.setKeyListener(null);
@@ -287,24 +288,14 @@ public class AddCarFragment extends DialogFragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupDropLocationSpinner(String collegeSelected, boolean routeSelected) {
-        ArrayAdapter dropSpinnerAdapter;
+    private void setupDropLocationSpinner(int position, boolean routeSelected) {
+        ArrayAdapter<String> dropSpinnerAdapter;
         if (routeSelected) {
-            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_KGP_options_B, R.layout.support_simple_spinner_dropdown_item);
-            } else {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_VIT_options_B, R.layout.support_simple_spinner_dropdown_item);
-            }
+            dropSpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                    R.layout.support_simple_spinner_dropdown_item, locations[position].getSetB());
         } else {
-            if (collegeSelected.equals(getResources().getStringArray(R.array.colleges)[0])) {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_KGP_options_A, R.layout.support_simple_spinner_dropdown_item);
-            } else {
-                dropSpinnerAdapter = ArrayAdapter.createFromResource(parentActivity,
-                        R.array.array_VIT_options_A, R.layout.support_simple_spinner_dropdown_item);
-            }
+            dropSpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                    R.layout.support_simple_spinner_dropdown_item, locations[position].getSetA());
         }
         dropView.setAdapter(dropSpinnerAdapter);
         dropView.setKeyListener(null);
@@ -522,11 +513,9 @@ public class AddCarFragment extends DialogFragment {
                     if (fromToDateLayout.getVisibility() == View.GONE) {
                         postOnResponse();
                         Toast.makeText(parentActivity, "Car added successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (response.isSuccessful()) {
-                            fromDateCalendar.add(Calendar.DATE, 1);
-                            saveCars();
-                        }
+                    } else if (response.isSuccessful()) {
+                        fromDateCalendar.add(Calendar.DATE, 1);
+                        saveCars();
                     }
                 }
             }
