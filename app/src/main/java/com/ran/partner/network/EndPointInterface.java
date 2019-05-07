@@ -1,5 +1,6 @@
 package com.ran.partner.network;
 
+import com.ran.partner.model.Location;
 import com.ran.partner.model.Partner;
 
 import retrofit2.Call;
@@ -11,6 +12,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface EndPointInterface {
+
+    @GET("/locations")
+    Call<Location[]> listLocation();
 
     @POST("/signin")
     @FormUrlEncoded
