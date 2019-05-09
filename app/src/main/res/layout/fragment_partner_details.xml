@@ -81,7 +81,7 @@
             android:paddingStart="20dp"
             android:paddingTop="8dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="40dp">
 
             <TextView
                 android:id="@+id/partner_details_alternate_number"
@@ -91,26 +91,6 @@
                 android:drawableStart="@drawable/ic_phone"
                 android:drawablePadding="16dp"
                 android:text="+91 9876543210" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="40dp">
-
-            <TextView
-                android:id="@+id/partner_details_address"
-                style="@style/body1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableStart="@drawable/ic_address"
-                android:drawablePadding="16dp"
-                android:text="23/C, Katpadi Road, Katpadi - 632014" />
 
         </LinearLayout>
 

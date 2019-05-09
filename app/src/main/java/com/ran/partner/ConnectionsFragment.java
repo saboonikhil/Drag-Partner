@@ -84,6 +84,7 @@ public class ConnectionsFragment extends Fragment {
                 assert getFragmentManager() != null;
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 dialog.show(ft, AddPartnerFragment.TAG);
+                toggleFabMode(addConnectionsView);
             }
         });
 
@@ -91,6 +92,7 @@ public class ConnectionsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Place clicked", Toast.LENGTH_SHORT).show();
+                toggleFabMode(addConnectionsView);
             }
         });
     }
