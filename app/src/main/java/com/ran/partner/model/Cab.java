@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Cab implements Serializable {
 
+    private String _id;
     private boolean isShared;
     private boolean isBooked;
     private String collegeName;
@@ -12,14 +13,15 @@ public class Cab implements Serializable {
     private String startTime;
     private String endTime;
     private String seats;
+    private String fare;
+    private Rider[] riders;
+    private String driverName;
+    private String driverContact;
     private String carName;
     private String carNumber;
-    private String driver;
-    private String fare;
-    private String _id;
 
     public Cab(Boolean isShared, Boolean isBooked, String collegeName, String pickup, String drop, String startTime, String endTime,
-               String seats, String carName, String carNumber, String driver, String fare) {
+               String seats, String carName, String carNumber, String fare, Rider[] riders, String driverName, String driverContact) {
         this.isShared = isShared;
         this.isBooked = isBooked;
         this.collegeName = collegeName;
@@ -30,8 +32,10 @@ public class Cab implements Serializable {
         this.seats = seats;
         this.carName = carName;
         this.carNumber = carNumber;
-        this.driver = driver;
+        this.riders = riders;
+        this.driverName = driverName;
         this.fare = fare;
+        this.driverContact = driverContact;
     }
 
     public String get_id() {
@@ -106,14 +110,6 @@ public class Cab implements Serializable {
         this.carNumber = carNumber;
     }
 
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
     public String getFare() {
         return fare;
     }
@@ -136,5 +132,29 @@ public class Cab implements Serializable {
 
     public void setBooked(boolean booked) {
         isBooked = booked;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getDriverContact() {
+        return driverContact;
+    }
+
+    public void setDriverContact(String driverContact) {
+        this.driverContact = driverContact;
+    }
+
+    public Rider[] getRiders() {
+        return riders;
+    }
+
+    public void setRiders(Rider[] riders) {
+        this.riders = riders;
     }
 }
