@@ -1,5 +1,6 @@
 package com.ran.partner.network;
 
+import com.ran.partner.model.Cab;
 import com.ran.partner.model.Location;
 import com.ran.partner.model.Partner;
 
@@ -8,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -57,5 +59,15 @@ public interface EndPointInterface {
             @Field("fare") String fare,
             @Field("carName") String carName,
             @Field("carNumber") String carNumber
+    );
+
+    @PUT("/cabs/{cID}")
+    @FormUrlEncoded
+    Call<Cab> cabUpdate(
+            @Path("cID") String cID,
+            @Field("carName") String carName,
+            @Field("carNumber") String carNumber,
+            @Field("driverName") String driverName,
+            @Field("driverContact") String driverContact
     );
 }

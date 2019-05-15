@@ -3,12 +3,14 @@ package com.ran.partner;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -25,14 +27,21 @@ import android.widget.Toast;
 
 import com.ran.partner.model.Cab;
 import com.ran.partner.model.Rider;
+import com.ran.partner.network.APIUtils;
+import com.ran.partner.network.EndPointInterface;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TripDetailsActivity extends AppCompatActivity {
 
+    private String TAG = "TripDetailsActivity";
     private Cab[] cabsBooked;
     private int position;
     private TextView riderNameView, riderContactView, carNameView, pickupView, dropView, seatsView,
@@ -42,6 +51,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText editDriverNameView, editDriverContactView, editCarNameView, editCarNumberView;
     private String countryCode = "+91 ", driverName, driverContact, carName, carNumber;
+    private ProgressDialog pd;
     private LinearLayout rootView;
 
     @SuppressLint("SimpleDateFormat")
@@ -118,6 +128,7 @@ public class TripDetailsActivity extends AppCompatActivity {
                                 if (!editCarNumberView.getText().toString().equals(carNumber))
                                     carNumber = editCarNumberView.getText().toString();
 
+                                saveTrip(driverName, driverContact, carName, carNumber);
                                 dialog.dismiss();
                             }
                         });
@@ -228,6 +239,36 @@ public class TripDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 callAction();
+            }
+        });
+    }
+
+    private void saveTrip(final String driverName, final String driverContact, final String carName, final String carNumber) {
+        pd = ProgressDialog.show(this, "", "Saving...", true, false);
+
+        EndPointInterface service = APIUtils.getAPIService();
+        service.cabUpdate(cabsBooked[position].get_id(), carName, carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
+            @Override
+            public void onResponse(@NonNull Call<Cab> call, @NonNull Response<Cab> response) {
+                if (response.body() != null) {
+                    cabsBooked[position].setDriverName(driverName);
+                    cabsBooked[position].setDriverContact(driverContact);
+                    cabsBooked[position].setCarName(carName);
+                    cabsBooked[position].setCarNumber(carNumber);
+                    driverNameView.setText(driverName);
+                    driverContactView.setText(driverContact);
+                    carNameView.setText(carName);
+                    carNumberView.setText(carNumber);
+                    pd.dismiss();
+                    Toast.makeText(getApplicationContext(), "Trip updated successfully", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Cab> call, @NonNull Throwable t) {
+                pd.dismiss();
+                Log.e(TAG + " On Failure", t.getMessage());
+                Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
             }
         });
     }
