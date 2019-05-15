@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -39,11 +38,12 @@ public class TripsFragment extends android.support.v4.app.Fragment {
     private Activity parentActivity;
     private View rootView;
     private SharedPreferences pref;
+    private Partner partner;
+    private String token;
     private Cab[] trips;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ImageView emptyView;
-    private RelativeLayout rootLayout;
     private TripsAdapter tripsAdapter;
 
     @Override
@@ -60,15 +60,19 @@ public class TripsFragment extends android.support.v4.app.Fragment {
         initViews();
 
         pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
-        String token = pref.getString("token", "");
+        token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
-        Partner partner = new Gson().fromJson(json, Partner.class);
+        partner = new Gson().fromJson(json, Partner.class);
 
         trips = generateTripsData(partner.getCabs());
         generateArrayData(trips);
         if (trips.length == 0)
             progressBar.setVisibility(View.VISIBLE);
 
+        updateTripsData();
+    }
+
+    private void updateTripsData() {
         EndPointInterface service = APIUtils.getAPIService();
         service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
             @Override
@@ -94,7 +98,7 @@ public class TripsFragment extends android.support.v4.app.Fragment {
                 progressBar.setVisibility(View.GONE);
                 if (tripsAdapter.getItemCount() == 0) {
                     emptyView.setVisibility(View.VISIBLE);
-                    Snackbar.make(rootLayout, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
                 } else
                     Toast.makeText(parentActivity, "Couldn't refresh trips", Toast.LENGTH_LONG).show();
             }
@@ -119,9 +123,14 @@ public class TripsFragment extends android.support.v4.app.Fragment {
     }
 
     private void initViews() {
-        rootLayout = rootView.findViewById(R.id.fragment_trips_layout);
         recyclerView = rootView.findViewById(R.id.trips_recycler_view);
         emptyView = rootView.findViewById(R.id.trips_empty_view);
         progressBar = rootView.findViewById(R.id.trips_progress_bar);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTripsData();
     }
 }

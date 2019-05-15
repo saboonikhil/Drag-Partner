@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -61,46 +60,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         displaySelectedScreen(R.id.navigation_drawer_trips);
     }
 
-    @Override
-    public void onBackPressed() {
-        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
-        if (rootView.isDrawerOpen(GravityCompat.START)) {
-            rootView.closeDrawer(GravityCompat.START);
-        } else if (currentFragment != null && currentFragment.isVisible()) {
-            count = count + 1;
-            if (count == 1)
-                Toast.makeText(MainActivity.this, "Press again to close RAN Partner", Toast.LENGTH_SHORT).show();
-            else if (count == 2)
-                finish();
-        } else {
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_trips);
-        }
-    }
-
     private void displaySelectedScreen(int itemId) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment frag;
         switch (itemId) {
             case R.id.navigation_drawer_trips:
                 count = 0;
-                frag = new TripsFragment();
-                ft.replace(R.id.main_content_frame, frag, "Trips").commit();
+                ft.replace(R.id.main_content_frame, new TripsFragment(), "Trips").commit();
                 break;
 
             case R.id.navigation_drawer_profile:
-                frag = new ProfileFragment();
-                ft.replace(R.id.main_content_frame, frag, "Profile").commit();
+                ft.replace(R.id.main_content_frame, new ProfileFragment(), "Profile").commit();
                 break;
 
             case R.id.navigation_drawer_connections:
-                frag = new ConnectionsFragment();
-                ft.replace(R.id.main_content_frame, frag, "Connections").commit();
+                ft.replace(R.id.main_content_frame, new ConnectionsFragment(), "Connections").commit();
                 break;
 
             case R.id.navigation_drawer_cars:
-                frag = new CarsFragment();
-                ft.replace(R.id.main_content_frame, frag, "Cars").commit();
+                ft.replace(R.id.main_content_frame, new CarsFragment(), "Cars").commit();
                 break;
 
             case R.id.navigation_drawer_logout:
@@ -113,12 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rootView.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        displaySelectedScreen(item.getItemId());
-        return true;
-    }
-
     private void showLogoutDialog() {
         new AlertDialog.Builder(MainActivity.this, R.style.MaterialAlertDialogStyle)
                 .setMessage("Are you sure you want to logout?")
@@ -128,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(DialogInterface dialog, int which) {
                                 pref.edit().clear().apply();
                                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.
-                                        FLAG_ACTIVITY_CLEAR_TASK);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
                                 finish();
                             }
@@ -137,21 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                    String riderContact = "+91 9876543210";
-                    startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + riderContact)));
-                } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
     }
 
     private void customLayout(String role) {
@@ -173,5 +128,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rootView = findViewById(R.id.activity_main_layout);
         toolbarView = findViewById(R.id.main_toolbar);
         navigationDrawerView = findViewById(R.id.main_navigation_drawer);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                    String riderContact = "+91 9876543210";
+                    startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + riderContact)));
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
+        if (rootView.isDrawerOpen(GravityCompat.START)) {
+            rootView.closeDrawer(GravityCompat.START);
+        } else if (currentFragment != null && currentFragment.isVisible()) {
+            count = count + 1;
+            if (count == 1)
+                Toast.makeText(MainActivity.this, "Press again to close Drag Partner", Toast.LENGTH_SHORT).show();
+            else if (count == 2)
+                finish();
+        } else {
+            navigationDrawerView.getMenu().getItem(0).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_trips);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        displaySelectedScreen(item.getItemId());
+        return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
