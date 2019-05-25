@@ -108,14 +108,13 @@
                                 android:paddingBottom="16dp"
                                 tools:text="Lorem Ipsum" />
 
-                            <TextView
+                            <ImageButton
                                 android:id="@+id/trip_details_rider_contact"
-                                style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_phone"
-                                android:drawablePadding="8dp"
-                                tools:text="9876543210" />
+                                android:background="@color/white"
+                                app:srcCompat="@drawable/ic_phone"
+                                tools:ignore="ContentDescription" />
 
                         </LinearLayout>
 
@@ -130,6 +129,7 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/trip_details_driver_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -175,7 +175,7 @@
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="9876543210" />
+                                tools:text="+91 9876543210" />
 
                         </LinearLayout>
 
@@ -230,25 +230,26 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="16dp"
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/trip_details_car_name"
                                     style="@style/body1"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginTop="16dp"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
                                     android:gravity="center_vertical"
                                     tools:text="Maruti Suzuki Swift" />
 
                                 <TextView
                                     android:id="@+id/trip_details_car_number"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:layout_marginBottom="16dp"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
                                     android:gravity="center_vertical"
                                     tools:text="TN 06H 34 5938" />
 
@@ -323,7 +324,7 @@
                                     android:layout_marginTop="16dp"
                                     android:layout_marginBottom="16dp"
                                     android:maxLines="2"
-                                    tools:text="RK Hall, IIT Kharagpur" />
+                                    tools:text="IIT Kharagpur" />
 
                             </LinearLayout>
 

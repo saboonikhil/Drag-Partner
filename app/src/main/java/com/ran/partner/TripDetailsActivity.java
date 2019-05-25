@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -26,14 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ran.partner.model.Cab;
-import com.ran.partner.model.Rider;
 import com.ran.partner.network.APIUtils;
 import com.ran.partner.network.EndPointInterface;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,8 +39,10 @@ public class TripDetailsActivity extends AppCompatActivity {
     private String TAG = "TripDetailsActivity";
     private Cab[] cabsBooked;
     private int position;
-    private TextView riderNameView, riderContactView, carNameView, pickupView, dropView, seatsView,
+    private TextView riderNameView, carNameView, pickupView, dropView, seatsView,
             driverNameView, driverContactView, carNumberView, fareView;
+    private ImageButton riderContactView;
+    private CardView driverInfoView;
     private ImageButton backView;
     private Button updateView;
     private AlertDialog dialog;
@@ -66,18 +63,29 @@ public class TripDetailsActivity extends AppCompatActivity {
         cabsBooked = (Cab[]) intent.getSerializableExtra("trip_details");
         position = Integer.parseInt(intent.getStringExtra("position"));
 
+        riderNameView.setText(cabsBooked[position].getRiders()[0].getName());
+        riderContactView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callAction();
+            }
+        });
+
         driverName = cabsBooked[position].getDriverName();
         driverContact = cabsBooked[position].getDriverContact();
-        carName = cabsBooked[position].getCarName();
-        carNumber = cabsBooked[position].getCarNumber();
+        if (driverName == null || driverContact == null || driverName.length() < 1 || driverContact.length() < 1)
+            driverInfoView.setVisibility(View.GONE);
+        else
+            setDriverInfo(driverName, driverContact);
 
-        Rider[] riders = cabsBooked[position].getRiders();
-        riderNameView.setText(riders[0].getName());
-        riderContactView.setText(riders[0].getContact());
-        driverNameView.setText(driverName);
-        driverContactView.setText(driverContact);
+        carName = cabsBooked[position].getCarName();
         carNameView.setText(carName);
-        carNumberView.setText(carNumber);
+        carNumber = cabsBooked[position].getCarNumber();
+        if (carNumber == null || carNumber.length() < 1)
+            carNumberView.setVisibility(View.GONE);
+        else
+            setCabInfo(carNumber);
+
         pickupView.setText(cabsBooked[position].getPickup());
         dropView.setText(cabsBooked[position].getDrop());
         seatsView.setText(cabsBooked[position].getSeats());
@@ -220,27 +228,6 @@ public class TripDetailsActivity extends AppCompatActivity {
                 });
             }
         });
-
-        try {
-            Calendar calendar = Calendar.getInstance();
-            String startTime = cabsBooked[position].getStartTime();
-            if (startTime != null) {
-                Date displayTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(startTime);
-                calendar.setTime(displayTime);
-                calendar.add(Calendar.HOUR, 5);
-                calendar.add(Calendar.MINUTE, 30);
-                setTitle(new SimpleDateFormat("EEE, MMM d, hh:mm a").format(calendar.getTime()));
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        riderContactView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callAction();
-            }
-        });
     }
 
     private void saveTrip(final String driverName, final String driverContact, final String carName, final String carNumber) {
@@ -255,10 +242,18 @@ public class TripDetailsActivity extends AppCompatActivity {
                     cabsBooked[position].setDriverContact(driverContact);
                     cabsBooked[position].setCarName(carName);
                     cabsBooked[position].setCarNumber(carNumber);
-                    driverNameView.setText(driverName);
-                    driverContactView.setText(driverContact);
+
+                    if (driverName.length() < 1 || driverContact.length() < 1)
+                        driverInfoView.setVisibility(View.GONE);
+                    else
+                        setDriverInfo(driverName, driverContact);
+
                     carNameView.setText(carName);
-                    carNumberView.setText(carNumber);
+                    if (carNumber.length() < 1)
+                        carNumberView.setVisibility(View.GONE);
+                    else
+                        setCabInfo(carNumber);
+
                     pd.dismiss();
                     Toast.makeText(getApplicationContext(), "Trip updated successfully", Toast.LENGTH_LONG).show();
                 }
@@ -273,14 +268,25 @@ public class TripDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void setDriverInfo(String driverName, String driverContact) {
+        driverInfoView.setVisibility(View.VISIBLE);
+        driverNameView.setText(driverName);
+        driverContactView.setText(driverContact);
+    }
+
+    private void setCabInfo(String carNumber) {
+        carNumberView.setVisibility(View.VISIBLE);
+        carNumberView.setText(carNumber);
+    }
+
     private void togglePositiveButton(boolean enable) {
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(enable);
     }
 
     private void callAction() {
-        String riderContact = riderContactView.getText().toString();
+        String riderContact = cabsBooked[position].getRiders()[0].getContact();
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + "+91" + riderContact));
+        callIntent.setData(Uri.parse("tel:" + riderContact));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             Log.v("TAG", "Calling permission is revoked");
@@ -302,6 +308,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         updateView = findViewById(R.id.trip_details_update);
         riderNameView = findViewById(R.id.trip_details_rider_name);
         riderContactView = findViewById(R.id.trip_details_rider_contact);
+        driverInfoView = findViewById(R.id.trip_details_driver_info);
         driverNameView = findViewById(R.id.trip_details_driver_name);
         driverContactView = findViewById(R.id.trip_details_driver_contact);
         carNameView = findViewById(R.id.trip_details_car_name);
@@ -313,15 +320,13 @@ public class TripDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                    callAction();
-                } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                callAction();
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
