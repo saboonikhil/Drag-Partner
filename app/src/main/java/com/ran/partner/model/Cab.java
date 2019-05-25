@@ -14,14 +14,14 @@ public class Cab implements Serializable {
     private String endTime;
     private String seats;
     private String fare;
-    private Rider[] riders;
+    private User[] riders;
     private String driverName;
     private String driverContact;
     private String carName;
     private String carNumber;
 
     public Cab(Boolean isShared, Boolean isBooked, String collegeName, String pickup, String drop, String startTime, String endTime,
-               String seats, String carName, String carNumber, String fare, Rider[] riders, String driverName, String driverContact) {
+               String seats, String carName, String carNumber, String fare, User[] riders, String driverName, String driverContact) {
         this.isShared = isShared;
         this.isBooked = isBooked;
         this.collegeName = collegeName;
@@ -150,11 +150,11 @@ public class Cab implements Serializable {
         this.driverContact = driverContact;
     }
 
-    public Rider[] getRiders() {
+    public User[] getRiders() {
         return riders;
     }
 
-    public void setRiders(Rider[] riders) {
+    public void setRiders(User[] riders) {
         this.riders = riders;
     }
 }

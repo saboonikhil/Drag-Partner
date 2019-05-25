@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 public class Partner implements Serializable {
 
-    private static Partner instance = null;
     private String _id;
     private String name;
     private String email;
@@ -18,20 +17,10 @@ public class Partner implements Serializable {
     private String response;
     private LoginResponse token;
 
-    private Partner() {
-    }
-
     public Partner(String name, String email, String contact) {
         this.name = name;
         this.email = email;
         this.contact = contact;
-    }
-
-    public static Partner getInstance() {
-        if (instance == null) {
-            instance = new Partner();
-        }
-        return instance;
     }
 
     public String get_id() {
