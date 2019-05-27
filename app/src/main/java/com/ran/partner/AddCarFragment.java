@@ -437,9 +437,6 @@ public class AddCarFragment extends DialogFragment {
         } else if (TextUtils.isEmpty(carName)) {
             focusView = carNameView;
             cancel = true;
-        } else if (TextUtils.isEmpty(carNumber)) {
-            focusView = carNumberView;
-            cancel = true;
         }
 
         if (cancel) {
