@@ -120,7 +120,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:maxLines="2"
-                            tools:text="RP Hall, IIT Kharagpur" />
+                            tools:text="IIT Kharagpur" />
 
                     </LinearLayout>
 

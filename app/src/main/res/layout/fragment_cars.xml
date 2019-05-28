@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.ran.partner.util.HorizontalCalendar.HorizontalCalendarView
+        <com.drag.partner.util.HorizontalCalendar.HorizontalCalendarView
             android:id="@+id/cars_calendar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
