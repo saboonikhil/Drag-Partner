@@ -1,1 +1,1 @@
-Android Application for RAN Admin/Driver/Associations
+Android Application for Drag Admin/Partner
