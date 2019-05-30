@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         } else if (TextUtils.isEmpty(password)) {
             focusView = passwordView;
             cancel = true;
-        } else if (password.length() > 0 && password.length() < 6) {
+        } else if (password.length() > 0 && password.length() < 5) {
             focusView = passwordView;
             cancel = true;
         }
@@ -145,9 +145,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
-                String role = email.equals("admin@comingsoon.com") ? "user" : "partner";
                 EndPointInterface service = APIUtils.getAPIService();
-                service.authSignIn(email, password, role).enqueue(new Callback<Partner>() {
+                service.authSignIn(email, password, "partner").enqueue(new Callback<Partner>() {
                     @Override
                     public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
                         if (response.body() != null) {
