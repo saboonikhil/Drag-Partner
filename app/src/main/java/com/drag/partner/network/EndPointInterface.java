@@ -18,7 +18,7 @@ public interface EndPointInterface {
     @GET("/locations")
     Call<Location[]> listLocation();
 
-    @POST("/signin")
+    @POST("/signIn")
     @FormUrlEncoded
     Call<Partner> authSignIn(
             @Field("email") String email,
@@ -33,7 +33,7 @@ public interface EndPointInterface {
             @Query("token") String token
     );
 
-    @POST("/api/admin/signup")
+    @POST("/api/admin/signUp")
     @FormUrlEncoded
     Call<Partner> addPartner(
             @Query("x_key") String key,

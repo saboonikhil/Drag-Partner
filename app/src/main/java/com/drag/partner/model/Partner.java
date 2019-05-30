@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Partner implements Serializable {
 
     private String _id;
+    private String role;
     private String name;
     private String email;
     private String contact;
@@ -77,5 +78,9 @@ public class Partner implements Serializable {
 
     public void setAlternateContact(String alternateContact) {
         this.alternateContact = alternateContact;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
