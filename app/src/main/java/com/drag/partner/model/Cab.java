@@ -7,6 +7,7 @@ public class Cab implements Serializable {
     private String _id;
     private boolean isAvailable;
     private boolean isBooked;
+    private String tripId;
     private String collegeName;
     private String pickup;
     private String drop;
@@ -156,5 +157,13 @@ public class Cab implements Serializable {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 }

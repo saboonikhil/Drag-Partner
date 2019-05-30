@@ -57,7 +57,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
             e.printStackTrace();
         }
 
-        holder.idView.setText(cabs[position].get_id());
+        holder.idView.setText(cabs[position].getTripId());
         holder.pickupView.setText(cabs[position].getPickup());
         holder.dropView.setText(cabs[position].getDrop());
 
