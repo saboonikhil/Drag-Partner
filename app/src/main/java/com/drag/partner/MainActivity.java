@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String json = pref.getString("dbObj", "");
         Partner partner = new Gson().fromJson(json, Partner.class);
         if (partner != null) {
+            customLayout(partner.getRole());
             nameView.setText(partner.getName());
             emailView.setText(partner.getEmail());
         }
@@ -56,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         navigationDrawerView.setNavigationItemSelectedListener(this);
-        navigationDrawerView.getMenu().getItem(0).setChecked(true);
-        displaySelectedScreen(R.id.navigation_drawer_trips);
     }
 
     private void displaySelectedScreen(int itemId) {
@@ -112,17 +111,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void customLayout(String role) {
-        switch (role) {
-            case "admin":
-                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
-                break;
-            case "org":
-
-                break;
-            case "driver":
-                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
-                navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_cars);
-                break;
+        if ("admin".equals(role)) {
+            navigationDrawerView.getMenu().getItem(2).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_connections);
+            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
+            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_cars);
+            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_trips);
+        } else {
+            navigationDrawerView.getMenu().getItem(0).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_trips);
+            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
         }
     }
 
