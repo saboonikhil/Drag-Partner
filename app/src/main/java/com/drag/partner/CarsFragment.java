@@ -120,7 +120,7 @@ public class CarsFragment extends Fragment {
                 calendar.add(Calendar.HOUR, 5);
                 calendar.add(Calendar.MINUTE, 30);
                 String startDate = new SimpleDateFormat("EEE, MMM dd, YYYY").format(calendar.getTime());
-                if (cab.isBooked() || !startDate.equals(selectedDate))
+                if (cab.getTripId() != null || !startDate.equals(selectedDate))
                     myList.remove(cab);
             } catch (ParseException e) {
                 e.printStackTrace();

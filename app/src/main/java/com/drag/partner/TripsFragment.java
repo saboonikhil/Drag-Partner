@@ -68,7 +68,11 @@ public class TripsFragment extends android.support.v4.app.Fragment {
         generateArrayData(trips);
         if (trips.length == 0)
             progressBar.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         updateTripsData();
     }
 
@@ -108,7 +112,7 @@ public class TripsFragment extends android.support.v4.app.Fragment {
     private Cab[] generateTripsData(Cab[] cabs) {
         ArrayList<Cab> myList = new ArrayList<>(Arrays.asList(cabs));
         for (Cab cab : cabs) {
-            if (!cab.isBooked()) {
+            if (cab.getTripId() == null) {
                 myList.remove(cab);
             }
         }
@@ -126,11 +130,5 @@ public class TripsFragment extends android.support.v4.app.Fragment {
         recyclerView = rootView.findViewById(R.id.trips_recycler_view);
         emptyView = rootView.findViewById(R.id.trips_empty_view);
         progressBar = rootView.findViewById(R.id.trips_progress_bar);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateTripsData();
     }
 }

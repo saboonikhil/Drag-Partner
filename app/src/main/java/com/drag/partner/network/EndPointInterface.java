@@ -61,7 +61,7 @@ public interface EndPointInterface {
             @Field("carNumber") String carNumber
     );
 
-    @PUT("/cabs/{cID}")
+    @PUT("/api/admin/cabs/{cID}")
     @FormUrlEncoded
     Call<Cab> cabUpdate(
             @Path("cID") String cID,
