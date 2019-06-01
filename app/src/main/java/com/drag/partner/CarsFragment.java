@@ -12,16 +12,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.drag.partner.adapter.CarsAdapter;
 import com.drag.partner.model.Cab;
 import com.drag.partner.model.Partner;
+import com.drag.partner.network.APIUtils;
+import com.drag.partner.network.EndPointInterface;
 import com.drag.partner.util.HorizontalCalendar.HorizontalCalendar;
 import com.drag.partner.util.HorizontalCalendar.util.HorizontalCalendarListener;
+import com.drag.partner.util.OnSwipeTouchListener;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -30,17 +35,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class CarsFragment extends Fragment {
 
+    private String TAG = "CarsFragment";
     private Activity parentActivity;
     private View rootView;
+    private SharedPreferences pref;
     private Partner partner;
+    private String token;
+    private Cab[] trips;
+    private HorizontalCalendar horizontalCalendar;
     private RecyclerView recyclerView;
     private CarsAdapter carsAdapter;
     private ImageView emptyView;
     private FloatingActionButton addCarView;
+    private int count = 2;
 
     @Nullable
     @Override
@@ -50,23 +65,19 @@ public class CarsFragment extends Fragment {
         return rootView;
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint({"SimpleDateFormat", "ClickableViewAccessibility"})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentActivity.setTitle("My Cars");
         initViews();
 
-        SharedPreferences pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
-        String json = pref.getString("dbObj", "");
-        partner = new Gson().fromJson(json, Partner.class);
-
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.DAY_OF_MONTH, 1);
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_MONTH, 30);
 
-        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.cars_calendar_view)
+        horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.cars_calendar_view)
                 .range(startDate, endDate)
                 .datesNumberOnScreen(5)
                 .configure()
@@ -80,20 +91,37 @@ public class CarsFragment extends Fragment {
                 .end()
                 .build();
 
-        Cab[] trips = generateTripsData(partner.getCabs(), startDate);
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+                count = position;
+                refreshTripsData();
+            }
+        });
+
+        pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
+        token = pref.getString("token", "");
+        String json = pref.getString("dbObj", "");
+        partner = new Gson().fromJson(json, Partner.class);
+
+        trips = generateTripsData(partner.getCabs(), startDate);
         generateArrayData(trips);
         if (trips.length == 0)
             emptyView.setVisibility(View.VISIBLE);
 
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+        recyclerView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
-            public void onDateSelected(Calendar date, int position) {
-                Cab[] trips = generateTripsData(partner.getCabs(), date);
-                carsAdapter.refreshData(trips);
-                if (trips.length == 0)
-                    emptyView.setVisibility(View.VISIBLE);
-                else
-                    emptyView.setVisibility(View.GONE);
+            public void onSwipeLeft() {
+                if (count != 32)
+                    count++;
+                horizontalCalendar.centerCalendarToPosition(count);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                if (count != 2)
+                    count--;
+                horizontalCalendar.centerCalendarToPosition(count);
             }
         });
 
@@ -107,6 +135,44 @@ public class CarsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTripsData();
+    }
+
+    private void updateTripsData() {
+        EndPointInterface service = APIUtils.getAPIService();
+        service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
+            @Override
+            public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                if (response.body() != null) {
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("dbObj", new Gson().toJson(response.body()));
+                    edit.apply();
+                    String json = pref.getString("dbObj", "");
+                    partner = new Gson().fromJson(json, Partner.class);
+                    refreshTripsData();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                Log.e(TAG + " On Failure", t.getMessage());
+                Toast.makeText(parentActivity, "Couldn't refresh cars", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void refreshTripsData() {
+        trips = generateTripsData(partner.getCabs(), horizontalCalendar.getSelectedDate());
+        carsAdapter.refreshData(trips);
+        if (trips.length == 0)
+            emptyView.setVisibility(View.VISIBLE);
+        else
+            emptyView.setVisibility(View.GONE);
     }
 
     @SuppressLint("SimpleDateFormat")
