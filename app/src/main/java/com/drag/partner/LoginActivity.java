@@ -1,21 +1,13 @@
 package com.drag.partner;
 
-import android.annotation.TargetApi;
-import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -27,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,18 +30,12 @@ import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.Manifest.permission.READ_CONTACTS;
+public class LoginActivity extends AppCompatActivity {
 
-public class LoginActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int REQUEST_READ_CONTACTS = 0;
     private String TAG = LoginActivity.class.getSimpleName();
     private LinearLayout rootView;
     private TextInputLayout emailLayout, passwordLayout;
@@ -59,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     private Button loginView;
     private InputMethodManager imm;
     private SharedPreferences pref;
+    private ProgressDialog pd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         pref = getSharedPreferences("AppPref", MODE_PRIVATE);
-        populateAutoComplete();
 
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -105,8 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     }
 
     private boolean isTokenValid() {
-        SharedPreferences sharedPreferences = getSharedPreferences("AppPref", MODE_PRIVATE);
-        String exp = sharedPreferences.getString("expires", "");
+        String exp = pref.getString("expires", "");
         long time = System.currentTimeMillis();
         long expires;
         try {
@@ -145,10 +129,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
+                pd = ProgressDialog.show(this, "", "Logging in...", true, false);
                 EndPointInterface service = APIUtils.getAPIService();
                 service.authSignIn(email, password, "partner").enqueue(new Callback<Partner>() {
                     @Override
                     public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                        pd.dismiss();
                         if (response.body() != null) {
                             if (response.body().res()) {
                                 SharedPreferences.Editor edit = pref.edit();
@@ -166,6 +152,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
 
                     @Override
                     public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                        pd.dismiss();
                         Log.e(TAG + " On Failure", t.getMessage());
                         Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
                     }
@@ -178,11 +165,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     private void displayResponse(String message) {
         switch (message) {
             case "Invalid Password":
-                passwordLayout.setError("Password not valid.");
+                passwordLayout.setError("Password not valid");
                 passwordView.requestFocus();
                 break;
             case "Email Not Registered":
-                emailLayout.setError("Email address not registered.");
+                emailLayout.setError("Email address not registered");
                 emailView.requestFocus();
                 break;
             case "Invalid Credentials":
@@ -194,73 +181,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
 
     private boolean isEmailValid(String email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(emailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?", new String[]{ContactsContract.
-                CommonDataKinds.Email.CONTENT_ITEM_TYPE}, ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(LoginActivity.this,
-                android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-        emailView.setAdapter(adapter);
     }
 
     private boolean isConnectedToInternet() {
@@ -286,13 +206,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         passwordLayout = findViewById(R.id.login_password_layout);
         passwordView = findViewById(R.id.login_password);
         loginView = findViewById(R.id.login_button);
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-        int ADDRESS = 0;
     }
 }

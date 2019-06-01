@@ -3,6 +3,7 @@ package com.drag.partner;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -55,6 +56,7 @@ public class AddPartnerFragment extends DialogFragment {
     private EditText nameView, emailView, contactView, alternateContactView, passwordView, confirmPasswordView;
     private String token, alternateContact, countryCode = "+91 ";
     private TextWatcher textWatcher1, textWatcher;
+    private ProgressDialog progressDialog;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -188,8 +190,7 @@ public class AddPartnerFragment extends DialogFragment {
                 if (hasFocus) {
                     if (passwordView.getText().toString().length() == 0) {
                         passwordLayout.setErrorTextAppearance(R.style.NoteDisplay);
-                        passwordLayout.setError("Password should contain at least one number, " +
-                                "one uppercase letter and one special character.");
+                        passwordLayout.setError("Password must have at least five characters");
                     }
                 } else {
                     passwordLayout.setErrorEnabled(false);
@@ -206,15 +207,13 @@ public class AddPartnerFragment extends DialogFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 passwordLayout.setErrorEnabled(false);
                 confirmPasswordLayout.setErrorEnabled(false);
-                confirmPasswordView.setText(null);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() == 0) {
                     passwordLayout.setErrorTextAppearance(R.style.NoteDisplay);
-                    passwordLayout.setError("Password should contain at least one number, " +
-                            "one uppercase letter and one special character.");
+                    passwordLayout.setError("Password must have at least five characters");
                 }
             }
         });
@@ -274,14 +273,14 @@ public class AddPartnerFragment extends DialogFragment {
         } else if (TextUtils.isEmpty(password)) {
             focusView = passwordView;
             cancel = true;
-        } else if (password.length() > 0 && password.length() < 6) {
+        } else if (password.length() > 0 && password.length() < 5) {
             focusView = passwordView;
             cancel = true;
         } else if (TextUtils.isEmpty(confirmPassword)) {
             focusView = confirmPasswordView;
             cancel = true;
         } else if (!confirmPassword.equals(password)) {
-            confirmPasswordLayout.setError("Passwords do not match.");
+            confirmPasswordLayout.setError("Passwords do not match");
             focusView = confirmPasswordView;
             cancel = true;
         }
@@ -291,6 +290,9 @@ public class AddPartnerFragment extends DialogFragment {
             focusView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
         } else {
             if (isConnectedToInternet()) {
+                progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage("Adding Partner...");
+                progressDialog.show();
                 EndPointInterface service = APIUtils.getAPIService();
                 Call<Partner> call = service.addPartner(
                         partner.getEmail(), token, name, email, contact, alternateContact, password);
@@ -298,6 +300,7 @@ public class AddPartnerFragment extends DialogFragment {
                 call.enqueue(new Callback<Partner>() {
                     @Override
                     public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+                        progressDialog.cancel();
                         if (response.body() != null) {
                             if (response.body().res()) {
                                 Toast.makeText(parentActivity, response.body().response(), Toast.LENGTH_LONG).show();
@@ -310,6 +313,7 @@ public class AddPartnerFragment extends DialogFragment {
 
                     @Override
                     public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+                        progressDialog.cancel();
                         Log.e(TAG + " On Failure", t.getMessage());
                         Toast.makeText(parentActivity, "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
                     }
