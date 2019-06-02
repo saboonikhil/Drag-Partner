@@ -65,6 +65,8 @@ public interface EndPointInterface {
     @FormUrlEncoded
     Call<Cab> cabUpdate(
             @Path("cID") String cID,
+            @Query("x_key") String key,
+            @Query("token") String token,
             @Field("carName") String carName,
             @Field("carNumber") String carNumber,
             @Field("driverName") String driverName,

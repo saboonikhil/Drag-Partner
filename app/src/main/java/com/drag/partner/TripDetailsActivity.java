@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.drag.partner.model.Cab;
+import com.drag.partner.model.Partner;
 import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +40,8 @@ import retrofit2.Response;
 public class TripDetailsActivity extends AppCompatActivity {
 
     private String TAG = "TripDetailsActivity";
+    private String token;
+    private Partner partner;
     private Cab[] cabsBooked;
     private int position;
     private TextView riderNameView, carNameView, pickupView, dropView, seatsView,
@@ -58,6 +63,11 @@ public class TripDetailsActivity extends AppCompatActivity {
         setupActionBar();
         setContentView(R.layout.activity_trip_details);
         initViews();
+
+        SharedPreferences pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+        token = pref.getString("token", "");
+        String json = pref.getString("dbObj", "");
+        partner = new Gson().fromJson(json, Partner.class);
 
         Intent intent = getIntent();
         cabsBooked = (Cab[]) intent.getSerializableExtra("trip_details");
@@ -234,7 +244,8 @@ public class TripDetailsActivity extends AppCompatActivity {
         pd = ProgressDialog.show(this, "", "Saving...", true, false);
 
         EndPointInterface service = APIUtils.getAPIService();
-        service.cabUpdate(cabsBooked[position].get_id(), carName, carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
+        service.cabUpdate(cabsBooked[position].get_id(), partner.getEmail(), token, carName,
+                carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
             @Override
             public void onResponse(@NonNull Call<Cab> call, @NonNull Response<Cab> response) {
                 if (response.body() != null) {
