@@ -4,6 +4,11 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/navigation_drawer_rides"
+            android:icon="@drawable/ic_rides"
+            android:title="@string/rides" />
+
+        <item
             android:id="@+id/navigation_drawer_trips"
             android:icon="@drawable/ic_trips"
             android:title="@string/trips" />

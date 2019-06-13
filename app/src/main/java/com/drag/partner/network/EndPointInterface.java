@@ -4,6 +4,8 @@ import com.drag.partner.model.Cab;
 import com.drag.partner.model.Location;
 import com.drag.partner.model.Partner;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -29,6 +31,12 @@ public interface EndPointInterface {
     @GET("/api/admin/partners/{pID}")
     Call<Partner> partnerDetail(
             @Path("pID") String pID,
+            @Query("x_key") String key,
+            @Query("token") String token
+    );
+
+    @GET("/api/admin/rides")
+    Call<List<Cab>> partnerRideList(
             @Query("x_key") String key,
             @Query("token") String token
     );

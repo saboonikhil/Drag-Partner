@@ -62,8 +62,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void displaySelectedScreen(int itemId) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (itemId) {
-            case R.id.navigation_drawer_trips:
+            case R.id.navigation_drawer_rides:
                 count = 0;
+                ft.replace(R.id.main_content_frame, new RidesFragment(), "Rides").commit();
+                break;
+
+            case R.id.navigation_drawer_trips:
                 ft.replace(R.id.main_content_frame, new TripsFragment(), "Trips").commit();
                 break;
 
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_trips);
         } else {
             navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_trips);
+            displaySelectedScreen(R.id.navigation_drawer_rides);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
         }
     }
@@ -145,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
+        RidesFragment currentFragment = (RidesFragment) getSupportFragmentManager().findFragmentByTag("Rides");
         if (rootView.isDrawerOpen(GravityCompat.START)) {
             rootView.closeDrawer(GravityCompat.START);
         } else if (currentFragment != null && currentFragment.isVisible()) {
@@ -156,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
         } else {
             navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_trips);
+            displaySelectedScreen(R.id.navigation_drawer_rides);
         }
     }
 
