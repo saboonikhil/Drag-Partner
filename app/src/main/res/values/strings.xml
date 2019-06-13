@@ -17,9 +17,10 @@
     <string name="cars">Cars</string>
     <string name="logout">Logout</string>
     <string name="call_support">Call Support</string>
+    <string name="rides">Rides</string>
 
     <!-- Strings related to Trips -->
-    <string name="crn">CRN:</string>
+    <string name="crn">Booking ID:</string>
 
     <!-- Strings related to Trip details -->
     <string name="trip_details">Trip details</string>
