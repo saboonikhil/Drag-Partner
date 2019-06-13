@@ -50,11 +50,11 @@ import com.drag.partner.util.ObjectSerializer;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -544,14 +544,23 @@ public class AddCarFragment extends DialogFragment {
     @SuppressLint("SimpleDateFormat")
     private String formatDateTime(Date date, Date time) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        df.setTimeZone(TimeZone.getTimeZone("UTC"));
         String isoDate = df.format(date);
 
         DateFormat df1 = new SimpleDateFormat("HH:mm:ss.SSS");
-        df1.setTimeZone(TimeZone.getTimeZone("UTC"));
         String isoTime = df1.format(time);
 
-        return isoDate + 'T' + isoTime + 'Z';
+        String startDateTime = isoDate + 'T' + isoTime + 'Z';
+        try {
+            Calendar calendar = Calendar.getInstance();
+            Date startTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(startDateTime);
+            calendar.setTime(startTime);
+            calendar.add(Calendar.HOUR, -5);
+            calendar.add(Calendar.MINUTE, -30);
+            startDateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(calendar.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return startDateTime;
     }
 
     private boolean isConnectedToInternet() {
