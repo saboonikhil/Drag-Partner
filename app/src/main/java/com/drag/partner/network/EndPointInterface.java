@@ -69,6 +69,18 @@ public interface EndPointInterface {
             @Field("carNumber") String carNumber
     );
 
+    @POST("/api/admin/rides")
+    @FormUrlEncoded
+    Call<Partner> addRide(
+            @Query("x_key") String key,
+            @Query("token") String token,
+            @Field("pickup") String pickup,
+            @Field("drop") String drop,
+            @Field("startTime") String startTime,
+            @Field("seats") String seats,
+            @Field("fare") String fare
+    );
+
     @PUT("/api/admin/cabs/{cID}")
     @FormUrlEncoded
     Call<Cab> cabUpdate(
