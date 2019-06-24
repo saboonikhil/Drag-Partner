@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void customLayout(String role) {
         if ("admin".equals(role)) {
-            navigationDrawerView.getMenu().getItem(2).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_connections);
+            navigationDrawerView.getMenu().getItem(0).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_rides);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_cars);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_trips);

@@ -17,12 +17,12 @@
         android:paddingBottom="40dp">
 
         <ImageView
-            android:layout_width="300dp"
-            android:layout_height="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="60dp"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/ic_logo" />
+            app:srcCompat="@drawable/ic_splash_logo" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/login_email_layout"
