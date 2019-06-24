@@ -418,12 +418,34 @@ public class AddCarFragment extends DialogFragment {
         seats = seatsView.getText().toString();
         fare = fareView.getText().toString();
         carName = carNameView.getText().toString();
-        carNumber = carNumberView.getText().toString();
 
-        if (!TextUtils.isEmpty(pickupView.getText().toString()))
+        if (!TextUtils.isEmpty(pickupView.getText().toString())) {
             pickup = pickupView.getText().toString();
-        if (!TextUtils.isEmpty(dropView.getText().toString()))
+            for (Location location : locations) {
+                if (collegeName.equals(location.getCollegeName())) {
+                    for (String aList : location.getSetA()) {
+                        if (pickup.equals(aList)) {
+                            pickup = collegeName;
+                        }
+                    }
+                }
+            }
+        }
+        if (!TextUtils.isEmpty(dropView.getText().toString())) {
             drop = dropView.getText().toString();
+            for (Location location : locations) {
+                if (collegeName.equals(location.getCollegeName())) {
+                    for (String aList : location.getSetA()) {
+                        if (drop.equals(aList)) {
+                            drop = collegeName;
+                        }
+                    }
+                }
+            }
+        }
+        if (!TextUtils.isEmpty(carNumberView.getText().toString())) {
+            carNumber = carNumberView.getText().toString();
+        }
 
         boolean cancel = false;
         View focusView = null;
