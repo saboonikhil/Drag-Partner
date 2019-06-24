@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/trips_fare"
+                    android:layout_toStartOf="@+id/rides_fare"
                     android:orientation="vertical">
 
                     <TextView
@@ -58,14 +58,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
-                            android:text="@string/crn" />
+                            android:text="@string/ride_id_" />
 
                         <TextView
                             android:id="@+id/rides_id"
                             style="@style/body1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="KGP471089" />
+                            tools:text="5647-8485-5642" />
 
                     </LinearLayout>
 

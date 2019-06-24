@@ -32,4 +32,20 @@
         android:visibility="gone"
         tools:ignore="ContentDescription" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/rides_add_ride"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="18dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@android:color/white"
+        android:visibility="gone"
+        app:backgroundTint="@color/black"
+        app:fabSize="normal"
+        app:rippleColor="@android:color/white"
+        app:srcCompat="@drawable/ic_add" />
+
 </RelativeLayout>

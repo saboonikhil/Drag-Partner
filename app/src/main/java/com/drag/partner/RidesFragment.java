@@ -8,7 +8,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +48,7 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
     private ImageView emptyView;
     private RidesAdapter ridesAdapter;
     private int refreshCount = 0;
+    private FloatingActionButton addRideView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +67,11 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
         token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
         partner = new Gson().fromJson(json, Partner.class);
+        if (partner != null) {
+            if ("admin".equals(partner.getRole())) {
+                addRideView.setVisibility(View.VISIBLE);
+            }
+        }
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -71,12 +79,27 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
                 pullAndRefresh();
             }
         });
+
+        addRideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddRideFragment dialog = new AddRideFragment();
+                if (getFragmentManager() != null) {
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, AddRideFragment.TAG);
+                }
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        pullAndRefresh();
+        if (partner != null) {
+            if (!"admin".equals(partner.getRole())) {
+                pullAndRefresh();
+            }
+        }
     }
 
     private void pullAndRefresh() {
@@ -139,6 +162,7 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
 
     }
 
+
     private boolean isConnectedToInternet() {
         ConnectivityManager connMgr = (ConnectivityManager) parentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = null;
@@ -152,5 +176,6 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
         refreshLayout = rootView.findViewById(R.id.rides_refresh_layout);
         recyclerView = rootView.findViewById(R.id.rides_recycler_view);
         emptyView = rootView.findViewById(R.id.rides_empty_view);
+        addRideView = rootView.findViewById(R.id.rides_add_ride);
     }
 }

@@ -58,7 +58,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
-                            android:text="@string/crn" />
+                            android:text="@string/trip_id_" />
 
                         <TextView
                             android:id="@+id/trips_id"

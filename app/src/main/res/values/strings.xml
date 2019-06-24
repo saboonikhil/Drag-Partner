@@ -19,8 +19,11 @@
     <string name="call_support">Call Support</string>
     <string name="rides">Rides</string>
 
+    <!-- Strings related to Rides -->
+    <string name="ride_id_">Ride ID:</string>
+
     <!-- Strings related to Trips -->
-    <string name="crn">Booking ID:</string>
+    <string name="trip_id_">Trip ID:</string>
 
     <!-- Strings related to Trip details -->
     <string name="trip_details">Trip details</string>
@@ -67,5 +70,10 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="trip_fare">Trip fare</string>
+
+    <!-- Strings related to Add Ride -->
+    <string name="new_ride">New Ride</string>
+    <string name="new_rides">New Rides</string>
+    <string name="ride_fare">Ride fare</string>
 
 </resources>
