@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.drag.partner"
         minSdkVersion 17
@@ -14,8 +13,16 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "BASE_URL", "\"https://ec2-52-66-214-151.ap-south-1.compute.amazonaws.com:8443\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://ec2-52-66-214-151.ap-south-1.compute.amazonaws.com:8443\""
+            debuggable true
+            signingConfig signingConfigs.debug
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-DEBUG'
         }
     }
     lintOptions {

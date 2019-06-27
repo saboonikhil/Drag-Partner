@@ -29,7 +29,7 @@ public class SplashActivity extends Activity {
 
         pref = getSharedPreferences("AppPref", MODE_PRIVATE);
 
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(SplashActivity.this);
         service.listLocation().enqueue(new Callback<Location[]>() {
             @Override
             public void onResponse(@NonNull Call<Location[]> call, @NonNull Response<Location[]> response) {

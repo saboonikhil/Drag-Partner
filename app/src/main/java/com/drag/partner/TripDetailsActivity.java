@@ -243,7 +243,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private void saveTrip(final String driverName, final String driverContact, final String carName, final String carNumber) {
         pd = ProgressDialog.show(this, "", "Saving...", true, false);
 
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(TripDetailsActivity.this);
         service.cabUpdate(cabsBooked[position].get_id(), partner.getEmail(), token, carName,
                 carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
             @Override

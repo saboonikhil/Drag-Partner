@@ -112,7 +112,7 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
     }
 
     private void getRideList() {
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(parentActivity);
         Call<List<Cab>> call = service.partnerRideList(partner.getEmail(), token);
 
         call.enqueue(new Callback<List<Cab>>() {

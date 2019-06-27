@@ -77,7 +77,7 @@ public class TripsFragment extends android.support.v4.app.Fragment {
     }
 
     private void updateTripsData() {
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(parentActivity);
         service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
             @Override
             public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {

@@ -518,7 +518,7 @@ public class AddCarFragment extends DialogFragment {
     }
 
     private void addCab(String startTime) {
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(parentActivity);
         Call<Partner> call = service.addCab(
                 partner.get_id(), partner.getEmail(), token, collegeName, pickup, drop, startTime, seats, fare, carName, carNumber);
 

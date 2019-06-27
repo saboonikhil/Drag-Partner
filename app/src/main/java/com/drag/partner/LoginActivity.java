@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             if (isConnectedToInternet()) {
                 pd = ProgressDialog.show(this, "", "Logging in...", true, false);
-                EndPointInterface service = APIUtils.getAPIService();
+                EndPointInterface service = APIUtils.getAPIService(LoginActivity.this);
                 service.authSignIn(email, password, "partner").enqueue(new Callback<Partner>() {
                     @Override
                     public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {

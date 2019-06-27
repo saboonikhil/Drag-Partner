@@ -1,17 +1,20 @@
 package com.drag.partner.network;
 
+import android.content.Context;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClientInstance {
+class RetrofitClientInstance {
 
     private static Retrofit retrofit;
 
-    public static Retrofit getRetrofitInstance(String base_url) {
+    static Retrofit getRetrofitInstance(Context context) {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(base_url)
+                    .baseUrl(com.drag.partner.BuildConfig.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(SelfSigningClientBuilder.createClient(context))
                     .build();
         }
         return retrofit;

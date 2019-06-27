@@ -293,7 +293,7 @@ public class AddPartnerFragment extends DialogFragment {
                 progressDialog = new ProgressDialog(getContext());
                 progressDialog.setMessage("Adding Partner...");
                 progressDialog.show();
-                EndPointInterface service = APIUtils.getAPIService();
+                EndPointInterface service = APIUtils.getAPIService(parentActivity);
                 Call<Partner> call = service.addPartner(
                         partner.getEmail(), token, name, email, contact, alternateContact, password);
 

@@ -511,7 +511,7 @@ public class AddRideFragment extends DialogFragment {
     }
 
     private void addRide(String startTime) {
-        EndPointInterface service = APIUtils.getAPIService();
+        EndPointInterface service = APIUtils.getAPIService(parentActivity);
         Call<Partner> call = service.addRide(partner.getEmail(), token, pickup, drop, startTime, seats, fare);
         call.enqueue(new Callback<Partner>() {
             @Override
