@@ -94,12 +94,13 @@
                         <View style="@style/DividerWithMargin" />
 
                         <LinearLayout
+                            android:id="@+id/trip_details_rider_layout0"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:id="@+id/trip_details_rider_name"
+                                android:id="@+id/trip_details_rider_name0"
                                 style="@style/body1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -108,13 +109,90 @@
                                 android:paddingBottom="16dp"
                                 tools:text="Lorem Ipsum" />
 
-                            <ImageButton
-                                android:id="@+id/trip_details_rider_contact"
+                            <TextView
+                                android:id="@+id/trip_details_rider_contact0"
+                                style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/white"
-                                app:srcCompat="@drawable/ic_phone"
-                                tools:ignore="ContentDescription" />
+                                tools:text="+91 9876543210" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/trip_details_rider_layout1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_name1"
+                                style="@style/body1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingTop="16dp"
+                                android:paddingBottom="16dp"
+                                tools:text="Lorem Ipsum" />
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_contact1"
+                                style="@style/body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="+91 9876543210" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/trip_details_rider_layout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_name2"
+                                style="@style/body1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingTop="16dp"
+                                android:paddingBottom="16dp"
+                                tools:text="Lorem Ipsum" />
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_contact2"
+                                style="@style/body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="+91 9876543210" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/trip_details_rider_layout3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_name3"
+                                style="@style/body1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingTop="16dp"
+                                android:paddingBottom="16dp"
+                                tools:text="Lorem Ipsum" />
+
+                            <TextView
+                                android:id="@+id/trip_details_rider_contact3"
+                                style="@style/body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="+91 9876543210" />
 
                         </LinearLayout>
 

@@ -1,18 +1,14 @@
 package com.drag.partner;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
@@ -44,9 +40,9 @@ public class TripDetailsActivity extends AppCompatActivity {
     private Partner partner;
     private Cab[] cabsBooked;
     private int position;
-    private TextView riderNameView, carNameView, pickupView, dropView, seatsView,
+    private LinearLayout rider0View, rider1View, rider2View, rider3View;
+    private TextView carNameView, pickupView, dropView, seatsView,
             driverNameView, driverContactView, carNumberView, fareView;
-    private ImageButton riderContactView;
     private CardView driverInfoView;
     private ImageButton backView;
     private Button updateView;
@@ -56,7 +52,6 @@ public class TripDetailsActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private LinearLayout rootView;
 
-    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +68,38 @@ public class TripDetailsActivity extends AppCompatActivity {
         cabsBooked = (Cab[]) intent.getSerializableExtra("trip_details");
         position = Integer.parseInt(intent.getStringExtra("position"));
 
-        riderNameView.setText(cabsBooked[position].getRiders()[0].getName());
-        riderContactView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callAction();
-            }
-        });
+        if (cabsBooked[position].getRiders().length > 0) {
+            rider0View.setVisibility(View.VISIBLE);
+            TextView riderNameView = findViewById(R.id.trip_details_rider_name0);
+            riderNameView.setText(cabsBooked[position].getRiders()[0].getName());
+
+            TextView riderContactView = findViewById(R.id.trip_details_rider_contact0);
+            riderContactView.setText(cabsBooked[position].getRiders()[0].getContact());
+        }
+        if (cabsBooked[position].getRiders().length > 1) {
+            rider1View.setVisibility(View.VISIBLE);
+            TextView riderNameView = findViewById(R.id.trip_details_rider_name1);
+            riderNameView.setText(cabsBooked[position].getRiders()[1].getName());
+
+            TextView riderContactView = findViewById(R.id.trip_details_rider_contact1);
+            riderContactView.setText(cabsBooked[position].getRiders()[1].getContact());
+        }
+        if (cabsBooked[position].getRiders().length > 2) {
+            rider2View.setVisibility(View.VISIBLE);
+            TextView riderNameView = findViewById(R.id.trip_details_rider_name2);
+            riderNameView.setText(cabsBooked[position].getRiders()[2].getName());
+
+            TextView riderContactView = findViewById(R.id.trip_details_rider_contact2);
+            riderContactView.setText(cabsBooked[position].getRiders()[2].getContact());
+        }
+        if (cabsBooked[position].getRiders().length > 3) {
+            rider3View.setVisibility(View.VISIBLE);
+            TextView riderNameView = findViewById(R.id.trip_details_rider_name3);
+            riderNameView.setText(cabsBooked[position].getRiders()[3].getName());
+
+            TextView riderContactView = findViewById(R.id.trip_details_rider_contact3);
+            riderContactView.setText(cabsBooked[position].getRiders()[3].getContact());
+        }
 
         driverName = cabsBooked[position].getDriverName();
         driverContact = cabsBooked[position].getDriverContact();
@@ -294,20 +314,6 @@ public class TripDetailsActivity extends AppCompatActivity {
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(enable);
     }
 
-    private void callAction() {
-        String riderContact = cabsBooked[position].getRiders()[0].getContact();
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + riderContact));
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            Log.v("TAG", "Calling permission is revoked");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-        } else {
-            Log.v("TAG", "Calling permission is granted");
-            startActivity(callIntent);
-        }
-    }
-
     private void setupActionBar() {
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
@@ -317,8 +323,10 @@ public class TripDetailsActivity extends AppCompatActivity {
         rootView = findViewById(R.id.trip_details_activity_layout);
         backView = findViewById(R.id.trip_details_back);
         updateView = findViewById(R.id.trip_details_update);
-        riderNameView = findViewById(R.id.trip_details_rider_name);
-        riderContactView = findViewById(R.id.trip_details_rider_contact);
+        rider0View = findViewById(R.id.trip_details_rider_layout0);
+        rider1View = findViewById(R.id.trip_details_rider_layout1);
+        rider2View = findViewById(R.id.trip_details_rider_layout2);
+        rider3View = findViewById(R.id.trip_details_rider_layout3);
         driverInfoView = findViewById(R.id.trip_details_driver_info);
         driverNameView = findViewById(R.id.trip_details_driver_name);
         driverContactView = findViewById(R.id.trip_details_driver_contact);
@@ -328,17 +336,5 @@ public class TripDetailsActivity extends AppCompatActivity {
         dropView = findViewById(R.id.trip_details_drop);
         seatsView = findViewById(R.id.trip_details_seats);
         fareView = findViewById(R.id.trip_details_fare);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                callAction();
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
