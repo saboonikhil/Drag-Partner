@@ -29,6 +29,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/test_profile_picture"
             app:border="true"
+            app:border_color="@color/black"
             app:border_width="1dp" />
 
     </RelativeLayout>
