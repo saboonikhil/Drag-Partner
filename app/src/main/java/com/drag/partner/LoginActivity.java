@@ -19,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -39,8 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = LoginActivity.class.getSimpleName();
     private LinearLayout rootView;
     private TextInputLayout emailLayout, passwordLayout;
-    private AutoCompleteTextView emailView;
-    private EditText passwordView;
+    private EditText emailView, passwordView;
     private Button loginView;
     private InputMethodManager imm;
     private SharedPreferences pref;
