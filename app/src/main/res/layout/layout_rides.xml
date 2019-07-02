@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/rides_fare"
+                    android:layout_toStartOf="@+id/rides_seats"
                     android:orientation="vertical">
 
                     <TextView
@@ -72,15 +72,17 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/rides_fare"
+                    android:id="@+id/rides_seats"
                     style="@style/body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
+                    android:drawableStart="@drawable/ic_seats"
+                    android:drawablePadding="6dp"
                     android:gravity="center_vertical"
-                    tools:text="₹ 2000" />
+                    tools:text="4" />
 
             </RelativeLayout>
 

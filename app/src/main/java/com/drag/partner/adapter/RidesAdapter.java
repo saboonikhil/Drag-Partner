@@ -65,9 +65,23 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesCardVie
         holder.pickupView.setText(rideList.get(position).getPickup());
         holder.dropView.setText(rideList.get(position).getDrop());
 
-        if (rideList.get(position).getFare() != null) {
-            String displayFare = "₹ " + rideList.get(position).getFare();
-            holder.fareView.setText(displayFare);
+        if (rideList.get(position).getTripId().indexOf('@') == -1) {
+            switch (rideList.get(position).getSeats()) {
+                case "0":
+                    holder.seatsView.setText("4");
+                    break;
+                case "1":
+                    holder.seatsView.setText("3");
+                    break;
+                case "2":
+                    holder.seatsView.setText("2");
+                    break;
+                case "3":
+                    holder.seatsView.setText("1");
+                    break;
+            }
+        } else {
+            holder.seatsView.setText(rideList.get(position).getSeats());
         }
     }
 
@@ -85,7 +99,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesCardVie
     }
 
     class RidesCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView idView, pickupView, dropView, startTimeView, fareView;
+        private TextView idView, pickupView, dropView, startTimeView, seatsView;
 
         RidesCardViewHolder(View itemView) {
             super(itemView);
@@ -93,7 +107,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesCardVie
             pickupView = itemView.findViewById(R.id.rides_pickup);
             dropView = itemView.findViewById(R.id.rides_drop);
             startTimeView = itemView.findViewById(R.id.rides_start_time);
-            fareView = itemView.findViewById(R.id.rides_fare);
+            seatsView = itemView.findViewById(R.id.rides_seats);
             itemView.setOnClickListener(this);
         }
 

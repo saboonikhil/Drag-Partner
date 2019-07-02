@@ -69,7 +69,9 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
         partner = new Gson().fromJson(json, Partner.class);
         if (partner != null) {
             if ("admin".equals(partner.getRole())) {
-                addRideView.setVisibility(View.VISIBLE);
+                addRideView.show();
+            } else {
+                addRideView.hide();
             }
         }
 
@@ -95,11 +97,7 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
     @Override
     public void onResume() {
         super.onResume();
-        if (partner != null) {
-            if (!"admin".equals(partner.getRole())) {
-                pullAndRefresh();
-            }
-        }
+        pullAndRefresh();
     }
 
     private void pullAndRefresh() {
@@ -136,7 +134,7 @@ public class RidesFragment extends Fragment implements RidesAdapter.ListItemClic
                 if (refreshCount == 1)
                     Toast.makeText(getContext(), "Something went wrong. Please try again later!", Toast.LENGTH_LONG).show();
                 else
-                    Toast.makeText(getContext(), "Couldn't refresh cabs", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Couldn't refresh rides", Toast.LENGTH_LONG).show();
                 refreshLayout.setRefreshing(false);
             }
         });
