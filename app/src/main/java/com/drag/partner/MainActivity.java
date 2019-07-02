@@ -1,5 +1,6 @@
 package com.drag.partner;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static String TAG = MainActivity.class.getSimpleName();
     private SharedPreferences pref;
     private DrawerLayout rootView;
     private Toolbar toolbarView;
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.navigation_drawer_support:
+                callAction();
                 break;
         }
         rootView.closeDrawer(GravityCompat.START);
@@ -134,15 +139,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationDrawerView = findViewById(R.id.main_navigation_drawer);
     }
 
+    private void callAction() {
+        String helpDesk = "+91 7010823612";
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + helpDesk));
+
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Calling permission is revoked");
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+        } else {
+            Log.v(TAG, "Calling permission is granted");
+            startActivity(callIntent);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                String riderContact = "+91 9876543210";
-                startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + riderContact)));
+                Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                callAction();
             } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -155,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (currentFragment != null && currentFragment.isVisible()) {
             count = count + 1;
             if (count == 1)
-                Toast.makeText(MainActivity.this, "Press again to close Drag Partner", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Tap again to exit Drag Partner", Toast.LENGTH_SHORT).show();
             else if (count == 2)
                 finish();
         } else {
