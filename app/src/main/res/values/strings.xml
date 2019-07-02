@@ -62,7 +62,7 @@
     <!-- Strings related to Add Car -->
     <string name="new_car">New Car</string>
     <string name="new_cars">New Cars</string>
-    <string name="college">College</string>
+    <string name="city">City</string>
     <string name="pickup_location">Pickup Location</string>
     <string name="drop_location">Drop Location</string>
     <string name="from">From</string>

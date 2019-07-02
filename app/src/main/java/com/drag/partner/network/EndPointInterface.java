@@ -59,17 +59,16 @@ public interface EndPointInterface {
             @Path("pID") String pID,
             @Query("x_key") String key,
             @Query("token") String token,
-            @Field("collegeName") String collegeName,
+            @Field("city") String city,
             @Field("pickup") String pickup,
             @Field("drop") String drop,
             @Field("startTime") String startTime,
             @Field("seats") String seats,
             @Field("fare") String fare,
-            @Field("carName") String carName,
-            @Field("carNumber") String carNumber
+            @Field("carName") String carName
     );
 
-    @POST("/api/admin/rides")
+    @POST("/api/rides")
     @FormUrlEncoded
     Call<Partner> addRide(
             @Query("x_key") String key,

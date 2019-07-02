@@ -7,7 +7,7 @@ public class Cab implements Serializable {
     private String _id;
     private boolean isAvailable;
     private String tripId;
-    private String collegeName;
+    private String city;
     private String pickup;
     private String drop;
     private String startTime;
@@ -20,10 +20,10 @@ public class Cab implements Serializable {
     private String carName;
     private String carNumber;
 
-    public Cab(Boolean isAvailable, String collegeName, String pickup, String drop, String startTime, String endTime,
+    public Cab(Boolean isAvailable, String city, String pickup, String drop, String startTime, String endTime,
                String seats, String carName, String carNumber, String fare, User[] riders, String driverName, String driverContact) {
         this.isAvailable = isAvailable;
-        this.collegeName = collegeName;
+        this.city = city;
         this.pickup = pickup;
         this.drop = drop;
         this.startTime = startTime;
@@ -45,12 +45,12 @@ public class Cab implements Serializable {
         this._id = _id;
     }
 
-    public String getCollegeName() {
-        return collegeName;
+    public String getCity() {
+        return city;
     }
 
-    public void setCollegeName(String collegeName) {
-        this.collegeName = collegeName;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getPickup() {

@@ -68,21 +68,21 @@ public class AddCarFragment extends DialogFragment {
     private Activity parentActivity;
     private View rootView;
     private Location[] locations;
-    private String[] colleges;
+    private String[] cities;
     private SharedPreferences pref;
     private Partner partner;
     private ImageButton closeView;
     private TextView titleView;
     private Button saveView;
     private Switch switchDateView;
-    private AutoCompleteTextView collegeNameView, pickupView, dropView;
-    private EditText fromDateView, toDateView, dateView, timeView, seatsView, fareView, carNameView, carNumberView;
+    private AutoCompleteTextView cityView, pickupView, dropView;
+    private EditText fromDateView, toDateView, dateView, timeView, seatsView, fareView, carNameView;
     private ImageButton swapLocationView;
     private LinearLayout fromToDateLayout, dateTimeLayout;
     private Button increaseSeatView, decreaseSeatView;
     private InputMethodManager imm;
     private Calendar fromDateCalendar, toDateCalendar, DateCalendar, TimeCalendar;
-    private String collegeNameText, token, pickup, drop, collegeName, seats, fare, carName, carNumber;
+    private String cityText, token, pickup, drop, city, seats, fare, carName;
     private long thirtyDays = 2592000000L;
     private int seatsText = 4;
     private boolean route = true;
@@ -108,9 +108,9 @@ public class AddCarFragment extends DialogFragment {
 
         locations = (Location[]) ObjectSerializer.deserialize(pref.getString("locations",
                 ObjectSerializer.serialize(new Location[10])));
-        colleges = new String[locations.length];
+        cities = new String[locations.length];
         for (int i = 0; i < locations.length; i++)
-            colleges[i] = locations[i].getCollegeName();
+            cities[i] = locations[i].getCity();
 
         imm = (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -142,8 +142,8 @@ public class AddCarFragment extends DialogFragment {
             }
         });
 
-        setupCollegeSpinner();
-        collegeNameView.addTextChangedListener(new TextWatcher() {
+        setupCitySpinner();
+        cityView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -156,8 +156,8 @@ public class AddCarFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                collegeNameText = collegeNameView.getText().toString();
-                selectLocation(collegeNameText, route);
+                cityText = cityView.getText().toString();
+                selectLocation(cityText, route);
             }
         });
 
@@ -165,9 +165,9 @@ public class AddCarFragment extends DialogFragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 imm.hideSoftInputFromWindow(pickupView.getWindowToken(), 0);
-                if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.requestFocus();
-                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                if (TextUtils.isEmpty(cityText)) {
+                    cityView.requestFocus();
+                    cityView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                 }
                 return true;
             }
@@ -177,9 +177,9 @@ public class AddCarFragment extends DialogFragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 imm.hideSoftInputFromWindow(dropView.getWindowToken(), 0);
-                if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.requestFocus();
-                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                if (TextUtils.isEmpty(cityText)) {
+                    cityView.requestFocus();
+                    cityView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                 }
                 return true;
             }
@@ -188,10 +188,10 @@ public class AddCarFragment extends DialogFragment {
         swapLocationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(collegeNameText)) {
-                    collegeNameView.requestFocus();
-                    collegeNameView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
-                    imm.hideSoftInputFromWindow(collegeNameView.getWindowToken(), 0);
+                if (TextUtils.isEmpty(cityText)) {
+                    cityView.requestFocus();
+                    cityView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
+                    imm.hideSoftInputFromWindow(cityView.getWindowToken(), 0);
                 } else if ((TextUtils.isEmpty(pickupView.getText().toString())) && (TextUtils.isEmpty(dropView.getText().toString()))) {
                     pickupView.requestFocus();
                     pickupView.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
@@ -201,7 +201,7 @@ public class AddCarFragment extends DialogFragment {
                     Editable location = pickupView.getText();
                     pickupView.setText(dropView.getText());
                     dropView.setText(location);
-                    selectLocation(collegeNameText, route);
+                    selectLocation(cityText, route);
                 }
             }
         });
@@ -214,7 +214,7 @@ public class AddCarFragment extends DialogFragment {
         increaseSeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (seatsText != 6) {
+                if (seatsText != 4) {
                     seatsText++;
                     seatsView.setText(String.valueOf(seatsText));
                 }
@@ -232,16 +232,16 @@ public class AddCarFragment extends DialogFragment {
         });
     }
 
-    private void selectLocation(String collegeSelected, boolean routeSelected) {
-        boolean isCollegePresent = false;
+    private void selectLocation(String citySelected, boolean routeSelected) {
+        boolean isCityPresent = false;
         int position = 0;
-        for (int i = 0; i < colleges.length; i++) {
-            if (collegeSelected.equals(colleges[i])) {
-                isCollegePresent = true;
+        for (int i = 0; i < cities.length; i++) {
+            if (citySelected.equals(cities[i])) {
+                isCityPresent = true;
                 position = i;
             }
         }
-        if (isCollegePresent) {
+        if (isCityPresent) {
             setupPickupLocationSpinner(position, routeSelected);
             setupDropLocationSpinner(position, routeSelected);
         } else {
@@ -251,12 +251,12 @@ public class AddCarFragment extends DialogFragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupCollegeSpinner() {
-        ArrayAdapter<String> collegeSpinnerAdapter = new ArrayAdapter<>(parentActivity,
-                R.layout.support_simple_spinner_dropdown_item, colleges);
-        collegeNameView.setAdapter(collegeSpinnerAdapter);
-        collegeNameView.setKeyListener(null);
-        collegeNameView.setOnTouchListener(new View.OnTouchListener() {
+    private void setupCitySpinner() {
+        ArrayAdapter<String> citySpinnerAdapter = new ArrayAdapter<>(parentActivity,
+                R.layout.support_simple_spinner_dropdown_item, cities);
+        cityView.setAdapter(citySpinnerAdapter);
+        cityView.setKeyListener(null);
+        cityView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 ((AutoCompleteTextView) view).showDropDown();
@@ -414,44 +414,23 @@ public class AddCarFragment extends DialogFragment {
 
     @SuppressLint("SimpleDateFormat")
     private void saveCar() {
-        collegeName = collegeNameView.getText().toString();
+        city = cityView.getText().toString();
         seats = seatsView.getText().toString();
         fare = fareView.getText().toString();
         carName = carNameView.getText().toString();
 
         if (!TextUtils.isEmpty(pickupView.getText().toString())) {
             pickup = pickupView.getText().toString();
-            for (Location location : locations) {
-                if (collegeName.equals(location.getCollegeName())) {
-                    for (String aList : location.getSetA()) {
-                        if (pickup.equals(aList)) {
-                            pickup = collegeName;
-                        }
-                    }
-                }
-            }
         }
         if (!TextUtils.isEmpty(dropView.getText().toString())) {
             drop = dropView.getText().toString();
-            for (Location location : locations) {
-                if (collegeName.equals(location.getCollegeName())) {
-                    for (String aList : location.getSetA()) {
-                        if (drop.equals(aList)) {
-                            drop = collegeName;
-                        }
-                    }
-                }
-            }
-        }
-        if (!TextUtils.isEmpty(carNumberView.getText().toString())) {
-            carNumber = carNumberView.getText().toString();
         }
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(collegeName)) {
-            focusView = collegeNameView;
+        if (TextUtils.isEmpty(city)) {
+            focusView = cityView;
             cancel = true;
         } else if (TextUtils.isEmpty(fare)) {
             focusView = fareView;
@@ -520,7 +499,7 @@ public class AddCarFragment extends DialogFragment {
     private void addCab(String startTime) {
         EndPointInterface service = APIUtils.getAPIService(parentActivity);
         Call<Partner> call = service.addCab(
-                partner.get_id(), partner.getEmail(), token, collegeName, pickup, drop, startTime, seats, fare, carName, carNumber);
+                partner.get_id(), partner.getEmail(), token, city, pickup, drop, startTime, seats, fare, carName);
 
         call.enqueue(new Callback<Partner>() {
             @Override
@@ -616,7 +595,7 @@ public class AddCarFragment extends DialogFragment {
         closeView = rootView.findViewById(R.id.add_car_close);
         titleView = rootView.findViewById(R.id.add_car_title);
         saveView = rootView.findViewById(R.id.add_car_save);
-        collegeNameView = rootView.findViewById(R.id.add_car_college_name);
+        cityView = rootView.findViewById(R.id.add_car_city);
         switchDateView = rootView.findViewById(R.id.add_car_switch_date);
         pickupView = rootView.findViewById(R.id.add_car_pickup);
         dropView = rootView.findViewById(R.id.add_car_drop);
@@ -632,6 +611,5 @@ public class AddCarFragment extends DialogFragment {
         decreaseSeatView = rootView.findViewById(R.id.add_car_decrease_seat);
         fareView = rootView.findViewById(R.id.add_car_fare);
         carNameView = rootView.findViewById(R.id.add_car_name);
-        carNumberView = rootView.findViewById(R.id.add_car_number);
     }
 }
