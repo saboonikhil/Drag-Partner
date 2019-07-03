@@ -178,14 +178,14 @@ public class CarsFragment extends Fragment {
     @SuppressLint("SimpleDateFormat")
     private Cab[] generateTripsData(Cab[] cabs, Calendar date) {
         ArrayList<Cab> myList = new ArrayList<>(Arrays.asList(cabs));
-        String selectedDate = new SimpleDateFormat("EEE, MMM dd, YYYY").format(date.getTime());
+        String selectedDate = new SimpleDateFormat("EEE, MMM dd, yyyy").format(date.getTime());
         for (Cab cab : cabs) {
             Calendar calendar = Calendar.getInstance();
             try {
                 calendar.setTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(cab.getStartTime()));
                 calendar.add(Calendar.HOUR, 5);
                 calendar.add(Calendar.MINUTE, 30);
-                String startDate = new SimpleDateFormat("EEE, MMM dd, YYYY").format(calendar.getTime());
+                String startDate = new SimpleDateFormat("EEE, MMM dd, yyyy").format(calendar.getTime());
                 if (cab.getTripId() != null || !startDate.equals(selectedDate))
                     myList.remove(cab);
             } catch (ParseException e) {
