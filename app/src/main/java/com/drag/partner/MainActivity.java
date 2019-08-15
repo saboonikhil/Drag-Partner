@@ -23,13 +23,23 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.drag.partner.model.Location;
 import com.drag.partner.model.Partner;
+import com.drag.partner.network.APIUtils;
+import com.drag.partner.network.EndPointInterface;
+import com.drag.partner.util.ObjectSerializer;
 import com.google.gson.Gson;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
     private SharedPreferences pref;
+    private String token;
+    private Partner partner;
     private DrawerLayout rootView;
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
@@ -47,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView emailView = navHeader.findViewById(R.id.navigation_drawer_email);
 
         pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+        token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
-        Partner partner = new Gson().fromJson(json, Partner.class);
+        partner = new Gson().fromJson(json, Partner.class);
         if (partner != null) {
             customLayout(partner.getRole());
             nameView.setText(partner.getName());
@@ -60,18 +71,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rootView.addDrawerListener(toggle);
         toggle.syncState();
 
+        getAuthLocations();
         navigationDrawerView.setNavigationItemSelectedListener(this);
+    }
+
+    private void getAuthLocations() {
+        EndPointInterface service = APIUtils.getAPIService(MainActivity.this);
+        service.authLocation(partner.getEmail(), token).enqueue(new Callback<Location[]>() {
+            @Override
+            public void onResponse(@NonNull Call<Location[]> call, @NonNull Response<Location[]> response) {
+                if (response.code() == 401) {
+                    pref.edit().remove("token").apply();
+                    pref.edit().remove("expires").apply();
+                    pref.edit().remove("dbObj").apply();
+                    Toast.makeText(getApplicationContext(),
+                            "Your account is blocked. Please contact help desk for recovery.", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
+                } else if (response.body() != null) {
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("locations", ObjectSerializer.serialize(response.body()));
+                    edit.apply();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Location[]> call, @NonNull Throwable t) {
+                Log.e(TAG + " On Failure", t.getMessage());
+            }
+        });
     }
 
     private void displaySelectedScreen(int itemId) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (itemId) {
-            case R.id.navigation_drawer_rides:
-                count = 0;
+            /*case R.id.navigation_drawer_rides:
                 ft.replace(R.id.main_content_frame, new RidesFragment(), "Rides").commit();
-                break;
+                break;*/
 
             case R.id.navigation_drawer_trips:
+                count = 0;
                 ft.replace(R.id.main_content_frame, new TripsFragment(), "Trips").commit();
                 break;
 
@@ -83,9 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft.replace(R.id.main_content_frame, new ConnectionsFragment(), "Connections").commit();
                 break;
 
-            case R.id.navigation_drawer_cars:
+            /*case R.id.navigation_drawer_cars:
                 ft.replace(R.id.main_content_frame, new CarsFragment(), "Cars").commit();
-                break;
+                break;*/
 
             case R.id.navigation_drawer_logout:
                 showLogoutDialog();
@@ -121,15 +162,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void customLayout(String role) {
         if ("admin".equals(role)) {
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_rides);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
-            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_cars);
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_trips);
-        } else {
             navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_rides);
+            displaySelectedScreen(R.id.navigation_drawer_connections);
+        } else {
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
+            navigationDrawerView.getMenu().getItem(0).setChecked(true);
+            displaySelectedScreen(R.id.navigation_drawer_trips);
         }
     }
 
@@ -167,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        RidesFragment currentFragment = (RidesFragment) getSupportFragmentManager().findFragmentByTag("Rides");
+        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
         if (rootView.isDrawerOpen(GravityCompat.START)) {
             rootView.closeDrawer(GravityCompat.START);
         } else if (currentFragment != null && currentFragment.isVisible()) {
@@ -178,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
         } else {
             navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_rides);
+            displaySelectedScreen(R.id.navigation_drawer_trips);
         }
     }
 

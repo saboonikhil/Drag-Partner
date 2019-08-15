@@ -17,8 +17,11 @@ import retrofit2.http.Query;
 
 public interface EndPointInterface {
 
-    @GET("/locations")
-    Call<Location[]> listLocation();
+    @GET("/api/locations")
+    Call<Location[]> authLocation(
+            @Query("x_key") String key,
+            @Query("token") String token
+    );
 
     @POST("/signIn")
     @FormUrlEncoded

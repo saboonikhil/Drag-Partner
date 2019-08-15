@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item
+        <!--<item
             android:id="@+id/navigation_drawer_rides"
             android:icon="@drawable/ic_rides"
             android:title="@string/rides" />
-
+-->
         <item
             android:id="@+id/navigation_drawer_trips"
             android:icon="@drawable/ic_trips"
@@ -23,10 +23,10 @@
             android:icon="@drawable/ic_connections"
             android:title="@string/connections" />
 
-        <item
+        <!--<item
             android:id="@+id/navigation_drawer_cars"
             android:icon="@drawable/ic_cars"
-            android:title="@string/cars" />
+            android:title="@string/cars" />-->
 
         <item
             android:id="@+id/navigation_drawer_logout"
