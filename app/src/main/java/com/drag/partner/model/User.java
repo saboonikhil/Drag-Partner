@@ -4,14 +4,12 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
+    private String _id;
     private String name;
     private String contact;
-    private String alternateContact;
 
-    public User(String name, String contact, String alternateContact) {
-        this.name = name;
-        this.contact = contact;
-        this.alternateContact = alternateContact;
+    public String get_id() {
+        return _id;
     }
 
     public String getName() {
@@ -20,9 +18,5 @@ public class User implements Serializable {
 
     public String getContact() {
         return contact;
-    }
-
-    public String getAlternateContact() {
-        return alternateContact;
     }
 }
