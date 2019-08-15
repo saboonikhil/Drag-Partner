@@ -265,7 +265,7 @@ public class AddRideFragment extends DialogFragment {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupPickupLocationSpinner(int position, boolean routeSelected) {
-        ArrayAdapter<String> pickupSpinnerAdapter;
+        /*ArrayAdapter<String> pickupSpinnerAdapter;
         if (routeSelected) {
             pickupSpinnerAdapter = new ArrayAdapter<>(parentActivity,
                     R.layout.support_simple_spinner_dropdown_item, locations[position].getSetA());
@@ -282,12 +282,12 @@ public class AddRideFragment extends DialogFragment {
                 ((AutoCompleteTextView) v).showDropDown();
                 return false;
             }
-        });
+        });*/
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupDropLocationSpinner(int position, boolean routeSelected) {
-        ArrayAdapter<String> dropSpinnerAdapter;
+        /*ArrayAdapter<String> dropSpinnerAdapter;
         if (routeSelected) {
             dropSpinnerAdapter = new ArrayAdapter<>(parentActivity,
                     R.layout.support_simple_spinner_dropdown_item, locations[position].getSetB());
@@ -304,7 +304,7 @@ public class AddRideFragment extends DialogFragment {
                 ((AutoCompleteTextView) view).showDropDown();
                 return false;
             }
-        });
+        });*/
     }
 
     private void setupFromToDatePicker() {

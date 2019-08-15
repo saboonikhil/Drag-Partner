@@ -12,12 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.drag.partner.adapter.CarsAdapter;
 import com.drag.partner.model.Cab;
@@ -29,15 +27,9 @@ import com.drag.partner.util.HorizontalCalendar.util.HorizontalCalendarListener;
 import com.drag.partner.util.OnSwipeTouchListener;
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -145,7 +137,7 @@ public class CarsFragment extends Fragment {
 
     private void updateTripsData() {
         EndPointInterface service = APIUtils.getAPIService(parentActivity);
-        service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
+        /*service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
             @Override
             public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
                 if (response.body() != null) {
@@ -163,7 +155,7 @@ public class CarsFragment extends Fragment {
                 Log.e(TAG + " On Failure", t.getMessage());
                 Toast.makeText(parentActivity, "Couldn't refresh cars", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 
     private void refreshTripsData() {
@@ -178,7 +170,7 @@ public class CarsFragment extends Fragment {
     @SuppressLint("SimpleDateFormat")
     private Cab[] generateTripsData(Cab[] cabs, Calendar date) {
         ArrayList<Cab> myList = new ArrayList<>(Arrays.asList(cabs));
-        String selectedDate = new SimpleDateFormat("EEE, MMM dd, yyyy").format(date.getTime());
+        /*String selectedDate = new SimpleDateFormat("EEE, MMM dd, yyyy").format(date.getTime());
         for (Cab cab : cabs) {
             Calendar calendar = Calendar.getInstance();
             try {
@@ -191,7 +183,7 @@ public class CarsFragment extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         Cab[] trips = new Cab[myList.size()];
         return myList.toArray(trips);
     }

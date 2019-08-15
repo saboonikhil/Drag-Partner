@@ -61,7 +61,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesCardVie
             e.printStackTrace();
         }
 
-        holder.idView.setText(rideList.get(position).getTripId());
+       /* holder.idView.setText(rideList.get(position).getTripId());
         holder.pickupView.setText(rideList.get(position).getPickup());
         holder.dropView.setText(rideList.get(position).getDrop());
 
@@ -82,7 +82,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesCardVie
             }
         } else {
             holder.seatsView.setText(rideList.get(position).getSeats());
-        }
+        }*/
     }
 
     @Override

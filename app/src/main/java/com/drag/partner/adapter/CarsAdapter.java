@@ -54,8 +54,8 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.CarsViewHolder
             drop = "All Drop Locations";
         holder.dropView.setText(drop);
 
-        holder.seatsView.setText(cabs[position].getSeats());
-        holder.fareView.setText(cabs[position].getFare());
+        /*holder.seatsView.setText(cabs[position].getRiders()[0].getSeats());
+        holder.fareView.setText(cabs[position].getRiders()[0].getFare());*/
 
         if (cabs[position].getStartTime() != null) {
             try {
