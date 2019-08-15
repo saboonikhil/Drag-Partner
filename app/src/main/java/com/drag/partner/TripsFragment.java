@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.drag.partner.adapter.TripsAdapter;
 import com.drag.partner.model.Cab;
@@ -23,24 +22,19 @@ import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class TripsFragment extends android.support.v4.app.Fragment {
+public class TripsFragment extends Fragment {
 
     private static final String TAG = TripsFragment.class.getSimpleName();
     private Activity parentActivity;
     private View rootView;
-    private SharedPreferences pref;
     private Partner partner;
     private String token;
-    private Cab[] trips;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ImageView emptyView;
@@ -59,69 +53,49 @@ public class TripsFragment extends android.support.v4.app.Fragment {
         parentActivity.setTitle("My Trips");
         initViews();
 
-        pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
+        SharedPreferences pref = parentActivity.getSharedPreferences("AppPref", MODE_PRIVATE);
         token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
         partner = new Gson().fromJson(json, Partner.class);
-
-        trips = generateTripsData(partner.getCabs());
-        generateArrayData(trips);
-        if (trips.length == 0)
-            progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (tripsAdapter == null)
+            progressBar.setVisibility(View.VISIBLE);
         updateTripsData();
     }
 
     private void updateTripsData() {
         EndPointInterface service = APIUtils.getAPIService(parentActivity);
-        service.partnerDetail(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Partner>() {
+        service.partnerTrips(partner.get_id(), partner.getEmail(), token).enqueue(new Callback<Cab[]>() {
             @Override
-            public void onResponse(@NonNull Call<Partner> call, @NonNull Response<Partner> response) {
+            public void onResponse(@NonNull Call<Cab[]> call, @NonNull Response<Cab[]> response) {
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
-                    SharedPreferences.Editor edit = pref.edit();
-                    edit.putString("dbObj", new Gson().toJson(response.body()));
-                    edit.apply();
-                    trips = generateTripsData(response.body().getCabs());
-                    tripsAdapter.refreshData(trips);
-                    if (trips.length == 0) {
+                    generateArrayData(response.body());
+                    if (response.body().length == 0)
                         emptyView.setVisibility(View.VISIBLE);
-                    } else {
+                    else
                         emptyView.setVisibility(View.GONE);
-                    }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Partner> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Cab[]> call, @NonNull Throwable t) {
                 Log.e(TAG + " On Failure", t.getMessage());
                 progressBar.setVisibility(View.GONE);
-                if (tripsAdapter.getItemCount() == 0) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
-                } else
-                    Toast.makeText(parentActivity, "Couldn't refresh trips", Toast.LENGTH_LONG).show();
+                if (tripsAdapter != null) {
+                    if (tripsAdapter.getItemCount() == 0)
+                        emptyView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
-    private Cab[] generateTripsData(Cab[] cabs) {
-        ArrayList<Cab> myList = new ArrayList<>(Arrays.asList(cabs));
-        for (Cab cab : cabs) {
-            if (cab.getTripId() == null) {
-                myList.remove(cab);
-            }
-        }
-        Cab[] trips = new Cab[myList.size()];
-        return myList.toArray(trips);
-    }
-
-    private void generateArrayData(Cab[] cabs) {
-        tripsAdapter = new TripsAdapter(cabs);
+    private void generateArrayData(Cab[] trips) {
+        tripsAdapter = new TripsAdapter(trips);
         recyclerView.setAdapter(tripsAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
     }

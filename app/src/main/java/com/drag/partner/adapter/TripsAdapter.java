@@ -21,17 +21,17 @@ import java.util.Date;
 
 public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardViewHolder> {
 
-    private Cab[] cabs;
+    private Cab[] trips;
     private Context mContext;
 
-    public TripsAdapter(Cab[] cabs) {
-        this.cabs = cabs;
+    public TripsAdapter(Cab[] trips) {
+        this.trips = trips;
     }
 
-    public void refreshData(Cab[] dataSet) {
-        cabs = dataSet;
+    /*public void refreshData(Cab[] dataSet) {
+        trips = dataSet;
         notifyDataSetChanged();
-    }
+    }*/
 
     @NonNull
     @Override
@@ -45,7 +45,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
     public void onBindViewHolder(@NonNull TripsCardViewHolder holder, int position) {
         try {
             Calendar calendar = Calendar.getInstance();
-            String startTime = cabs[position].getStartTime();
+            String startTime = trips[position].getStartTime();
             if (startTime != null) {
                 Date displayTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(startTime);
                 calendar.setTime(displayTime);
@@ -57,17 +57,19 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
             e.printStackTrace();
         }
 
-        holder.idView.setText(cabs[position].getTripId());
-        holder.pickupView.setText(cabs[position].getPickup());
-        holder.dropView.setText(cabs[position].getDrop());
+        holder.idView.setText(trips[position].getRiders()[0].getTripId());
+        holder.pickupView.setText(trips[position].getRiders()[0].getPickup());
+        holder.dropView.setText(trips[position].getRiders()[0].getDrop());
 
-        String displayFare = "₹ " + cabs[position].getFare();
+        float fare = Integer.parseInt(trips[position].getRiders()[0].getFare());
+        float commission = Float.parseFloat(trips[position].getRiders()[0].getLuggageCount());
+        String displayFare = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
         holder.fareView.setText(displayFare);
     }
 
     @Override
     public int getItemCount() {
-        return cabs.length;
+        return trips.length;
     }
 
     class TripsCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -89,7 +91,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
             int itemPosition = getLayoutPosition();
             Intent intent = new Intent(mContext, TripDetailsActivity.class);
             intent.putExtra("position", itemPosition + "");
-            intent.putExtra("trip_details", cabs);
+            intent.putExtra("trip_details", trips);
             mContext.startActivity(intent);
         }
     }

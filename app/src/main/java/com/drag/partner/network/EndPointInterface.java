@@ -31,8 +31,8 @@ public interface EndPointInterface {
             @Field("role") String role
     );
 
-    @GET("/api/admin/partners/{pID}")
-    Call<Partner> partnerDetail(
+    @GET("/api/admin/partners/{pID}/trips")
+    Call<Cab[]> partnerTrips(
             @Path("pID") String pID,
             @Query("x_key") String key,
             @Query("token") String token
