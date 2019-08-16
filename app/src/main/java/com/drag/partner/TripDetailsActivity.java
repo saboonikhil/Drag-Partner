@@ -35,15 +35,14 @@ import retrofit2.Response;
 
 public class TripDetailsActivity extends AppCompatActivity {
 
-    private String TAG = "TripDetailsActivity";
+    private static String TAG = TripDetailsActivity.class.getSimpleName();
     private String token;
     private Partner partner;
-    private Cab[] cabsBooked;
+    private Cab[] trips;
     private int position;
     private LinearLayout rider0View, rider1View, rider2View, rider3View;
-    private TextView carNameView, pickupView, dropView, seatsView,
-            driverNameView, driverContactView, carNumberView, fareView;
-    private CardView driverInfoView;
+    private TextView carNameView, pickupView, dropView, driverNameView, driverContactView, carNumberView, seatsView, fareView;
+    private CardView riderInfoView, driverInfoView;
     private ImageButton backView;
     private Button updateView;
     private AlertDialog dialog;
@@ -65,62 +64,69 @@ public class TripDetailsActivity extends AppCompatActivity {
         partner = new Gson().fromJson(json, Partner.class);
 
         Intent intent = getIntent();
-        cabsBooked = (Cab[]) intent.getSerializableExtra("trip_details");
+        trips = (Cab[]) intent.getSerializableExtra("trip_details");
         position = Integer.parseInt(intent.getStringExtra("position"));
 
-        if (cabsBooked[position].getRiders().length > 0) {
+        if (trips[position].getRiders().length > 0) {
             rider0View.setVisibility(View.VISIBLE);
             TextView riderNameView = findViewById(R.id.trip_details_rider_name0);
-            riderNameView.setText(cabsBooked[position].getRiders()[0].getName());
+            riderNameView.setText(trips[position].getRiders()[0].get_id().getName());
 
             TextView riderContactView = findViewById(R.id.trip_details_rider_contact0);
-            riderContactView.setText(cabsBooked[position].getRiders()[0].getContact());
+            riderContactView.setText(trips[position].getRiders()[0].get_id().getContact());
         }
-        if (cabsBooked[position].getRiders().length > 1) {
+        if (trips[position].getRiders().length > 1) {
             rider1View.setVisibility(View.VISIBLE);
             TextView riderNameView = findViewById(R.id.trip_details_rider_name1);
-            riderNameView.setText(cabsBooked[position].getRiders()[1].getName());
+            riderNameView.setText(trips[position].getRiders()[1].get_id().getName());
 
             TextView riderContactView = findViewById(R.id.trip_details_rider_contact1);
-            riderContactView.setText(cabsBooked[position].getRiders()[1].getContact());
+            riderContactView.setText(trips[position].getRiders()[1].get_id().getContact());
         }
-        if (cabsBooked[position].getRiders().length > 2) {
+        if (trips[position].getRiders().length > 2) {
             rider2View.setVisibility(View.VISIBLE);
             TextView riderNameView = findViewById(R.id.trip_details_rider_name2);
-            riderNameView.setText(cabsBooked[position].getRiders()[2].getName());
+            riderNameView.setText(trips[position].getRiders()[2].get_id().getName());
 
             TextView riderContactView = findViewById(R.id.trip_details_rider_contact2);
-            riderContactView.setText(cabsBooked[position].getRiders()[2].getContact());
+            riderContactView.setText(trips[position].getRiders()[2].get_id().getContact());
         }
-        if (cabsBooked[position].getRiders().length > 3) {
+        if (trips[position].getRiders().length > 3) {
             rider3View.setVisibility(View.VISIBLE);
             TextView riderNameView = findViewById(R.id.trip_details_rider_name3);
-            riderNameView.setText(cabsBooked[position].getRiders()[3].getName());
+            riderNameView.setText(trips[position].getRiders()[3].get_id().getName());
 
             TextView riderContactView = findViewById(R.id.trip_details_rider_contact3);
-            riderContactView.setText(cabsBooked[position].getRiders()[3].getContact());
+            riderContactView.setText(trips[position].getRiders()[3].get_id().getContact());
         }
 
-        driverName = cabsBooked[position].getDriverName();
-        driverContact = cabsBooked[position].getDriverContact();
-        if (driverName == null || driverContact == null || driverName.length() < 1 || driverContact.length() < 1)
+        driverName = trips[position].getDriverName();
+        driverContact = trips[position].getDriverContact();
+        if (driverName == null || driverContact == null || driverName.length() < 1 || driverContact.length() < 1) {
             driverInfoView.setVisibility(View.GONE);
-        else
+            riderInfoView.setVisibility(View.GONE);
+        } else
             setDriverInfo(driverName, driverContact);
 
-        carName = cabsBooked[position].getCarName();
-        carNameView.setText(carName);
-        carNumber = cabsBooked[position].getCarNumber();
+        carName = trips[position].getCarName();
+        if (carName == null || carName.length() < 1)
+            carNameView.setText(trips[position].getType());
+        else
+            carNameView.setText(carName);
+
+        carNumber = trips[position].getCarNumber();
         if (carNumber == null || carNumber.length() < 1)
             carNumberView.setVisibility(View.GONE);
         else
             setCabInfo(carNumber);
 
-        pickupView.setText(cabsBooked[position].getPickup());
-        dropView.setText(cabsBooked[position].getDrop());
-        seatsView.setText(cabsBooked[position].getSeats());
+        pickupView.setText(trips[position].getRiders()[0].getPickup());
+        dropView.setText(trips[position].getRiders()[0].getDrop());
+        seatsView.setText(trips[position].getRiders()[0].getSeats());
 
-        String displayFare = "₹ " + cabsBooked[position].getFare();
+        float fare = Integer.parseInt(trips[position].getRiders()[0].getFare());
+        float commission = Float.parseFloat(trips[position].getRiders()[0].getLuggageCount());
+        String displayFare = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
         fareView.setText(displayFare);
 
         backView.setOnClickListener(new View.OnClickListener() {
@@ -264,15 +270,15 @@ public class TripDetailsActivity extends AppCompatActivity {
         pd = ProgressDialog.show(this, "", "Saving...", true, false);
 
         EndPointInterface service = APIUtils.getAPIService(TripDetailsActivity.this);
-        service.cabUpdate(cabsBooked[position].get_id(), partner.getEmail(), token, carName,
+        service.cabUpdate(trips[position].get_id(), partner.getEmail(), token, carName,
                 carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
             @Override
             public void onResponse(@NonNull Call<Cab> call, @NonNull Response<Cab> response) {
                 if (response.body() != null) {
-                    cabsBooked[position].setDriverName(driverName);
-                    cabsBooked[position].setDriverContact(driverContact);
-                    cabsBooked[position].setCarName(carName);
-                    cabsBooked[position].setCarNumber(carNumber);
+                    trips[position].setDriverName(driverName);
+                    trips[position].setDriverContact(driverContact);
+                    trips[position].setCarName(carName);
+                    trips[position].setCarNumber(carNumber);
 
                     if (driverName.length() < 1 || driverContact.length() < 1)
                         driverInfoView.setVisibility(View.GONE);
@@ -294,12 +300,13 @@ public class TripDetailsActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<Cab> call, @NonNull Throwable t) {
                 pd.dismiss();
                 Log.e(TAG + " On Failure", t.getMessage());
-                Snackbar.make(rootView, "Something went wrong. Please try again later!", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootView, "Please check your internet connection or try again later.", Snackbar.LENGTH_LONG).show();
             }
         });
     }
 
     private void setDriverInfo(String driverName, String driverContact) {
+        riderInfoView.setVisibility(View.VISIBLE);
         driverInfoView.setVisibility(View.VISIBLE);
         driverNameView.setText(driverName);
         driverContactView.setText(driverContact);
@@ -323,6 +330,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         rootView = findViewById(R.id.trip_details_activity_layout);
         backView = findViewById(R.id.trip_details_back);
         updateView = findViewById(R.id.trip_details_update);
+        riderInfoView = findViewById(R.id.trip_details_rider_info);
         rider0View = findViewById(R.id.trip_details_rider_layout0);
         rider1View = findViewById(R.id.trip_details_rider_layout1);
         rider2View = findViewById(R.id.trip_details_rider_layout2);
