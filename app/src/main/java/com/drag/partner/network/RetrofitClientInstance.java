@@ -14,7 +14,6 @@ class RetrofitClientInstance {
             retrofit = new Retrofit.Builder()
                     .baseUrl(com.drag.partner.BuildConfig.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(SelfSigningClientBuilder.createClient(context))
                     .build();
         }
         return retrofit;
