@@ -63,7 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/pickup_icon"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                tools:ignore="NotSibling">
 
                 <TextView
                     android:id="@+id/cars_pickup"
@@ -97,7 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/drop_icon"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                tools:ignore="NotSibling">
 
                 <TextView
                     android:id="@+id/cars_drop"
