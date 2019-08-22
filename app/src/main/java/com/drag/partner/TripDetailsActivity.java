@@ -41,7 +41,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private Cab[] trips;
     private int position;
     private LinearLayout rider0View, rider1View, rider2View, rider3View;
-    private TextView carNameView, pickupView, dropView, driverNameView, driverContactView, carNumberView, seatsView, fareView;
+    private TextView carNameView, pickupView, dropView, driverNameView, driverContactView, carNumberView, amountView, amountPendingView;
     private CardView riderInfoView, driverInfoView;
     private ImageButton backView;
     private Button updateView;
@@ -115,19 +115,23 @@ public class TripDetailsActivity extends AppCompatActivity {
             carNameView.setText(carName);
 
         carNumber = trips[position].getCarNumber();
-        if (carNumber == null || carNumber.length() < 1)
+        if (carNumber == null || carNumber.length() < 1) {
             carNumberView.setVisibility(View.GONE);
-        else
+            riderInfoView.setVisibility(View.GONE);
+        } else
             setCabInfo(carNumber);
 
         pickupView.setText(trips[position].getRiders()[0].getPickup());
         dropView.setText(trips[position].getRiders()[0].getDrop());
-        seatsView.setText(trips[position].getRiders()[0].getSeats());
 
-        float fare = Integer.parseInt(trips[position].getRiders()[0].getFare());
+        float fare = Float.parseFloat(trips[position].getFare());
         float commission = Float.parseFloat(trips[position].getRiders()[0].getLuggageCount());
-        String displayFare = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
-        fareView.setText(displayFare);
+        String displayAmount = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
+        amountView.setText(displayAmount);
+
+        float amountPaid = Float.parseFloat(trips[position].getRiders()[0].getFare());
+        String displayAmountPending = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - amountPaid));
+        amountPendingView.setText(displayAmountPending);
 
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -342,7 +346,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         carNumberView = findViewById(R.id.trip_details_car_number);
         pickupView = findViewById(R.id.trip_details_pickup);
         dropView = findViewById(R.id.trip_details_drop);
-        seatsView = findViewById(R.id.trip_details_seats);
-        fareView = findViewById(R.id.trip_details_fare);
+        amountView = findViewById(R.id.trip_details_amount);
+        amountPendingView = findViewById(R.id.trip_details_amount_pending);
     }
 }

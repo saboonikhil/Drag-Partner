@@ -61,10 +61,10 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
         holder.pickupView.setText(trips[position].getRiders()[0].getPickup());
         holder.dropView.setText(trips[position].getRiders()[0].getDrop());
 
-        float fare = Integer.parseInt(trips[position].getRiders()[0].getFare());
+        float fare = Float.parseFloat(trips[position].getFare());
         float commission = Float.parseFloat(trips[position].getRiders()[0].getLuggageCount());
-        String displayFare = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
-        holder.fareView.setText(displayFare);
+        String displayAmount = "₹ " + String.format(java.util.Locale.US, "%.2f", (fare - (commission * 0.01 * fare)));
+        holder.amountView.setText(displayAmount);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
     }
 
     class TripsCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView idView, pickupView, dropView, startTimeView, fareView;
+        private TextView idView, pickupView, dropView, startTimeView, amountView;
 
         TripsCardViewHolder(View itemView) {
             super(itemView);
@@ -82,7 +82,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripsCardVie
             pickupView = itemView.findViewById(R.id.trips_pickup);
             dropView = itemView.findViewById(R.id.trips_drop);
             startTimeView = itemView.findViewById(R.id.trips_start_time);
-            fareView = itemView.findViewById(R.id.trips_fare);
+            amountView = itemView.findViewById(R.id.trips_amount);
             itemView.setOnClickListener(this);
         }
 

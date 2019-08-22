@@ -477,7 +477,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:text="@string/fare_info" />
+                            android:text="@string/payment_info" />
 
                         <View style="@style/DividerWithMargin" />
 
@@ -493,14 +493,14 @@
                                 android:layout_weight="1"
                                 android:paddingTop="16dp"
                                 android:paddingBottom="16dp"
-                                android:text="@string/seats" />
+                                android:text="@string/total_amount" />
 
                             <TextView
-                                android:id="@+id/trip_details_seats"
+                                android:id="@+id/trip_details_amount"
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="4" />
+                                tools:text="₹ 2000.00" />
 
                         </LinearLayout>
 
@@ -515,14 +515,14 @@
                                 android:layout_weight="1"
                                 android:paddingTop="16dp"
                                 android:paddingBottom="16dp"
-                                android:text="@string/total_amount" />
+                                android:text="@string/amount_to_be_collected" />
 
                             <TextView
-                                android:id="@+id/trip_details_fare"
+                                android:id="@+id/trip_details_amount_pending"
                                 style="@style/body1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="₹ 2000" />
+                                tools:text="₹ 1500.00" />
 
                         </LinearLayout>
 

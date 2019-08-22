@@ -12,29 +12,12 @@ public class Cab implements Serializable {
     private String drop;
     private String startTime;
     private String endTime;
+    private String fare;
     private Rider[] riders;
     private String driverName;
     private String driverContact;
     private String carName;
     private String carNumber;
-
-    public Cab(String id, boolean isAvailable, boolean isShared, String type,
-               String pickup, String drop, String startTime, String endTime, Rider[] riders,
-               String driverName, String driverContact, String carName, String carNumber) {
-        _id = id;
-        this.isAvailable = isAvailable;
-        this.isShared = isShared;
-        this.type = type;
-        this.pickup = pickup;
-        this.drop = drop;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.riders = riders;
-        this.driverName = driverName;
-        this.driverContact = driverContact;
-        this.carName = carName;
-        this.carNumber = carNumber;
-    }
 
     public String getPickup() {
         return pickup;
@@ -90,5 +73,9 @@ public class Cab implements Serializable {
 
     public Rider[] getRiders() {
         return riders;
+    }
+
+    public String getFare() {
+        return fare;
     }
 }
