@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Rider implements Serializable {
 
-    private User _id;
+    private User id;
     private String tripId;
     private String tripStatus;
     private String pickup;
@@ -12,6 +12,10 @@ public class Rider implements Serializable {
     private String seats;
     private String fare;
     private String luggageCount;
+
+    public User getId() {
+        return id;
+    }
 
     public String getTripId() {
         return tripId;
@@ -35,10 +39,6 @@ public class Rider implements Serializable {
 
     public String getDrop() {
         return drop;
-    }
-
-    public User get_id() {
-        return _id;
     }
 
     public String getLuggageCount() {

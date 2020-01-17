@@ -29,6 +29,11 @@ import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,8 +45,9 @@ public class TripDetailsActivity extends AppCompatActivity {
     private Partner partner;
     private Cab[] trips;
     private int position;
+    private Calendar startTime;
     private LinearLayout rider0View, rider1View, rider2View, rider3View;
-    private TextView carNameView, pickupView, dropView, driverNameView, driverContactView, carNumberView, amountView, amountPendingView;
+    private TextView startTimeView, carNameView, pickupView, dropView, driverNameView, driverContactView, carNumberView, amountView, amountPendingView;
     private CardView riderInfoView, driverInfoView;
     private ImageButton backView;
     private Button updateView;
@@ -51,6 +57,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private LinearLayout rootView;
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,37 +74,54 @@ public class TripDetailsActivity extends AppCompatActivity {
         trips = (Cab[]) intent.getSerializableExtra("trip_details");
         position = Integer.parseInt(intent.getStringExtra("position"));
 
-        if (trips[position].getRiders().length > 0) {
-            rider0View.setVisibility(View.VISIBLE);
-            TextView riderNameView = findViewById(R.id.trip_details_rider_name0);
-            riderNameView.setText(trips[position].getRiders()[0].get_id().getName());
-
-            TextView riderContactView = findViewById(R.id.trip_details_rider_contact0);
-            riderContactView.setText(trips[position].getRiders()[0].get_id().getContact());
+        try {
+            startTime = Calendar.getInstance();
+            Date displayTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(trips[position].getStartTime());
+            startTime.setTime(displayTime);
+            startTime.add(Calendar.HOUR, 5);
+            startTime.add(Calendar.MINUTE, 30);
+            startTimeView.setText(new SimpleDateFormat("EEE, MMM d, hh:mm a").format(startTime.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        if (trips[position].getRiders().length > 1) {
-            rider1View.setVisibility(View.VISIBLE);
-            TextView riderNameView = findViewById(R.id.trip_details_rider_name1);
-            riderNameView.setText(trips[position].getRiders()[1].get_id().getName());
 
-            TextView riderContactView = findViewById(R.id.trip_details_rider_contact1);
-            riderContactView.setText(trips[position].getRiders()[1].get_id().getContact());
-        }
-        if (trips[position].getRiders().length > 2) {
-            rider2View.setVisibility(View.VISIBLE);
-            TextView riderNameView = findViewById(R.id.trip_details_rider_name2);
-            riderNameView.setText(trips[position].getRiders()[2].get_id().getName());
+        if (isShowTime()) {
 
-            TextView riderContactView = findViewById(R.id.trip_details_rider_contact2);
-            riderContactView.setText(trips[position].getRiders()[2].get_id().getContact());
-        }
-        if (trips[position].getRiders().length > 3) {
-            rider3View.setVisibility(View.VISIBLE);
-            TextView riderNameView = findViewById(R.id.trip_details_rider_name3);
-            riderNameView.setText(trips[position].getRiders()[3].get_id().getName());
+            if (trips[position].getRiders().length > 0) {
+                rider0View.setVisibility(View.VISIBLE);
+                TextView riderNameView = findViewById(R.id.trip_details_rider_name0);
+                riderNameView.setText(trips[position].getRiders()[0].getId().getName());
 
-            TextView riderContactView = findViewById(R.id.trip_details_rider_contact3);
-            riderContactView.setText(trips[position].getRiders()[3].get_id().getContact());
+                TextView riderContactView = findViewById(R.id.trip_details_rider_contact0);
+                riderContactView.setText(trips[position].getRiders()[0].getId().getContact());
+            }
+            if (trips[position].getRiders().length > 1) {
+                rider1View.setVisibility(View.VISIBLE);
+                TextView riderNameView = findViewById(R.id.trip_details_rider_name1);
+                riderNameView.setText(trips[position].getRiders()[1].getId().getName());
+
+                TextView riderContactView = findViewById(R.id.trip_details_rider_contact1);
+                riderContactView.setText(trips[position].getRiders()[1].getId().getContact());
+            }
+            if (trips[position].getRiders().length > 2) {
+                rider2View.setVisibility(View.VISIBLE);
+                TextView riderNameView = findViewById(R.id.trip_details_rider_name2);
+                riderNameView.setText(trips[position].getRiders()[2].getId().getName());
+
+                TextView riderContactView = findViewById(R.id.trip_details_rider_contact2);
+                riderContactView.setText(trips[position].getRiders()[2].getId().getContact());
+            }
+            if (trips[position].getRiders().length > 3) {
+                rider3View.setVisibility(View.VISIBLE);
+                TextView riderNameView = findViewById(R.id.trip_details_rider_name3);
+                riderNameView.setText(trips[position].getRiders()[3].getId().getName());
+
+                TextView riderContactView = findViewById(R.id.trip_details_rider_contact3);
+                riderContactView.setText(trips[position].getRiders()[3].getId().getContact());
+            }
+
+        } else {
+            riderInfoView.setVisibility(View.GONE);
         }
 
         driverName = trips[position].getDriverName();
@@ -276,6 +300,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         EndPointInterface service = APIUtils.getAPIService(TripDetailsActivity.this);
         service.cabUpdate(trips[position].get_id(), partner.getEmail(), token, carName,
                 carNumber, driverName, driverContact).enqueue(new Callback<Cab>() {
+
             @Override
             public void onResponse(@NonNull Call<Cab> call, @NonNull Response<Cab> response) {
                 if (response.body() != null) {
@@ -310,7 +335,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     }
 
     private void setDriverInfo(String driverName, String driverContact) {
-        riderInfoView.setVisibility(View.VISIBLE);
+        if (isShowTime()) riderInfoView.setVisibility(View.VISIBLE);
         driverInfoView.setVisibility(View.VISIBLE);
         driverNameView.setText(driverName);
         driverContactView.setText(driverContact);
@@ -319,6 +344,11 @@ public class TripDetailsActivity extends AppCompatActivity {
     private void setCabInfo(String carNumber) {
         carNumberView.setVisibility(View.VISIBLE);
         carNumberView.setText(carNumber);
+    }
+
+    private boolean isShowTime() {
+        return (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) > -21600000 &&
+                (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < 86400000;
     }
 
     private void togglePositiveButton(boolean enable) {
@@ -333,6 +363,7 @@ public class TripDetailsActivity extends AppCompatActivity {
     private void initViews() {
         rootView = findViewById(R.id.trip_details_activity_layout);
         backView = findViewById(R.id.trip_details_back);
+        startTimeView = findViewById(R.id.trip_details_start_time);
         updateView = findViewById(R.id.trip_details_update);
         riderInfoView = findViewById(R.id.trip_details_rider_info);
         rider0View = findViewById(R.id.trip_details_rider_layout0);
