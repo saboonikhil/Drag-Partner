@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void getAuthLocations() {
         EndPointInterface service = APIUtils.getAPIService(MainActivity.this);
-        service.authLocation(partner.getEmail(), token).enqueue(new Callback<Location[]>() {
+        service.authLocation(partner.getEmail(), token, com.drag.partner.BuildConfig.VERSION_CODE).enqueue(new Callback<Location[]>() {
             @Override
             public void onResponse(@NonNull Call<Location[]> call, @NonNull Response<Location[]> response) {
                 if (response.code() == 401) {
@@ -86,6 +86,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     pref.edit().remove("dbObj").apply();
                     Toast.makeText(getApplicationContext(),
                             "Your account is blocked. Please contact help desk for recovery.", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
+                } else if (response.code() == 403) {
+                    pref.edit().remove("token").apply();
+                    pref.edit().remove("expires").apply();
+                    pref.edit().remove("dbObj").apply();
+                    Toast.makeText(getApplicationContext(),
+                            "Please update the app with the latest version from the play store.", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);

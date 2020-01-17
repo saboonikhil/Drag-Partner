@@ -22,9 +22,8 @@ public class ProfileFragment extends Fragment {
     private View rootView;
     private TextView nameView, emailView, contactView, alternateContactView;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         parentActivity = getActivity();
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         return rootView;
