@@ -36,7 +36,8 @@ public interface EndPointInterface {
     Call<Cab[]> partnerTrips(
             @Path("pID") String pID,
             @Query("x_key") String key,
-            @Query("token") String token
+            @Query("token") String token,
+            @Query("skip") int skip
     );
 
     @GET("/api/admin/rides")
