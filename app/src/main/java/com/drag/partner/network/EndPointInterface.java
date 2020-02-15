@@ -3,6 +3,7 @@ package com.drag.partner.network;
 import com.drag.partner.model.Cab;
 import com.drag.partner.model.Location;
 import com.drag.partner.model.Partner;
+import com.drag.partner.model.Request;
 
 import java.util.List;
 
@@ -35,6 +36,13 @@ public interface EndPointInterface {
     @GET("/api/admin/partners/{pID}/trips")
     Call<Cab[]> partnerTrips(
             @Path("pID") String pID,
+            @Query("x_key") String key,
+            @Query("token") String token,
+            @Query("skip") int skip
+    );
+
+    @GET("/api/admin/requests")
+    Call<Request[]> requestList(
             @Query("x_key") String key,
             @Query("token") String token,
             @Query("skip") int skip

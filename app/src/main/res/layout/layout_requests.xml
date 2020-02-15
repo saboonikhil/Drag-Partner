@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/requests_cab_logo"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/ic_app_logo"
+                tools:ignore="ContentDescription" />
+
+            <RelativeLayout
+                android:id="@+id/requests_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignTop="@+id/requests_cab_logo"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/requests_cab_logo">
+
+                <TextView
+                    android:id="@+id/requests_start_time"
+                    style="@style/body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Sun, May 24, 10:45 PM" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/requests_start_time"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        style="@style/body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/request_id_" />
+
+                    <TextView
+                        android:id="@+id/requests_id"
+                        style="@style/body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="KGP471089" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/requests_location_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/requests_info_layout"
+                android:layout_alignStart="@+id/requests_info_layout"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/pickup_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@null"
+                        android:src="@mipmap/ic_pickup"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/pickup_icon"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/requests_pickup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:maxLines="2"
+                            tools:text="IIT Kharagpur" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/drop_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:background="@null"
+                        android:src="@mipmap/ic_drop"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/drop_icon"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/requests_drop"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:maxLines="2"
+                            tools:text="Kolkata International Airport" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/trips_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:text="2  bids  received" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
