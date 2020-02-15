@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
     private SharedPreferences pref;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbarView;
     private NavigationView navigationDrawerView;
     private int count = 0;
+    private BottomNavigationView bottomNavigationView;
+    private boolean isNavigationHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +69,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             emailView.setText(partner.getEmail());
         }
 
+        getAuthLocations();
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootView,
                 toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
         rootView.addDrawerListener(toggle);
         toggle.syncState();
 
-        getAuthLocations();
-        navigationDrawerView.setNavigationItemSelectedListener(this);
+        navigationDrawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                switch (item.getItemId()) {
+                    case R.id.navigation_drawer_home:
+                        animateBottomNavigation(false);
+                        displaySelectedScreen(R.id.bottom_navigation_requests);
+                        break;
+
+                    case R.id.navigation_drawer_profile:
+                        animateBottomNavigation(true);
+                        ft.replace(R.id.main_content_frame, new ProfileFragment(), "Profile").commit();
+                        break;
+
+                    case R.id.navigation_drawer_connections:
+                        animateBottomNavigation(true);
+                        ft.replace(R.id.main_content_frame, new ConnectionsFragment(), "Connections").commit();
+                        break;
+
+                    case R.id.navigation_drawer_logout:
+                        showLogoutDialog();
+                        break;
+
+                    case R.id.navigation_drawer_support:
+                        break;
+                }
+                rootView.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.getMenu().getItem(0).setChecked(true);
+        displaySelectedScreen(R.id.bottom_navigation_requests);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void getAuthLocations() {
@@ -115,38 +158,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void displaySelectedScreen(int itemId) {
+        navigationDrawerView.getMenu().getItem(0).setChecked(true);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (itemId) {
-            /*case R.id.navigation_drawer_rides:
-                ft.replace(R.id.main_content_frame, new RidesFragment(), "Rides").commit();
-                break;*/
+            case R.id.bottom_navigation_requests:
+                bottomNavigationView.getMenu().getItem(0).setChecked(true);
+                ft.replace(R.id.main_content_frame, new RequestsFragment(), "Requests").commit();
+                break;
 
-            case R.id.navigation_drawer_trips:
-                count = 0;
+            case R.id.bottom_navigation_trips:
                 ft.replace(R.id.main_content_frame, new TripsFragment(), "Trips").commit();
                 break;
-
-            case R.id.navigation_drawer_profile:
-                ft.replace(R.id.main_content_frame, new ProfileFragment(), "Profile").commit();
-                break;
-
-            case R.id.navigation_drawer_connections:
-                ft.replace(R.id.main_content_frame, new ConnectionsFragment(), "Connections").commit();
-                break;
-
-            /*case R.id.navigation_drawer_cars:
-                ft.replace(R.id.main_content_frame, new CarsFragment(), "Cars").commit();
-                break;*/
-
-            case R.id.navigation_drawer_logout:
-                showLogoutDialog();
-                break;
-
-            case R.id.navigation_drawer_support:
-                callAction();
-                break;
         }
-        rootView.closeDrawer(GravityCompat.START);
+    }
+
+    public void animateBottomNavigation(final boolean hide) {
+        if (isNavigationHidden && hide || !isNavigationHidden && !hide) return;
+        isNavigationHidden = hide;
+        int moveY = hide ? (2 * bottomNavigationView.getHeight()) : 0;
+        bottomNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
     private void showLogoutDialog() {
@@ -173,20 +203,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void customLayout(String role) {
         if ("admin".equals(role)) {
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_profile);
-            navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_trips);
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_connections);
         } else {
             navigationDrawerView.getMenu().removeItem(R.id.navigation_drawer_connections);
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_trips);
         }
-    }
-
-    private void initViews() {
-        rootView = findViewById(R.id.main_activity_layout);
-        toolbarView = findViewById(R.id.main_toolbar);
-        navigationDrawerView = findViewById(R.id.main_navigation_drawer);
     }
 
     private void callAction() {
@@ -217,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        TripsFragment currentFragment = (TripsFragment) getSupportFragmentManager().findFragmentByTag("Trips");
+        RequestsFragment currentFragment = (RequestsFragment) getSupportFragmentManager().findFragmentByTag("Requests");
         if (rootView.isDrawerOpen(GravityCompat.START)) {
             rootView.closeDrawer(GravityCompat.START);
         } else if (currentFragment != null && currentFragment.isVisible()) {
@@ -227,8 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else if (count == 2)
                 finish();
         } else {
-            navigationDrawerView.getMenu().getItem(0).setChecked(true);
-            displaySelectedScreen(R.id.navigation_drawer_trips);
+            displaySelectedScreen(R.id.bottom_navigation_requests);
         }
     }
 
@@ -238,8 +256,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initViews() {
+        rootView = findViewById(R.id.main_activity_layout);
+        toolbarView = findViewById(R.id.main_toolbar);
+        navigationDrawerView = findViewById(R.id.main_navigation_drawer);
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation);
     }
 }

@@ -11,7 +11,9 @@
     <!-- Strings related to Main -->
     <string name="open_navigation_drawer">Open navigation drawer</string>
     <string name="close_navigation_drawer">Close navigation drawer</string>
+    <string name="home">Home</string>
     <string name="trips">Trips</string>
+    <string name="requests">Requests</string>
     <string name="profile">Profile</string>
     <string name="connections">Connections</string>
     <string name="cars">Cars</string>

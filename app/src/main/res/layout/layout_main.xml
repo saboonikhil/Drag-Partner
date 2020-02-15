@@ -27,7 +27,26 @@
         <FrameLayout
             android:id="@+id/main_content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_above="@+id/main_view" />
+
+        <View
+            android:id="@+id/main_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@+id/main_bottom_navigation"
+            android:background="#05989898" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/main_bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/white_three"
+            app:itemIconTint="@color/main_bottom_navigation"
+            app:itemTextColor="@color/main_bottom_navigation"
+            app:menu="@menu/main_bottom_navigation" />
 
     </RelativeLayout>
 

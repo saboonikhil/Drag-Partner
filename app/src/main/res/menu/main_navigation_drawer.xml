@@ -9,9 +9,9 @@
             android:title="@string/rides" />
 -->
         <item
-            android:id="@+id/navigation_drawer_trips"
-            android:icon="@drawable/ic_trips"
-            android:title="@string/trips" />
+            android:id="@+id/navigation_drawer_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
 
         <item
             android:id="@+id/navigation_drawer_profile"
