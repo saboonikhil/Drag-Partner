@@ -164,6 +164,11 @@ public class TripDetailsActivity extends AppCompatActivity {
             }
         });
 
+        if (Calendar.getInstance().getTimeInMillis() < startTime.getTimeInMillis())
+            updateView.setEnabled(true);
+        else
+            updateView.setEnabled(false);
+
         updateView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override

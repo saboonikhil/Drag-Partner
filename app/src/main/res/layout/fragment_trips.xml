@@ -6,21 +6,14 @@
     android:orientation="vertical"
     tools:context=".TripsFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/trips_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="vertical" />
-
     <ImageView
         android:id="@+id/trips_empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:contentDescription="@string/no_trips_available"
         android:src="@drawable/ic_empty_view"
-        android:visibility="gone"
-        tools:ignore="ContentDescription" />
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/trips_progress_bar"
@@ -29,5 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trips_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical" />
 
 </RelativeLayout>

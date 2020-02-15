@@ -97,13 +97,14 @@ public class TripsFragment extends Fragment {
                 return isLoading;
             }
         });
+
+        if (isConnectedToInternet()) loadFirstPage();
+        else Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isConnectedToInternet()) loadFirstPage();
-        else Snackbar.make(rootView, "No Internet Connection", Snackbar.LENGTH_LONG).show();
     }
 
     private void loadFirstPage() {

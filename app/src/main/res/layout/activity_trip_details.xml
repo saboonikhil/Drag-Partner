@@ -20,8 +20,9 @@
                 android:id="@+id/trip_details_back"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="@android:color/white"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_trip_details_back"
                 app:srcCompat="@drawable/ic_back"
                 tools:ignore="ContentDescription" />
 
@@ -32,22 +33,18 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
-                tools:text="Sun, May 24, 10:45 PM"
-                android:textColor="@android:color/white" />
-
-            <View
-                android:layout_width="12dp"
-                android:layout_height="0dp" />
+                tools:text="Sun, May 24, 10:45 PM" />
 
             <Button
                 android:id="@+id/trip_details_update"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@drawable/bg_trip_details_update"
                 android:gravity="center"
                 android:text="@string/update"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/trip_details_update" />
 
         </LinearLayout>
 

@@ -152,7 +152,7 @@ public class TripsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         LoadingViewHolder(View itemView) {
             super(itemView);
-            mProgressBar = itemView.findViewById(R.id.trips_loading_progress_bar);
+            mProgressBar = itemView.findViewById(R.id.loading_progress_bar);
         }
     }
 }

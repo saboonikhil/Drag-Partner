@@ -24,6 +24,11 @@
 
     <!-- Strings related to Trips -->
     <string name="trip_id_">Trip ID:</string>
+    <string name="no_trips_available">No Trips Available!</string>
+
+    <!-- Strings related to Requests -->
+    <string name="request_id_">Request ID:</string>
+    <string name="no_requests_available">No Requests Available!</string>
 
     <!-- Strings related to Trip details -->
     <string name="trip_details">Trip details</string>
