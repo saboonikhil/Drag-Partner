@@ -6,11 +6,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +13,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.drag.partner.adapter.TripsAdapter;
 import com.drag.partner.model.Cab;
 import com.drag.partner.model.Partner;
 import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
 import com.drag.partner.util.TripsScrollListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import retrofit2.Call;

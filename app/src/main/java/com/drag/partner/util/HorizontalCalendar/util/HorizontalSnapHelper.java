@@ -1,9 +1,10 @@
 package com.drag.partner.util.HorizontalCalendar.util;
 
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.drag.partner.util.HorizontalCalendar.HorizontalCalendar;
 import com.drag.partner.util.HorizontalCalendar.HorizontalCalendarView;

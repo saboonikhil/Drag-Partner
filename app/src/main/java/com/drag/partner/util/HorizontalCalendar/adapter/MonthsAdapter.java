@@ -1,9 +1,10 @@
 package com.drag.partner.util.HorizontalCalendar.adapter;
 
-import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.drag.partner.R;
 import com.drag.partner.util.HorizontalCalendar.HorizontalCalendar;

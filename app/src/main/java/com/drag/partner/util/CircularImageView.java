@@ -15,7 +15,7 @@ import android.util.AttributeSet;
 
 import com.drag.partner.R;
 
-public class CircularImageView extends android.support.v7.widget.AppCompatImageView {
+public class CircularImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     private int borderWidth, canvasSize;
     private Paint paint, paintBorder;
