@@ -28,8 +28,13 @@ import com.drag.partner.model.Partner;
 import com.drag.partner.network.APIUtils;
 import com.drag.partner.network.EndPointInterface;
 import com.drag.partner.util.ObjectSerializer;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
@@ -64,13 +69,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         token = pref.getString("token", "");
         String json = pref.getString("dbObj", "");
         partner = new Gson().fromJson(json, Partner.class);
+
         if (partner != null) {
             customLayout(partner.getRole());
             nameView.setText(partner.getName());
             emailView.setText(partner.getEmail());
-        }
 
-        getAuthLocations();
+            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM TOKEN Failed", task.getException());
+                    } else {
+                        if (task.getResult() != null)
+                            Log.i("FCM TOKEN", task.getResult().getToken());
+                    }
+                }
+            });
+            FirebaseMessaging.getInstance().subscribeToTopic("new_requests");
+            getAuthLocations();
+        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, rootView,
                 toolbarView, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
@@ -83,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.navigation_drawer_home:
-                        animateBottomNavigation(false);
                         displaySelectedScreen(R.id.bottom_navigation_requests);
                         break;
 
@@ -102,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         break;
 
                     case R.id.navigation_drawer_support:
+                        callAction();
                         break;
                 }
                 rootView.closeDrawer(GravityCompat.START);
@@ -110,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.getMenu().getItem(0).setChecked(true);
         displaySelectedScreen(R.id.bottom_navigation_requests);
     }
 
@@ -163,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (itemId) {
             case R.id.bottom_navigation_requests:
+                animateBottomNavigation(false);
                 bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 ft.replace(R.id.main_content_frame, new RequestsFragment(), "Requests").commit();
                 break;

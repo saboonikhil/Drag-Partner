@@ -19,7 +19,6 @@ android {
         debug {
             buildConfigField "String", "BASE_URL", "\"https://97ee4a48.ngrok.io\""
             debuggable true
-            signingConfig signingConfigs.debug
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
         }
@@ -40,8 +39,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'joda-time:joda-time:2.9.7'
 }
+
+apply plugin: 'com.google.gms.google-services'
