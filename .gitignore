@@ -32,3 +32,9 @@ Thumbs.db
 .gradle
 build/
 release/
+
+# Firebase / local secrets (use google-services.json.example)
+app/google-services.json
+*.jks
+*.keystore
+local.properties

@@ -42,6 +42,6 @@
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:textStyle="normal"
-        tools:text="loremipsum@dragcabs.in" />
+        tools:text="partner@example.com" />
 
 </LinearLayout>
