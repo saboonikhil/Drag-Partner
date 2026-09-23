@@ -1,54 +1,55 @@
 # Drag Partner
 
-Android partner / admin app for the **Drag** ride-sharing stack. Operators sign in, manage trips and booking requests, update trip details (rider, driver, car, fare), and maintain connections (users, partners, places).
+Android **partner / admin** client for the Drag ride-sharing stack.
 
-Pairs with the backend API: **[Drag-API](https://github.com/saboonikhil/Drag-API)**.
+Operators log in, work **requests** and **trips**, update rider / driver / car / fare details, and manage **connections** (users, partners, places). Talks to **[Drag-API](https://github.com/saboonikhil/Drag-API)** over HTTPS.
 
-## Features
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-Android-orange.svg)](#stack)
+[![AndroidX](https://img.shields.io/badge/UI-AndroidX-green.svg)](#stack)
 
-- **Auth** — email / password partner login (`/signIn`)
-- **Home** — navigation drawer for profile, connections, support, logout
-- **Requests & Trips** — bottom navigation; trip detail with rider / driver / car / location / fare / payment
-- **Connections** — users, partners, places; add partner
-- **Cars & rides** — add / update cabs and rides against the admin API
-- **Push** — Firebase Cloud Messaging for in-app notifications
+## What you can do
+
+| Area | Capabilities |
+|---|---|
+| **Auth** | Email / password partner login (`/signIn`) |
+| **Ops** | Requests and trips (bottom nav); trip detail with rider, driver, car, location, fare, payment |
+| **Fleet** | Add / update cabs and rides via admin API |
+| **Network** | Users, partners, places; add partner |
+| **Profile** | Account details, support call, logout |
+| **Push** | Firebase Cloud Messaging |
 
 ## Stack
 
-| Layer | Choice |
+| | |
 |---|---|
 | Language | Java |
 | UI | AndroidX (AppCompat, Material, RecyclerView, ConstraintLayout) |
-| Networking | Retrofit 2 + Gson |
+| HTTP | Retrofit 2 + Gson |
 | Push | Firebase Messaging |
-| Min / target SDK | 19 / 28 |
+| SDK | min 19 · compile/target 28 |
 | App ID | `com.drag.partner` |
-| Version | 1.0.6 (versionCode 7) |
+| Version | 1.0.6 (`versionCode` 7) |
 
-## Project layout
+## Layout
 
 ```text
 app/src/main/java/com/drag/partner/
-  LoginActivity, SplashActivity, MainActivity, TripDetailsActivity
-  *Fragment.java          # trips, requests, connections, profile, cars, …
-  network/                # Retrofit client + EndPointInterface
-  model/                  # Partner, Cab, Request, User, …
-  adapter/                # list adapters
-  util/                   # FCM service, calendar helpers, …
+  SplashActivity · LoginActivity · MainActivity · TripDetailsActivity
+  *Fragment.java     # trips, requests, connections, profile, cars, …
+  network/           # Retrofit + EndPointInterface
+  model/             # Partner, Cab, Request, User, …
+  adapter/           # list adapters
+  util/              # FCM, calendar helpers, …
 ```
 
 ## Setup
 
-### Requirements
+**Need:** Android Studio (JDK 8+), SDK 28 (or bump yourself), a running [Drag-API](https://github.com/saboonikhil/Drag-API), and your own Firebase Android apps.
 
-- Android Studio (or SDK tools) with **JDK 8+**
-- Android SDK matching `compileSdkVersion 28` (or raise SDK levels if you modernize the project)
-- A running **[Drag-API](https://github.com/saboonikhil/Drag-API)** (or compatible) backend
-- Your own Firebase Android app config
+### 1. API base URL
 
-### Configure API base URL
-
-Release and debug URLs are set in `app/build.gradle` (placeholders by default):
+In `app/build.gradle`:
 
 ```gradle
 release {
@@ -59,41 +60,38 @@ debug {
 }
 ```
 
-Point these at your Drag-API host before running.
+Point both at your API host before running.
 
-### Firebase
-
-1. Create a Firebase project and register Android app ids `com.drag.partner` and `com.drag.partner.debug`.
-2. Copy the example and drop in your downloaded config (this file is gitignored):
+### 2. Firebase
 
 ```bash
 cp app/google-services.json.example app/google-services.json
-# then replace with the file from Firebase Console
 ```
 
-### Build & run
+Replace with the file from Firebase Console for `com.drag.partner` and `com.drag.partner.debug`.  
+`app/google-services.json` is gitignored.
+
+### 3. Build
 
 ```bash
 ./gradlew assembleDebug
-# or open the project in Android Studio and Run on a device / emulator
+# or open in Android Studio and Run
 ```
-
-Release:
 
 ```bash
 ./gradlew assembleRelease
 ```
 
-## Related repos
+## Related
 
 | Repo | Role |
 |---|---|
-| [Drag-API](https://github.com/saboonikhil/Drag-API) | HTTPS Express + MongoDB API (auth, partners, cabs, rides, payments, OTP) |
-| **Drag-Partner** (this repo) | Android partner / admin client |
+| [Drag-API](https://github.com/saboonikhil/Drag-API) | Express + MongoDB API (auth, partners, cabs, rides, payments, OTP) |
+| **Drag-Partner** | This Android partner / admin app |
 
 ## Status
 
-Portfolio / legacy AndroidX project (Gradle plugin 3.5 era). Expect to bump AGP, dependencies, and target SDK for current Play / tooling requirements.
+Public portfolio project from the AndroidX / AGP 3.5 era. Fine for reading and forking; plan on newer AGP, dependencies, and target SDK before Play shipping.
 
 ## License
 
