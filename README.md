@@ -87,6 +87,7 @@ Replace with the file from Firebase Console for `com.drag.partner` and `com.drag
 | Repo | Role |
 |---|---|
 | [Drag-API](https://github.com/saboonikhil/Drag-API) | Express + MongoDB API (auth, partners, cabs, rides, payments, OTP) |
+| [Drag-User](https://github.com/saboonikhil/Drag-User) | Android rider app (book, track, Paytm) |
 | **Drag-Partner** | This Android partner / admin app |
 
 ## Status
